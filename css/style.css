@@ -6363,6 +6363,8 @@ body.no-sidebar .sidebar {
 .marked-body a {
   color: #2196f3;
   text-decoration: none;
+  letter-spacing:2px;
+  word-spacing: 7px;
 }
 
 .marked-body a:focus,

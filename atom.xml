@@ -1,901 +1,385 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://zjxdiu.github.io</id>
-    <title>青羽~blog site</title>
-    <link href="https://zjxdiu.github.io" />
-    <updated>2023-01-20T13:37:00.000Z</updated>
-    <category term="化学" />
-    <category term="仪器分析" />
-    <category term="信号处理" />
-    <category term="日常" />
-    <category term="分享" />
-    <category term="软件" />
-    <category term="游戏" />
-    <category term="网络" />
-    <category term="超频" />
-    <category term="硬件" />
-    <category term="脑洞" />
-    <category term="开发" />
-    <category term="游戏引擎" />
-    <category term="生活" />
-    <entry>
-        <id>https://zjxdiu.github.io/blog/ipv6_toss/</id>
-        <title>记一次折腾电信ipv6中的各种问题</title>
-        <link rel="alternate" href="https://zjxdiu.github.io/blog/ipv6_toss/"/>
-        <content type="html">&lt;p&gt;阅前提示：本文约 5000 字，预计阅读时长 &amp;gt; 5 分钟。&lt;/p&gt;
-&lt;h2 id=&#34;起因&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#起因&#34;&gt;#&lt;/a&gt; 起因&lt;/h2&gt;
-&lt;p&gt;由于想跟好友联机 minecraft，而使用 natfrp 做内网穿透时发现有很多问题，包括延迟高且不稳定、速率低、流量限制、高峰时期断连等。刚好想起来家里的网络已经被我启用了 ipv6，因此试图使用 ipv6 来直接对公网开放 minecraft 服务器。&lt;/p&gt;
-&lt;h2 id=&#34;开始第一次尝试&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#开始第一次尝试&#34;&gt;#&lt;/a&gt; 开始第一次尝试&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;当前状态：&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;光猫使用路由模式，自主拨号并获取两种 ip 地址（除非特殊说明，否则以下简称 ip）&lt;/li&gt;
-&lt;li&gt;无线路由器（下简称路由器）使用路由模式&lt;/li&gt;
-&lt;li&gt;所有设备连接在路由器上，并能获取到 ip&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;../_resources/a941e7dad288e2bd65c297c76503f111.png&#34; alt=&#34;a941e7dad288e2bd65c297c76503f111.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;当前问题：&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;首先尝试外网直接连接服务器 ipv6，失败&lt;/li&gt;
-&lt;li&gt;外网无法 ping 通任何内网主机&lt;/li&gt;
-&lt;li&gt;光猫获取到的 ipv6 地址仍然无法通过外网 ping 通&lt;/li&gt;
-&lt;li&gt;在光猫中设置端口映射或 DMZ 主机，无效&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;实际上，上述内容已经花了我一下午来检查和排查；网上搜索相关内容，有人说&lt;s&gt;获取到的 ipv6 是 240e 开头的，说明是经过了 NAT（类似 ipv4，所以肯定访问不到）&lt;/s&gt;；但是这种说法显然有问题，首先 ipv6 只有在特殊环境下才需要 NAT，其次 2 开头的地址至少不是内网地址。&lt;br&gt;
-另有说法称，运营商（我用的是电信）会用防火墙屏蔽入站流量，防止你开服务器。根据我的实验，这个说法是正确的。&lt;/p&gt;
-&lt;p&gt;随后开始折腾，既然防火墙阻碍了我，那我关掉就好。&lt;br&gt;
-但是现实很惨淡，运营商早就猜到你会搞这一手，所以直接不允许你关闭防火墙。&lt;br&gt;
-这里包括了最后的那个防止 ICMP 包攻击，还有其他的防火墙直接不显示。&lt;br&gt;
-&lt;img src=&#34;../_resources/7d186301818af5165a407c1751fb848c.png&#34; alt=&#34;7d186301818af5165a407c1751fb848c.png&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;换个地方拨号&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#换个地方拨号&#34;&gt;#&lt;/a&gt; 换个地方拨号？&lt;/h3&gt;
-&lt;p&gt;网上提供了一种解决思路，即光猫改桥接、使用路由器进行拨号；这样做有一些好处，例如路由器的性能更强、可以提供更快的网速，以及很高的可玩性、灵活性等等，这里直接把路由器换成软路由就能实现非常多的玩法，因此我就着手开始改桥接。&lt;/p&gt;
-&lt;p&gt;改的过程实际上非常简单，找到宽带的账号密码，进入光猫的超级用户，然后直接改桥接即可。&lt;br&gt;
-&lt;img src=&#34;../_resources/bc81d148f88500f57dbadabcf8080770.png&#34; alt=&#34;bc81d148f88500f57dbadabcf8080770.png&#34;&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;随后，将路由器设置为 PPPoE 拨号连接；这里就不放图了，各家路由器的配置流程都是一回事。&lt;br&gt;
-关闭路由器的防火墙，现在，所有的设备又能重新获取到 ip，且具有公网 ipv6 地址。当然由于 Windows 防火墙的配置，需要关闭 Windows 的防火墙才能从外网 ping 通。&lt;br&gt;
-大获全胜！网速也提升到了 570M（家里办理的 500M 宽带，如果直接从光猫拨号 + 路由，则速度最高 470M）&lt;br&gt;
-&lt;img src=&#34;../_resources/cbdb76297f0af4d4d3837f421060eb67.png&#34; alt=&#34;cbdb76297f0af4d4d3837f421060eb67.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;同时，Minecraft 也能正常从外网通过 ipv6 连接，看起来一切完美。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;核心问题网页无法访问&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#核心问题网页无法访问&#34;&gt;#&lt;/a&gt; 核心问题：网页无法访问&lt;/h2&gt;
-&lt;p&gt;一切完美？当然是不可能的。一定会出问题，而且是大问题。&lt;br&gt;
-配置好 ipv6 之后，一开始所有设备工作正常，网速和解析速度起飞。&lt;br&gt;
-然后，用了半个小时左右，问题开始逐步显现。&lt;br&gt;
-最开始，我在网上搜索一个 Windows 方面的配置问题，并且点进去了一个博客园的链接。然后，网页并没有按照我预想中的那样飞快加载，而是不断转圈。&lt;br&gt;
-最后：&lt;br&gt;
-&lt;img src=&#34;../_resources/84c01f9cc1ebf56595e7d025fc4a0617.png&#34; alt=&#34;84c01f9cc1ebf56595e7d025fc4a0617.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;一开始我以为这是必应的中转链接出现问题了（百度日常），因为点击必应的搜索结果并不是直接访问目标网址，而是先通过一个必应的链接重定向到目标。这个重定向有时候会失败，是正常的。但是，我直接访问目标网址时，居然也不能进去，这就非常奇怪了。&lt;br&gt;
-这时候我还是乐观的心态，认为是博客园的服务器出了问题，也没有去其它设备上尝试。但我仍然重视了这个问题，并立即去搜索解决方法。因为是开了路由器拨号 + ipv6 之后才出现的问题，所以查找方向也很明确了。结果，就在我查找的过程中，发现了更多的问题。&lt;br&gt;
-百度经验、百度知道、百度贴吧、知乎… 这些网站一个接一个地挂掉；有时候网站一开始能正常访问，再开的时候就加载不出 JS 和 CSS（变成了没有渲染的样式，仅限知乎），然后就是一样的不响应。症状跟博客园完全一致，控制台里没有任何有效信息，只有一个响应超时。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&#34;先恢复正常访问&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#先恢复正常访问&#34;&gt;#&lt;/a&gt; 先恢复正常访问&lt;/h3&gt;
-&lt;p&gt;一通摸索之后，我找到了暂时恢复的方法：在网卡选项里禁用 ipv6（Internet 协议版本 6）。&lt;br&gt;
-禁用后，所有网页恢复正常，但这显然不可取，因为我的目的就是使用 ipv6，而禁用它也就丧失了所有 ipv6 能力。&lt;br&gt;
-需要注意的是，现在出问题的网站都不是纯 ipv6 站点，有些是纯 ipv4 站点，但双栈域名居多。这时候访问纯 ipv6 网站是全部成功的，ipv6 测试也是全绿通过，并且无论何种类型的网站都有大量能成功访问的。&lt;/p&gt;
-&lt;h3 id=&#34;退一步试试&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#退一步试试&#34;&gt;#&lt;/a&gt; 退一步试试&lt;/h3&gt;
-&lt;p&gt;退一步，指的就是我找到一种方法，让浏览器只使用或优先使用 ipv4 进行访问。&lt;br&gt;
-因为出问题的只有浏览器，我电脑里其它软件全都正常运行。&lt;br&gt;
-&lt;em&gt;后续补充：今天发现 Windows 版的微信也不能正常使用，二维码加载不出来，禁用 ipv6 后恢复。&lt;/em&gt;。&lt;br&gt;
-但是，网上相关的教程极少甚至没有，偶有几个是针对 Firefox 或 chrome 的，而我使用的是 edge；就算我能参考 chrome，教程也是针对 Linux 而非 Windows。&lt;/p&gt;
-&lt;h3 id=&#34;再退一步&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#再退一步&#34;&gt;#&lt;/a&gt; 再退一步&lt;/h3&gt;
-&lt;p&gt;好的，如果浏览器不行，那我就找个方法让整个操作系统都优先使用 ipv4。&lt;br&gt;
-微软提供了一个文档，通过&lt;a href=&#34;https://learn.microsoft.com/en-US/troubleshoot/windows-server/networking/configure-ipv6-in-windows&#34;&gt;修改注册表的方法&lt;/a&gt;来实现全局优先 ipv4、禁用 ipv6、优先 ipv6 等等。&lt;br&gt;
-一看到这里，我立即兴奋地尝试了。改了注册表，重启，访问：&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;ERR_TIMED_OUT&lt;/code&gt;  .png&lt;/p&gt;
-&lt;p&gt;好，居然没用。微软，不愧是你。&lt;br&gt;
-重启很多次无效，当时已经半夜 2:30，我没有了折腾的心情，只想赶紧睡觉。&lt;/p&gt;
-&lt;h2 id=&#34;第一次折腾失败&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#第一次折腾失败&#34;&gt;#&lt;/a&gt; 第一次折腾失败&lt;/h2&gt;
-&lt;p&gt;网上又找了很多相同症状的用户，解决方案要么是改注册表，要么是说路由器兼容性有问题。&lt;br&gt;
-好吧，反正跟我联机的同学也不是很在意，natfrp 似乎还能继续用用。&lt;br&gt;
-于是，彻底宣告失败，我重新改回了光猫拨号、路由桥接，随后所有网络恢复正常（除了外网还是不能访问这里的所有 ipv6；当然，也包括 ipv4，因为有 NAT）。&lt;/p&gt;
-&lt;p&gt;这就结束了吗？怎么可能，不搞到好用我是不会罢休的。&lt;br&gt;
-于是，第二天，我又开始了新一轮的折腾。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;第二次尝试&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#第二次尝试&#34;&gt;#&lt;/a&gt; 第二次尝试&lt;/h2&gt;
-&lt;p&gt;重新尝试，同样的光猫改桥接，同样的路由器拨号。同样的正常 ipv6 公网访问，但是这一次似乎是运气比较好，网页访问全部正常使用，并且坚持了至少 4 个小时。&lt;br&gt;
-中途离家 4 小时，回来之后，惊喜地发现，这些网页又打不开了 😃&lt;br&gt;
-这时候我就已经明白，无论怎么修改电脑或者路由器配置都无效，于是没有再做尝试，转而对现在的情况进行分析，并希望通过其它方法解决需求。&lt;/p&gt;
-&lt;h3 id=&#34;转机&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#转机&#34;&gt;#&lt;/a&gt; 转机&lt;/h3&gt;
-&lt;p&gt;在我整理思路的时候，我意识到，实际上我只需要服务器一台电脑能够获取正常入站的 ipv6 地址（正常的 ipv6）即可，其余设备甚至根本不需要启用 ipv6。这时候，我首先想到的就是：&lt;/p&gt;
-&lt;h4 id=&#34;一号多拨&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#一号多拨&#34;&gt;#&lt;/a&gt; 一号多拨&lt;/h4&gt;
-&lt;p&gt;一号多拨，指的是我通过同一个光猫，使用同一个宽带账号，分别在两台设备上进行拨号。&lt;br&gt;
-我的最初想法是，服务器电脑直连光猫并自己拨号获取正常的 ipv6 地址，同时路由器也自己拨号，但只启用 ipv4。&lt;br&gt;
-网上搜索发现，这种方法当然是可行的，前提是运营商支持多拨。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;折腾中&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;没有任何侥幸，拨号失败。电脑上尝试第二次拨号时直接返回错误 629。&lt;/p&gt;
-&lt;p&gt;再换一种角度，重新分析我的需求。服务器能使用正常的 ipv6，同时其余设备仅需要 ipv4（最多需要 ipv6 内网而非公网访问）。因此，我做了如下操作，来使得二者兼顾。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;最终如何解决&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#最终如何解决&#34;&gt;#&lt;/a&gt; 最终如何解决&lt;/h2&gt;
-&lt;p&gt;如果你的需求和遇到的问题跟我完全一样，那么也许可以参考我的方法来临时解决。&lt;br&gt;
-&lt;strong&gt;提示：最终的解决方案也并不完美，只不过暂时保证了两边可以都解决主要矛盾&lt;/strong&gt;&lt;br&gt;
-以下是我的解决方案：&lt;/p&gt;
-&lt;h3 id=&#34;1-将路由器的内网ipv6地址分发从无状态改为有状态&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#1-将路由器的内网ipv6地址分发从无状态改为有状态&#34;&gt;#&lt;/a&gt; 1. 将路由器的内网 ipv6 地址分发从无状态改为有状态。&lt;/h3&gt;
-&lt;p&gt;无状态获取指的是机器自己配置地址，然后通过 NDP 等方式确定地址有效性即可；有状态获取类似 DHCP，不过分配的地址是 ipv6。&lt;br&gt;
-这一步解决了手机联网的问题；由于我的网络环境中手机为主要设备，而安卓系统并不支持通过 DHCPv6 进行有状态获取 ipv6 地址；于是所有的手机都只能通过 ipv4 联网，解决了所有上网问题。&lt;/p&gt;
-&lt;h3 id=&#34;2-为电脑配置虚假或者无效的ipv6地址&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#2-为电脑配置虚假或者无效的ipv6地址&#34;&gt;#&lt;/a&gt; 2.  为电脑配置虚假或者无效的 ipv6 地址&lt;/h3&gt;
-&lt;p&gt;这是我在测试的时候忽然想到的主意，既然 ipv4 地址在手动配置错误的情况下无法联网，那么 ipv6 应该也是一样的。&lt;br&gt;
-ipv6 中同样有很多保留地址，例如 &lt;code&gt;fe80&lt;/code&gt;  开头的地址表示本地链路地址，无法进行跨子网路由，因此给我自己的电脑配置一个 &lt;code&gt;fe80::1&lt;/code&gt;  的地址即可。&lt;br&gt;
-配置后，网卡状态中 IPv6 连接变为&lt;strong&gt;无 Internet 访问权限&lt;/strong&gt;，使用 &lt;code&gt;ipconfig /all&lt;/code&gt;  查看 IP 地址，发现手动配置的 ipv6 地址变成了&lt;strong&gt;本地链接 IPv6 地址&lt;/strong&gt;。&lt;br&gt;
-&lt;img src=&#34;../_resources/054913f5d395b1e809f0d7830e64c948.png&#34; alt=&#34;054913f5d395b1e809f0d7830e64c948.png&#34;&gt;&lt;br&gt;
- 此外，这里网卡仍然获取到了一个 IPv6 地址，但后面提示（&lt;strong&gt;复制&lt;/strong&gt;），检查其地址发现这个地址是我的服务器电脑的公网 ipv6 地址（因此在此处打码作保护）；这可能是一些其它方面的机制，但并不影响服务器和我的电脑的正常工作。同时，由于内网 ipv6 地址被正常配置，我仍然可以通过内网 ipv6 来访问服务器（包括文件服务器、网页服务器、minecraft 和远程桌面）。&lt;br&gt;
-这一步解决了环境中主要的电脑设备：我自己的使用需求。当然没有完全解决，纯 ipv4 模式下访问部分双栈网站时速度还是比较慢，但能够正常使用已经是极其难得了。&lt;/p&gt;
-&lt;h3 id=&#34;3-为windows-11配置&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#3-为windows-11配置&#34;&gt;#&lt;/a&gt; 3. 为 Windows 11 配置&lt;/h3&gt;
-&lt;p&gt;环境中存在另一台常用的电脑，而它搭载的是 Windows 11 家庭版。&lt;br&gt;
-在 win11 下可以执行相同的步骤进行配置，只不过需要多出一个步骤：&lt;strong&gt;你需要在系统设置中手动设置 ipv6 DNS，而不能使用自动获取。&lt;/strong&gt;&lt;br&gt;
-这一步是因为，即便手动配置了 ipv6 地址，win11 似乎也不会立即使用，而是先试图通过 DHCP 等方法获取 ipv6 地址以及 DNS 服务器等；而在自动获取 DNS 的过程中，路由器很可能就为它分配了一个 ipv6 地址，导致我们自己设置的地址完全变成内网地址，而无法实现目的。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;结语&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#结语&#34;&gt;#&lt;/a&gt; 结语&lt;/h2&gt;
-&lt;p&gt;至此，全部流程结束，解决方案全部执行。服务器正常接受公网入站流量，其余设备配置后均能实现正常上网。&lt;/p&gt;
-&lt;p&gt;但是，我并不对现在的解决方案满意。原因很简单，我开 ipv6 不仅是为了服务器使用，更是为了提高日常上网体验，同时接轨最新技术（虽然 ipv6 都是 12 年前的玩意了）；现在虽然解决了问题，但并未达成全部目的，因为除了服务器主机以外没有设备能够正常使用 ipv6 的。这个方法顶多也就临时用用，实际上我也就这一个寒假的需求，假期结束返校前肯定会恢复光猫拨号的，因为服务器主机之后只作为内网打印服务器，不再有公网访问需求。此外，每次新加一台电脑，都需要这样设置一遍无效的 ipv6 地址，以便正常访问网页。&lt;br&gt;
-所以，整体看下来，其实只是在两边的矛盾中取了一个居中妥协的值，为主要矛盾作了让步。我也不是每天都会折腾网络，更多时候还是希望它日常使用能稳定；但我又不希望放弃服务器的公网访问，因此这两者就是核心问题，而最终的方案也就向这两个问题进行妥协。&lt;br&gt;
-Anyway，反正问题算是解决了，但愿 ipv6 的部署进度还能快一点吧（&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;明天就是除夕了，浅放一张 AI 画的胡桃吧，祝大家新年快乐！&lt;br&gt;
-&lt;em&gt;胡桃没画成，人要么太大要么太小，随便搞了个背景算了（）&lt;/em&gt;&lt;br&gt;
-&lt;img src=&#34;../_resources/7c8d8e5459a9f8cd83c33281ca1aa262.png&#34; alt=&#34;7c8d8e5459a9f8cd83c33281ca1aa262.png&#34;&gt;&lt;/p&gt;
-</content>
-        <category term="游戏" />
-        <category term="网络" />
-        <updated>2023-01-20T13:37:00.000Z</updated>
-    </entry>
-    <entry>
-        <id>https://zjxdiu.github.io/blog/%E5%9B%BE%E5%BA%8A/</id>
-        <title>图床</title>
-        <link rel="alternate" href="https://zjxdiu.github.io/blog/%E5%9B%BE%E5%BA%8A/"/>
-        <content type="html">&lt;h2 id=&#34;此处用于保存一些图片&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#此处用于保存一些图片&#34;&gt;#&lt;/a&gt; 此处用于保存一些图片&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;../_resources/fc3ae10d48f0ad79151951f2ffa88d3c.png&#34; alt=&#34;fc3ae10d48f0ad79151951f2ffa88d3c.png&#34;&gt;&lt;/p&gt;
-</content>
-        <updated>2023-01-02T14:21:15.226Z</updated>
-    </entry>
-    <entry>
-        <id>https://zjxdiu.github.io/blog/Hello_2023/</id>
-        <title>你好，2023</title>
-        <link rel="alternate" href="https://zjxdiu.github.io/blog/Hello_2023/"/>
-        <content type="html">&lt;p&gt;向过去的 2022 说再见！&lt;br&gt;
+  <title>青羽~blog site</title>
+  
+  
+  <link href="https://zjxdiu.github.io/atom.xml" rel="self"/>
+  
+  <link href="https://zjxdiu.github.io/"/>
+  <updated>2023-01-27T02:27:23.218Z</updated>
+  <id>https://zjxdiu.github.io/</id>
+  
+  <author>
+    <name>zjxdiu</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>又一次折腾手机游戏《灵魂潮汐》音频录制的记录</title>
+    <link href="https://zjxdiu.github.io/blog/another_toss_of_music_recording/"/>
+    <id>https://zjxdiu.github.io/blog/another_toss_of_music_recording/</id>
+    <published>2023-01-26T15:51:00.000Z</published>
+    <updated>2023-01-27T02:27:23.218Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="事件初始"><a class="markdownIt-Anchor" href="#事件初始">#</a> 事件初始</h2><p>在 2021 年，我入坑了灵魂潮汐；作为副游，她已经做到了尽善尽美。具体不再阐述，有兴趣可自行前往<a href="https://lhcx.iqigame.net/">官网</a></p><p>然后，在大约 2022 年中的时候，有几次游戏大更新；有一天我意外地发现，游戏登录前的加载界面不再是寂静无声，而是加入了一段非常好听的音乐！<br>当时这段音乐就让我沉醉了，游戏都没肝就直接跑去 b 站找官方账号。很幸运，我找到了视频；不幸的是，官方视频里的歌曲不是同一个人唱的 😦<br>但是它实在太好听了，所以之后我又琢磨着怎么把这段音乐录下来。于是就有了后续的折腾环节。</p><hr><h2 id="尝试录制"><a class="markdownIt-Anchor" href="#尝试录制">#</a> 尝试录制</h2><p>不详细说了，我试了以下的方法：</p><ol><li>手机内置录屏<br>失败的原因很简单，手机内置的录屏音质不佳，更是只有单声道；显然我是不可能选择这个方式的。</li><li>电脑模拟器<br>同样失败；当时我用的是一众包装好的安卓模拟器，包括夜神、Mumu、联想手机助手等。失败的原因是，这些模拟器的音质同样不高，而且似乎只在游戏界面上才会发生，具体表现就是声音没有高频，12kHz 以上的频率全部被切除，听起来就像 96kbps 的电话音质一样。</li><li>其它手机软件<br>找了很久，找到一个能够读取原始 RAW 音频数据进而录屏的手机软件；但是这种方法有个很大的缺陷，就是它会同时把麦克风的声音混进去，而且无法分离；手机麦克风的噪音很大，非常影响听感，更何况环境噪声无处不在，不能实现完美的录制条件。禁用麦克风权限则所有声音都不能被录制，因此该方法 pass。<br>…</li></ol><hr><h2 id="初次解决方案"><a class="markdownIt-Anchor" href="#初次解决方案">#</a> 初次解决方案</h2><p>最终，我用一个很奇怪的方法达成了目标：<br><strong>多屏协同。</strong><br>对，就是华为手机支持的那个。当时我用的是荣耀 magic2 和 magicbook pro，多屏协同是很容易实现的。<br>通过多屏协同，手机的声音直接在电脑上播放，而且延迟低音质高（相对）。<br>随后在电脑上用 Au 录制，配上官方的视频画面，我就直接投稿到 b 站。</p><p>但是没几天我就发现了被我忽略的问题，那就是多屏协同的音质同样不是最佳；它会切除 16kHz 以上的音频，导致听感近似 128kbps 的低质量音频（尽管在这首歌里似乎不明显，几乎没感觉音质有多差）。当然，那时我也没想到更好的办法，于是这个视频就一直放着，还逐渐收获了 1.1W 的播放量。</p><hr><h2 id="二次折腾"><a class="markdownIt-Anchor" href="#二次折腾">#</a> 二次折腾</h2><p>就在今天晚上，我在整理 b 站的各类信息和配置，无意间点进了创作中心，看到了视频的最新评论。有人问我是怎么获得高音质音频的，于是我就把这个过程说了一遍。<br>但是这个时候，我决定要彻底解决问题，获取原始的最高音质音频；一直用着低质量音乐冒充高品质原声始终不太好，于是我又着手开始折腾。</p><p><strong>重新尝试虚拟机</strong></p><ul><li>微软的 WSA：失败，win10 没有成功启动</li><li>VirtualBox 虚拟机：失败，音频要么呈现断断续续的极为难听的状态，要么就只有之前遇到过的低质量。<br>此时我也已经明白，实际上模拟器音质不高基本上就是由于音频设备的原因，使用 Windows Audio Session+ICH AC97 能得到唯一流畅的声音输出，但质量低。</li></ul><hr><h2 id="聪明反被聪明误"><a class="markdownIt-Anchor" href="#聪明反被聪明误">#</a> 聪明反被聪明误</h2><p>没错，自作聪明的结果就是我这样，折腾了两回一点用都没有。<br>就在我放弃折腾准备关机睡觉的时候，我就忽然想到，为什么我不直接把手机的耳机孔输出连接到电脑的音频口呢？这样电脑直接就能接收到手机的音频输出，直接录制最原始的声音。</p><p>这个方法听起来很蠢，但它就是最快捷最有效的方法。换了几条线，我发现只要把 Realtek 的声音设备设置为麦克风，关闭所有麦克风增强、效果和加强，配合一根 AUX（3.5mm 公对公）转接线就能直接在电脑上录音了。</p><hr><h2 id="b站的阴间操作"><a class="markdownIt-Anchor" href="#b站的阴间操作">#</a> b 站的阴间操作</h2><p>终于得到了完美的录音，当然是要换源了，让后面的观众能享受到最佳的音质！<br>一顿操作，把之前的视频替换音轨，重新上传。<br>…<br> <code>10分钟后...</code> <br> 嗯，新上传的视频，音频直接被压缩到了 74kbps，听起来比电话还糊。<br>b 站，😃<br>时间已经比较晚了，我也不想继续折腾，直接投了个音频投稿然后关联过来，同时发新的文件下载链接置顶，就这样吧。反正问题算是解决了，就是这个结尾整的我有点脑溢血（</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;事件初始&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#事件初始&quot;&gt;#&lt;/a&gt; 事件初始&lt;/h2&gt;
+&lt;p&gt;在 2021 年，我入坑了灵魂潮汐；作为副游，她已经做到了尽善尽美。具体不再阐述，有兴趣可自行前往&lt;a href=&quot;https:/</summary>
+      
+    
+    
+    
+    <category term="杂项" scheme="https://zjxdiu.github.io/categories/%E6%9D%82%E9%A1%B9/"/>
+    
+    <category term="日志" scheme="https://zjxdiu.github.io/categories/%E6%9D%82%E9%A1%B9/%E6%97%A5%E5%BF%97/"/>
+    
+    
+    <category term="游戏" scheme="https://zjxdiu.github.io/tags/%E6%B8%B8%E6%88%8F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>记一次折腾电信ipv6中的各种问题</title>
+    <link href="https://zjxdiu.github.io/blog/ipv6_toss/"/>
+    <id>https://zjxdiu.github.io/blog/ipv6_toss/</id>
+    <published>2023-01-20T13:37:00.000Z</published>
+    <updated>2023-01-20T13:44:37.520Z</updated>
+    
+    <content type="html"><![CDATA[<p>阅前提示：本文约 5000 字，预计阅读时长 &gt; 5 分钟。</p><h2 id="起因"><a class="markdownIt-Anchor" href="#起因">#</a> 起因</h2><p>由于想跟好友联机 minecraft，而使用 natfrp 做内网穿透时发现有很多问题，包括延迟高且不稳定、速率低、流量限制、高峰时期断连等。刚好想起来家里的网络已经被我启用了 ipv6，因此试图使用 ipv6 来直接对公网开放 minecraft 服务器。</p><h2 id="开始第一次尝试"><a class="markdownIt-Anchor" href="#开始第一次尝试">#</a> 开始第一次尝试</h2><p><strong>当前状态：</strong></p><ul><li>光猫使用路由模式，自主拨号并获取两种 ip 地址（除非特殊说明，否则以下简称 ip）</li><li>无线路由器（下简称路由器）使用路由模式</li><li>所有设备连接在路由器上，并能获取到 ip</li></ul><p><img src="../_resources/a941e7dad288e2bd65c297c76503f111.png" alt="a941e7dad288e2bd65c297c76503f111.png"></p><p><strong>当前问题：</strong></p><ul><li>首先尝试外网直接连接服务器 ipv6，失败</li><li>外网无法 ping 通任何内网主机</li><li>光猫获取到的 ipv6 地址仍然无法通过外网 ping 通</li><li>在光猫中设置端口映射或 DMZ 主机，无效</li></ul><p>实际上，上述内容已经花了我一下午来检查和排查；网上搜索相关内容，有人说<s>获取到的 ipv6 是 240e 开头的，说明是经过了 NAT（类似 ipv4，所以肯定访问不到）</s>；但是这种说法显然有问题，首先 ipv6 只有在特殊环境下才需要 NAT，其次 2 开头的地址至少不是内网地址。<br>另有说法称，运营商（我用的是电信）会用防火墙屏蔽入站流量，防止你开服务器。根据我的实验，这个说法是正确的。</p><p>随后开始折腾，既然防火墙阻碍了我，那我关掉就好。<br>但是现实很惨淡，运营商早就猜到你会搞这一手，所以直接不允许你关闭防火墙。<br>这里包括了最后的那个防止 ICMP 包攻击，还有其他的防火墙直接不显示。<br><img src="../_resources/7d186301818af5165a407c1751fb848c.png" alt="7d186301818af5165a407c1751fb848c.png"></p><h3 id="换个地方拨号"><a class="markdownIt-Anchor" href="#换个地方拨号">#</a> 换个地方拨号？</h3><p>网上提供了一种解决思路，即光猫改桥接、使用路由器进行拨号；这样做有一些好处，例如路由器的性能更强、可以提供更快的网速，以及很高的可玩性、灵活性等等，这里直接把路由器换成软路由就能实现非常多的玩法，因此我就着手开始改桥接。</p><p>改的过程实际上非常简单，找到宽带的账号密码，进入光猫的超级用户，然后直接改桥接即可。<br><img src="../_resources/bc81d148f88500f57dbadabcf8080770.png" alt="bc81d148f88500f57dbadabcf8080770.png"></p><hr><p>随后，将路由器设置为 PPPoE 拨号连接；这里就不放图了，各家路由器的配置流程都是一回事。<br>关闭路由器的防火墙，现在，所有的设备又能重新获取到 ip，且具有公网 ipv6 地址。当然由于 Windows 防火墙的配置，需要关闭 Windows 的防火墙才能从外网 ping 通。<br>大获全胜！网速也提升到了 570M（家里办理的 500M 宽带，如果直接从光猫拨号 + 路由，则速度最高 470M）<br><img src="../_resources/cbdb76297f0af4d4d3837f421060eb67.png" alt="cbdb76297f0af4d4d3837f421060eb67.png"></p><p>同时，Minecraft 也能正常从外网通过 ipv6 连接，看起来一切完美。</p><hr><h2 id="核心问题网页无法访问"><a class="markdownIt-Anchor" href="#核心问题网页无法访问">#</a> 核心问题：网页无法访问</h2><p>一切完美？当然是不可能的。一定会出问题，而且是大问题。<br>配置好 ipv6 之后，一开始所有设备工作正常，网速和解析速度起飞。<br>然后，用了半个小时左右，问题开始逐步显现。<br>最开始，我在网上搜索一个 Windows 方面的配置问题，并且点进去了一个博客园的链接。然后，网页并没有按照我预想中的那样飞快加载，而是不断转圈。<br>最后：<br><img src="../_resources/84c01f9cc1ebf56595e7d025fc4a0617.png" alt="84c01f9cc1ebf56595e7d025fc4a0617.png"></p><p>一开始我以为这是必应的中转链接出现问题了（百度日常），因为点击必应的搜索结果并不是直接访问目标网址，而是先通过一个必应的链接重定向到目标。这个重定向有时候会失败，是正常的。但是，我直接访问目标网址时，居然也不能进去，这就非常奇怪了。<br>这时候我还是乐观的心态，认为是博客园的服务器出了问题，也没有去其它设备上尝试。但我仍然重视了这个问题，并立即去搜索解决方法。因为是开了路由器拨号 + ipv6 之后才出现的问题，所以查找方向也很明确了。结果，就在我查找的过程中，发现了更多的问题。<br>百度经验、百度知道、百度贴吧、知乎… 这些网站一个接一个地挂掉；有时候网站一开始能正常访问，再开的时候就加载不出 JS 和 CSS（变成了没有渲染的样式，仅限知乎），然后就是一样的不响应。症状跟博客园完全一致，控制台里没有任何有效信息，只有一个响应超时。</p><hr><h3 id="先恢复正常访问"><a class="markdownIt-Anchor" href="#先恢复正常访问">#</a> 先恢复正常访问</h3><p>一通摸索之后，我找到了暂时恢复的方法：在网卡选项里禁用 ipv6（Internet 协议版本 6）。<br>禁用后，所有网页恢复正常，但这显然不可取，因为我的目的就是使用 ipv6，而禁用它也就丧失了所有 ipv6 能力。<br>需要注意的是，现在出问题的网站都不是纯 ipv6 站点，有些是纯 ipv4 站点，但双栈域名居多。这时候访问纯 ipv6 网站是全部成功的，ipv6 测试也是全绿通过，并且无论何种类型的网站都有大量能成功访问的。</p><h3 id="退一步试试"><a class="markdownIt-Anchor" href="#退一步试试">#</a> 退一步试试</h3><p>退一步，指的就是我找到一种方法，让浏览器只使用或优先使用 ipv4 进行访问。<br>因为出问题的只有浏览器，我电脑里其它软件全都正常运行。<br><em>后续补充：今天发现 Windows 版的微信也不能正常使用，二维码加载不出来，禁用 ipv6 后恢复。</em>。<br>但是，网上相关的教程极少甚至没有，偶有几个是针对 Firefox 或 chrome 的，而我使用的是 edge；就算我能参考 chrome，教程也是针对 Linux 而非 Windows。</p><h3 id="再退一步"><a class="markdownIt-Anchor" href="#再退一步">#</a> 再退一步</h3><p>好的，如果浏览器不行，那我就找个方法让整个操作系统都优先使用 ipv4。<br>微软提供了一个文档，通过<a href="https://learn.microsoft.com/en-US/troubleshoot/windows-server/networking/configure-ipv6-in-windows">修改注册表的方法</a>来实现全局优先 ipv4、禁用 ipv6、优先 ipv6 等等。<br>一看到这里，我立即兴奋地尝试了。改了注册表，重启，访问：</p><p><code>ERR_TIMED_OUT</code>  .png</p><p>好，居然没用。微软，不愧是你。<br>重启很多次无效，当时已经半夜 2:30，我没有了折腾的心情，只想赶紧睡觉。</p><h2 id="第一次折腾失败"><a class="markdownIt-Anchor" href="#第一次折腾失败">#</a> 第一次折腾失败</h2><p>网上又找了很多相同症状的用户，解决方案要么是改注册表，要么是说路由器兼容性有问题。<br>好吧，反正跟我联机的同学也不是很在意，natfrp 似乎还能继续用用。<br>于是，彻底宣告失败，我重新改回了光猫拨号、路由桥接，随后所有网络恢复正常（除了外网还是不能访问这里的所有 ipv6；当然，也包括 ipv4，因为有 NAT）。</p><p>这就结束了吗？怎么可能，不搞到好用我是不会罢休的。<br>于是，第二天，我又开始了新一轮的折腾。</p><hr><h2 id="第二次尝试"><a class="markdownIt-Anchor" href="#第二次尝试">#</a> 第二次尝试</h2><p>重新尝试，同样的光猫改桥接，同样的路由器拨号。同样的正常 ipv6 公网访问，但是这一次似乎是运气比较好，网页访问全部正常使用，并且坚持了至少 4 个小时。<br>中途离家 4 小时，回来之后，惊喜地发现，这些网页又打不开了 😃<br>这时候我就已经明白，无论怎么修改电脑或者路由器配置都无效，于是没有再做尝试，转而对现在的情况进行分析，并希望通过其它方法解决需求。</p><h3 id="转机"><a class="markdownIt-Anchor" href="#转机">#</a> 转机</h3><p>在我整理思路的时候，我意识到，实际上我只需要服务器一台电脑能够获取正常入站的 ipv6 地址（正常的 ipv6）即可，其余设备甚至根本不需要启用 ipv6。这时候，我首先想到的就是：</p><h4 id="一号多拨"><a class="markdownIt-Anchor" href="#一号多拨">#</a> 一号多拨</h4><p>一号多拨，指的是我通过同一个光猫，使用同一个宽带账号，分别在两台设备上进行拨号。<br>我的最初想法是，服务器电脑直连光猫并自己拨号获取正常的 ipv6 地址，同时路由器也自己拨号，但只启用 ipv4。<br>网上搜索发现，这种方法当然是可行的，前提是运营商支持多拨。</p><p><code>折腾中</code></p><p>没有任何侥幸，拨号失败。电脑上尝试第二次拨号时直接返回错误 629。</p><p>再换一种角度，重新分析我的需求。服务器能使用正常的 ipv6，同时其余设备仅需要 ipv4（最多需要 ipv6 内网而非公网访问）。因此，我做了如下操作，来使得二者兼顾。</p><hr><h2 id="最终如何解决"><a class="markdownIt-Anchor" href="#最终如何解决">#</a> 最终如何解决</h2><p>如果你的需求和遇到的问题跟我完全一样，那么也许可以参考我的方法来临时解决。<br><strong>提示：最终的解决方案也并不完美，只不过暂时保证了两边可以都解决主要矛盾</strong><br>以下是我的解决方案：</p><h3 id="1-将路由器的内网ipv6地址分发从无状态改为有状态"><a class="markdownIt-Anchor" href="#1-将路由器的内网ipv6地址分发从无状态改为有状态">#</a> 1. 将路由器的内网 ipv6 地址分发从无状态改为有状态。</h3><p>无状态获取指的是机器自己配置地址，然后通过 NDP 等方式确定地址有效性即可；有状态获取类似 DHCP，不过分配的地址是 ipv6。<br>这一步解决了手机联网的问题；由于我的网络环境中手机为主要设备，而安卓系统并不支持通过 DHCPv6 进行有状态获取 ipv6 地址；于是所有的手机都只能通过 ipv4 联网，解决了所有上网问题。</p><h3 id="2-为电脑配置虚假或者无效的ipv6地址"><a class="markdownIt-Anchor" href="#2-为电脑配置虚假或者无效的ipv6地址">#</a> 2.  为电脑配置虚假或者无效的 ipv6 地址</h3><p>这是我在测试的时候忽然想到的主意，既然 ipv4 地址在手动配置错误的情况下无法联网，那么 ipv6 应该也是一样的。<br>ipv6 中同样有很多保留地址，例如 <code>fe80</code>  开头的地址表示本地链路地址，无法进行跨子网路由，因此给我自己的电脑配置一个 <code>fe80::1</code>  的地址即可。<br>配置后，网卡状态中 IPv6 连接变为<strong>无 Internet 访问权限</strong>，使用 <code>ipconfig /all</code>  查看 IP 地址，发现手动配置的 ipv6 地址变成了<strong>本地链接 IPv6 地址</strong>。<br><img src="../_resources/054913f5d395b1e809f0d7830e64c948.png" alt="054913f5d395b1e809f0d7830e64c948.png"><br> 此外，这里网卡仍然获取到了一个 IPv6 地址，但后面提示（<strong>复制</strong>），检查其地址发现这个地址是我的服务器电脑的公网 ipv6 地址（因此在此处打码作保护）；这可能是一些其它方面的机制，但并不影响服务器和我的电脑的正常工作。同时，由于内网 ipv6 地址被正常配置，我仍然可以通过内网 ipv6 来访问服务器（包括文件服务器、网页服务器、minecraft 和远程桌面）。<br>这一步解决了环境中主要的电脑设备：我自己的使用需求。当然没有完全解决，纯 ipv4 模式下访问部分双栈网站时速度还是比较慢，但能够正常使用已经是极其难得了。</p><h3 id="3-为windows-11配置"><a class="markdownIt-Anchor" href="#3-为windows-11配置">#</a> 3. 为 Windows 11 配置</h3><p>环境中存在另一台常用的电脑，而它搭载的是 Windows 11 家庭版。<br>在 win11 下可以执行相同的步骤进行配置，只不过需要多出一个步骤：<strong>你需要在系统设置中手动设置 ipv6 DNS，而不能使用自动获取。</strong><br>这一步是因为，即便手动配置了 ipv6 地址，win11 似乎也不会立即使用，而是先试图通过 DHCP 等方法获取 ipv6 地址以及 DNS 服务器等；而在自动获取 DNS 的过程中，路由器很可能就为它分配了一个 ipv6 地址，导致我们自己设置的地址完全变成内网地址，而无法实现目的。</p><hr><h2 id="结语"><a class="markdownIt-Anchor" href="#结语">#</a> 结语</h2><p>至此，全部流程结束，解决方案全部执行。服务器正常接受公网入站流量，其余设备配置后均能实现正常上网。</p><p>但是，我并不对现在的解决方案满意。原因很简单，我开 ipv6 不仅是为了服务器使用，更是为了提高日常上网体验，同时接轨最新技术（虽然 ipv6 都是 12 年前的玩意了）；现在虽然解决了问题，但并未达成全部目的，因为除了服务器主机以外没有设备能够正常使用 ipv6 的。这个方法顶多也就临时用用，实际上我也就这一个寒假的需求，假期结束返校前肯定会恢复光猫拨号的，因为服务器主机之后只作为内网打印服务器，不再有公网访问需求。此外，每次新加一台电脑，都需要这样设置一遍无效的 ipv6 地址，以便正常访问网页。<br>所以，整体看下来，其实只是在两边的矛盾中取了一个居中妥协的值，为主要矛盾作了让步。我也不是每天都会折腾网络，更多时候还是希望它日常使用能稳定；但我又不希望放弃服务器的公网访问，因此这两者就是核心问题，而最终的方案也就向这两个问题进行妥协。<br>Anyway，反正问题算是解决了，但愿 ipv6 的部署进度还能快一点吧（</p><hr><p>明天就是除夕了，浅放一张 AI 画的胡桃吧，祝大家新年快乐！<br><em>胡桃没画成，人要么太大要么太小，随便搞了个背景算了（）</em><br><img src="../_resources/7c8d8e5459a9f8cd83c33281ca1aa262.png" alt="7c8d8e5459a9f8cd83c33281ca1aa262.png"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;阅前提示：本文约 5000 字，预计阅读时长 &amp;gt; 5 分钟。&lt;/p&gt;
+&lt;h2 id=&quot;起因&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#起因&quot;&gt;#&lt;/a&gt; 起因&lt;/h2&gt;
+&lt;p&gt;由于想跟好友联机 minecraft，而使用 natfrp </summary>
+      
+    
+    
+    
+    <category term="学习" scheme="https://zjxdiu.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="网络工程" scheme="https://zjxdiu.github.io/categories/%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E5%B7%A5%E7%A8%8B/"/>
+    
+    
+    <category term="游戏" scheme="https://zjxdiu.github.io/tags/%E6%B8%B8%E6%88%8F/"/>
+    
+    <category term="网络" scheme="https://zjxdiu.github.io/tags/%E7%BD%91%E7%BB%9C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>图床</title>
+    <link href="https://zjxdiu.github.io/blog/%E5%9B%BE%E5%BA%8A/"/>
+    <id>https://zjxdiu.github.io/blog/%E5%9B%BE%E5%BA%8A/</id>
+    <published>2023-01-02T14:21:15.226Z</published>
+    <updated>2023-01-02T14:21:15.226Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="此处用于保存一些图片"><a class="markdownIt-Anchor" href="#此处用于保存一些图片">#</a> 此处用于保存一些图片</h2><p><img src="../_resources/fc3ae10d48f0ad79151951f2ffa88d3c.png" alt="fc3ae10d48f0ad79151951f2ffa88d3c.png"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;此处用于保存一些图片&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#此处用于保存一些图片&quot;&gt;#&lt;/a&gt; 此处用于保存一些图片&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;../_resources/fc3ae10d48f0ad79151951f</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>你好，2023</title>
+    <link href="https://zjxdiu.github.io/blog/Hello_2023/"/>
+    <id>https://zjxdiu.github.io/blog/Hello_2023/</id>
+    <published>2023-01-01T01:46:00.000Z</published>
+    <updated>2023-01-01T01:51:46.011Z</updated>
+    
+    <content type="html"><![CDATA[<p>向过去的 2022 说再见！<br>年度总结将会单独放在另一篇文章中（后续更新链接）<br>今天，让我们先为新的一年到来而庆贺<br>祝大家元旦快乐！</p><pre><code class="hljs text">Lay down forever and ever inside my arms请依偎在我怀Shine now forever and ever I&#x27;ll stay with you绽放华彩吧，我将寸步不离It&#x27;s magic, magic, magic有一种魔力when you are here当你在眼前It&#x27;s magic, magic, magic有一种魔力when you&#x27;re near当你在身畔</code></pre><p>歌词来源：Thomas Bergersen,Kimera Morrell - Magic（<a href="http://music.163.com/song?id=1834324494&amp;userid=438146708">点击收听</a>）</p><p><img src="../_resources/1a92108b49baab2f8a97603f1b04453d.png" alt="1a92108b49baab2f8a97603f1b04453d.png"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;向过去的 2022 说再见！&lt;br&gt;
 年度总结将会单独放在另一篇文章中（后续更新链接）&lt;br&gt;
 今天，让我们先为新的一年到来而庆贺&lt;br&gt;
 祝大家元旦快乐！&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;hljs text&#34;&gt;Lay down forever and ever inside my arms
-请依偎在我怀
-Shine now forever and ever I&amp;#x27;ll stay with you
-绽放华彩吧，我将寸步不离
-It&amp;#x27;s magic, magic, magic
-有一种魔力
-when you are here
-当你在眼前
-It&amp;#x27;s magic, magic, magic
-有一种魔力
-when you&amp;#x27;re near
-当你在身畔&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;歌词来源：Thomas Bergersen,Kimera Morrell - Magic（&lt;a href=&#34;http://music.163.com/song?id=1834324494&amp;amp;userid=438146708&#34;&gt;点击收听&lt;/a&gt;）&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;../_resources/1a92108b49baab2f8a97603f1b04453d.png&#34; alt=&#34;1a92108b49baab2f8a97603f1b04453d.png&#34;&gt;&lt;/p&gt;
-</content>
-        <category term="日常" />
-        <updated>2023-01-01T01:46:00.000Z</updated>
-    </entry>
-    <entry>
-        <id>https://zjxdiu.github.io/blog/%E6%9C%89%E6%84%8F%E6%80%9D%E7%9A%841/</id>
-        <title>一段话的风格改编之旅</title>
-        <link rel="alternate" href="https://zjxdiu.github.io/blog/%E6%9C%89%E6%84%8F%E6%80%9D%E7%9A%841/"/>
-        <content type="html">&lt;p&gt;在群里看到一张图：&lt;br&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs text&quot;&gt;Lay down forever and ever</summary>
+      
+    
+    
+    
+    <category term="杂项" scheme="https://zjxdiu.github.io/categories/%E6%9D%82%E9%A1%B9/"/>
+    
+    <category term="日志" scheme="https://zjxdiu.github.io/categories/%E6%9D%82%E9%A1%B9/%E6%97%A5%E5%BF%97/"/>
+    
+    
+    <category term="日常" scheme="https://zjxdiu.github.io/tags/%E6%97%A5%E5%B8%B8/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>一段话的风格改编之旅</title>
+    <link href="https://zjxdiu.github.io/blog/%E6%9C%89%E6%84%8F%E6%80%9D%E7%9A%841/"/>
+    <id>https://zjxdiu.github.io/blog/%E6%9C%89%E6%84%8F%E6%80%9D%E7%9A%841/</id>
+    <published>2022-12-17T14:55:00.000Z</published>
+    <updated>2022-12-17T14:55:49.110Z</updated>
+    
+    <content type="html"><![CDATA[<p>在群里看到一张图：<br>（很长，谨慎观看）<br>觉得很有意思，所以来尝试一手<br><img src="../_resources/dd3a38e57001d9152146cbdaf57f5e79.png" alt="dd3a38e57001d9152146cbdaf57f5e79.png"></p><p>zjxdiu 写作风格：<br>平淡的一天，我照常乘坐拥挤的地铁下班回家。一成不变的枯燥工作使我身心俱疲，但更糟心的事情，正在发生。<br>那看上去似乎已是中老年的身影逐渐靠近，并不瘦弱的身躯似乎隐藏着对全世界的恶意。他走到我的身边，停下了脚步。<br>“没看到这里写着爱心座位吗？” 一边说着，他举起手上的雨伞就是一次猛戳。<br>我避之不及，匆忙间只躲过了伞柄尖端，雨水依旧顺着伞面滑落到我的衣服上。渗透的雨水寒冷刺骨，却远不及我心中的冷意。<br>起身让开了座位，主动忽略了身旁的异样眼光，我只是默然想道：<br>“终有一日，施加于他人的善与恶，会再次回到自己身边。”</p><hr><p>草（指草本植物），真的没写过第一人称，也没写过现实内容，buff 拉满了，感觉跟自己的真实风格差距有亿点大。<br>还有想尝试的还能继续留言（</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;在群里看到一张图：&lt;br&gt;
 （很长，谨慎观看）&lt;br&gt;
 觉得很有意思，所以来尝试一手&lt;br&gt;
-&lt;img src=&#34;../_resources/dd3a38e57001d9152146cbdaf57f5e79.png&#34; alt=&#34;dd3a38e57001d9152146cbdaf57f5e79.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;zjxdiu 写作风格：&lt;br&gt;
-平淡的一天，我照常乘坐拥挤的地铁下班回家。一成不变的枯燥工作使我身心俱疲，但更糟心的事情，正在发生。&lt;br&gt;
-那看上去似乎已是中老年的身影逐渐靠近，并不瘦弱的身躯似乎隐藏着对全世界的恶意。他走到我的身边，停下了脚步。&lt;br&gt;
-“没看到这里写着爱心座位吗？” 一边说着，他举起手上的雨伞就是一次猛戳。&lt;br&gt;
-我避之不及，匆忙间只躲过了伞柄尖端，雨水依旧顺着伞面滑落到我的衣服上。渗透的雨水寒冷刺骨，却远不及我心中的冷意。&lt;br&gt;
-起身让开了座位，主动忽略了身旁的异样眼光，我只是默然想道：&lt;br&gt;
-“终有一日，施加于他人的善与恶，会再次回到自己身边。”&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;草（指草本植物），真的没写过第一人称，也没写过现实内容，buff 拉满了，感觉跟自己的真实风格差距有亿点大。&lt;br&gt;
-还有想尝试的还能继续留言（&lt;/p&gt;
-</content>
-        <category term="日常" />
-        <category term="脑洞" />
-        <updated>2022-12-17T14:55:00.000Z</updated>
-    </entry>
-    <entry>
-        <id>https://zjxdiu.github.io/blog/%E8%A1%A5%E6%A1%A31/</id>
-        <title>【补档】唤境游戏如何显示帧率？详解性能相关内容</title>
-        <link rel="alternate" href="https://zjxdiu.github.io/blog/%E8%A1%A5%E6%A1%A31/"/>
-        <content type="html">&lt;p&gt;因群里有成员对这方面存在疑问，所以写一篇文章详细解释下游戏内性能相关。&lt;br&gt;
+&lt;img src=&quot;../_resources/dd3a38e57001d9152146cbdaf57f5e79.png&quot; alt=&quot;dd3a38e57001d9152146cbd</summary>
+      
+    
+    
+    
+    <category term="杂项" scheme="https://zjxdiu.github.io/categories/%E6%9D%82%E9%A1%B9/"/>
+    
+    <category term="生活" scheme="https://zjxdiu.github.io/categories/%E6%9D%82%E9%A1%B9/%E7%94%9F%E6%B4%BB/"/>
+    
+    
+    <category term="日常" scheme="https://zjxdiu.github.io/tags/%E6%97%A5%E5%B8%B8/"/>
+    
+    <category term="脑洞" scheme="https://zjxdiu.github.io/tags/%E8%84%91%E6%B4%9E/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【补档】唤境游戏如何显示帧率？详解性能相关内容</title>
+    <link href="https://zjxdiu.github.io/blog/%E8%A1%A5%E6%A1%A31/"/>
+    <id>https://zjxdiu.github.io/blog/%E8%A1%A5%E6%A1%A31/</id>
+    <published>2022-12-05T14:11:00.000Z</published>
+    <updated>2022-12-05T14:11:49.635Z</updated>
+    
+    <content type="html"><![CDATA[<p>因群里有成员对这方面存在疑问，所以写一篇文章详细解释下游戏内性能相关。<br>需要注意的是，本人对于唤境中这些内容的最具体理解未必到位，因此可能出现一些技术细节上的错误，希望大佬能指出错误，感激不尽！<br>为了保证一般开发者也能看得懂，文章会尽量避免非常专业和硬核的描述，相应地就会降低严谨性。如果有兴趣深究，请查找更专业的资料。<br>此外，本文并非是针对唤境游戏的性能优化而写的，如果您的引擎或者制作的游戏出现卡顿，请前往 b 站查看小嗦大佬的教程。<br>传送门：<a href="https://www.bilibili.com/video/BV1wg411E7oF">https://www.bilibili.com/video/BV1wg411E7oF</a></p><hr><h2 id="一-性能相关概念基础内容"><a class="markdownIt-Anchor" href="#一-性能相关概念基础内容">#</a> 一、性能相关概念（基础内容）</h2><p>通常情况下，我们会通过几个方面来评估一个游戏运行的性能表现，分别是帧率、帧生成时间、CPU 占用、GPU 占用、内存占用、显存占用等。</p><h3 id="1-帧率-fps"><a class="markdownIt-Anchor" href="#1-帧率-fps">#</a> 1. 帧率 / FPS</h3><p>游戏之所以能呈现动态的画面，是因为它会以一个很快的速度生成画面，每秒几十张甚至上百张，其中每个画面就被称为一 “帧” 。因此，帧是游戏画面在时间上的最小单位。<br>于是，我们有了帧率的概念。帧率，就是每秒钟游戏生成的帧数量。很明显的，帧率越高，我们肉眼感觉到的画面就越流畅，反之则越卡顿。当帧率为 0 时，游戏就停止在一张静态的图片上。<br>一般而言，当帧率达到 60 时，人眼观察到的画面就可以称为 “比较流畅” 了。</p><h3 id="2帧生成时间或帧间隔-frametime"><a class="markdownIt-Anchor" href="#2帧生成时间或帧间隔-frametime">#</a> 2. 帧生成时间（或帧间隔）/ FRAMETIME</h3><p>有了帧率的概念，我们就可以引入帧生成时间的概念了。<br>游戏引擎每生成一帧画面，都需要消耗一定的时间，这个时间就称为帧生成时间。<br>帧生成时间波动是造成瞬间卡顿的原因之一。设想一个极端情况，在运行的某一秒里，游戏花了 0.9 秒来渲染第一帧，然后在剩下 0.1 秒里渲染了剩下的 59 帧。这时候的平均帧率还是 60，但是你在玩的时候就会明显感觉到游戏发生了一次剧烈的卡顿，因为这 0.9 秒的时间内游戏处于静止状态。<br>帧生成时间和间隔的定义，严格来说并不是完全一致的，但本文并不是进行画面技术研究，所以暂且认为它们是同一个概念。</p><h3 id="3cpu占用-cpu"><a class="markdownIt-Anchor" href="#3cpu占用-cpu">#</a> 3.CPU 占用 / CPU</h3><p>在计算机中，CPU 负责通用计算，也就是任何计算理论上都可以由 CPU 完成。在游戏中，控制游戏系统运行、通过公式计算数据、运行函数等都是由 CPU 完成的。最开始的时候，游戏画面的渲染也是由 CPU 完成的，但后来人们发现 CPU 难以胜任这一要求，于是将这个工作交由 GPU 完成。有关这一段历史的发展，详见 https://www.bilibili.com/video/BV1Hb41177JB<br> 对于现代电脑和手机来说，它们的 CPU 性能都相当强大，可以完成非常密集的运算需求。但它们的性能也不是无限的，而且在手机、笔记本电脑上，CPU 是耗电量非常大的元件。所以，CPU 会直接影响游戏的性能表现，降低 CPU 的占用率也可以有效提高游戏运行的效率，以及在低端设备上成功运行的可能性。</p><h3 id="4gpu占用-gpu"><a class="markdownIt-Anchor" href="#4gpu占用-gpu">#</a> 4.GPU 占用 / GPU</h3><p>前面提到了，GPU 是用来替代 CPU 来完成画面渲染工作的硬件。所以，GPU 是离游戏实际画面最近的硬件，因为游戏画面就是由它生成的。<br>GPU 负责的内容就是渲染画面，例如显示图片、文字等。<br>对于唤境来说，由于唤境只是 2D 游戏引擎，因此对于现代 GPU 来说压力比较低，但还是存在运行效率过低的情况。<br>有关 GPU 运行解析的内容请见官方教程<a href="https://evkworld.cn/wiki/58"> https://evkworld.cn/wiki/58</a></p><h3 id="5显存占用-vram-video-memory-image-memory等"><a class="markdownIt-Anchor" href="#5显存占用-vram-video-memory-image-memory等">#</a> 5. 显存占用 / (VRAM、VIDEO MEMORY、IMAGE MEMORY 等)</h3><p>显存，又称显示内存、显卡内存、图形内存、视频内存等，是显卡用来储存图像信息的临时空间。<br>对于集成显卡（例如手机）而言，显存就是从内存中分出来的部分；对于独立显卡（例如高性能电脑）而言，显存是单独集成在显卡中的一个存储器。所以，当游戏在手机上运行的时候，游戏会同时消耗两份内存空间，一部分用于程序运行，另一部分充当显存。因此，如果您的游戏在电脑上运行很正常，而在低端手机上就无法运行或者特别卡顿，则有可能是因为游戏消耗了较多的显存和内存。</p><hr><h2 id="二-唤境中跟性能有关的表达式"><a class="markdownIt-Anchor" href="#二-唤境中跟性能有关的表达式">#</a> 二、唤境中跟性能有关的表达式</h2><p>唤境引擎并没有提供性能监控相关的组件和能力，但可以通过表达式获取到性能数据。<br>所有相关表达式都在系统部分中。</p><h3 id="1帧率"><a class="markdownIt-Anchor" href="#1帧率">#</a> 1. 帧率</h3><p>表达式：fps<br> 刷新频率：每秒 1 次<br>返回值类型：整数<br>建议使用方法：直接通过表达式获取帧率即可。<br><img src="../_resources/ba2e311e9e59cfd649509ccc2fa99a0b.png" alt="ba2e311e9e59cfd649509ccc2fa99a0b.png"></p><h3 id="2帧生成时间帧间隔"><a class="markdownIt-Anchor" href="#2帧生成时间帧间隔">#</a> 2. 帧生成时间（帧间隔）</h3><p>表达式：dt<br> 刷新频率：每帧 1 次<br>返回值类型：单精度浮点数，即 6 位小数<br>（当测量单帧间隔时会返回 10 位小数）<br>其它：引擎内描述为 “时间间隔”<br> 建议使用方法：先将数据乘以 1000，然后使用 roundto () 将其化简到 1-3 位小数，最后加上单位 “ms”（毫秒），即可得到友好的数字展示。<br><img src="../_resources/fb34db0b029a4d27e4ad593e8cc363ac.png" alt="fb34db0b029a4d27e4ad593e8cc363ac.png"></p><h3 id="3cpu占用cpu时间"><a class="markdownIt-Anchor" href="#3cpu占用cpu时间">#</a> 3.CPU 占用（CPU 时间）</h3><p>表达式：cpuutilisation<br> 刷新频率：每秒 1 次<br>其它：引擎内描述为 “CPU 在游戏中消耗的时间”<br> 返回值类型：双精度浮点数，即 18 位小数。<br>建议使用方法：先将数据乘以 100，然后使用 roundto () 将其简化到 1-2 位小数，最后加上百分比符号 “%”，即可得到友好的数字展示。<br><img src="../_resources/68f1e9a186fe3b6660d1936f792cefe6.png" alt="68f1e9a186fe3b6660d1936f792cefe6.png"></p><h3 id="4gpu占用渲染消耗时间"><a class="markdownIt-Anchor" href="#4gpu占用渲染消耗时间">#</a> 4.GPU 占用（渲染消耗时间）</h3><p>表达式：gpuutilisation<br> 刷新频率：每秒 1 次<br>其它：引擎内描述为 “GPU 在游戏中消耗的时间”<br> 返回值类型：9 位小数。<br>建议使用方法：与 CPU 占用相同。<br><img src="../_resources/596e4d2898ce7eb638dca60f52193e12.png" alt="596e4d2898ce7eb638dca60f52193e12.png"></p><h3 id="5显存占用"><a class="markdownIt-Anchor" href="#5显存占用">#</a> 5. 显存占用</h3><p>表达式：imagememoryusage<br> 刷新频率：每帧 1 次<br>返回值类型：9 位小数。<br>建议使用方法：直接通过表达式获取即可。<br><img src="../_resources/4b1452908420640a6ac75af4bb2b156e.png" alt="4b1452908420640a6ac75af4bb2b156e.png"></p><hr><h2 id="三-制作性能监控窗口"><a class="markdownIt-Anchor" href="#三-制作性能监控窗口">#</a> 三、制作性能监控窗口</h2><p>光了解了上面所有的信息，但如果不会用，那就都是白搭。接下来，我会一步步解释如何制作游戏内的性能监控悬浮窗。</p><p>1. 打开游戏项目，新建对象：一个文本、一个精灵和一个按钮，精灵的贴图替换成一张长方形图片即可<br><img src="../_resources/799e625f09a212d9e980f8cff86b3a2e.png" alt="799e625f09a212d9e980f8cff86b3a2e.png"></p><p><img src="../_resources/c6d47b1f64216db3965c811b0afdb06e.png" alt="c6d47b1f64216db3965c811b0afdb06e.png"></p><p>2. 新建几个全局变量，“启用测量”、“悬浮窗 x”、“悬浮窗 y”。其中，第一个是布尔类型变量，是必需的；后两个是数值类型变量，不是必需的。<br>后两个的初始值不建议设为 0，应该根据你选择的默认位置来设置。<br><img src="../_resources/a974999ff46bbac77137dbfc7e819c24.png" alt="a974999ff46bbac77137dbfc7e819c24.png"></p><p>3. 新建一个图层组 “悬浮窗”，设置为全局图层组，然后将精灵、文本和按钮拖入该图层组中，调整文本和精灵的大小及属性，文本选择左对齐、上下居中对齐，大小跟精灵差不多一样大就行<br><img src="../_resources/7cf2b2e120c5da549d4cc1c5b5008a36.png" alt="7cf2b2e120c5da549d4cc1c5b5008a36.png"><br><img src="../_resources/2b26784c58f0c77a067d4447edbd42b4.png" alt="2b26784c58f0c77a067d4447edbd42b4.png"></p><p>4. 为文本添加拖拽和定时器能力，为精灵添加绑定能力<br><img src="../_resources/f2cc5d66755ee2eb24d199e7c453ae46.png" alt="f2cc5d66755ee2eb24d199e7c453ae46.png"><br><img src="../_resources/1751f48b11198c44c52e8e9cf67c033d.png" alt="1751f48b11198c44c52e8e9cf67c033d.png"></p><p>5. 新建一条全局事件表，名称为 “性能监控窗口”，或者任何你喜欢的名字。<br><img src="../_resources/3f181abb7a3ad49aaf2f1b81b178906a.png" alt="3f181abb7a3ad49aaf2f1b81b178906a.png"></p><p>6. 开始写事件。可以参考我下面的这种设计方案。<br>核心思路：<br>（1）当 “启用测量” 变量为 “真” 时，显示文本和精灵，否则隐藏；注意，不要重复触发，可以加入一个触发器（例如 “仅触发一次”）来解决；<br>（2）制作好看的文本排版；<br>（3）避免每帧检测和每帧改变文本；<br>（4）（可选）实现悬浮窗的拖动，以及位置记忆。<br><img src="../_resources/7b2602a886c2529d6189504f42ae5ff3.png" alt="7b2602a886c2529d6189504f42ae5ff3.png"><br> 文本内容供参考：<br>“帧率：” &amp; fps &amp; newline &amp; “CPU：” &amp; roundto (cpuutilisation*100,1) &amp; “%” &amp; newline &amp; “显存：” &amp; imagememoryusage &amp; “mb”</p><p>7. 在每个你希望有监控悬浮窗的场景下都新建一个叫做 “悬浮窗” 的图层组，不需要放入任何内容，因为你之前已经选中了全局事件表。<br>然后将刚才写的全局事件表应用于每个你希望有悬浮窗的场景。<br><img src="../_resources/9de754a5f74cef3b19451317d1597aa9.png" alt="9de754a5f74cef3b19451317d1597aa9.png"><br><img src="../_resources/c383bbc3f3d2d8ddb921774cdc2be8c1.png" alt="c383bbc3f3d2d8ddb921774cdc2be8c1.png"></p><p>8. 检查效果<br><img src="../_resources/50611b15f85e9e7e7164bff667699f0d.png" alt="50611b15f85e9e7e7164bff667699f0d.png"></p><p>9. 可额外优化的内容</p><p>拖拽能力没有进行区域限制，可以直接把悬浮窗拖到屏幕外，如何解决？<br>・提示：只需要使用一个能力即可解决。</p><p>事件表里还有可以进一步优化的内容？<br>・提示：绑定能力。</p><h2 id="四-总结"><a class="markdownIt-Anchor" href="#四-总结">#</a> 四、总结</h2><p>通过这一篇文章的解析和教学，你应该对唤境游戏的性能及其监控方法有了一定的了解。<br>在多数情况下，唤境游戏其实并不需要这么多高级的技术细节，但这类功能可以给你的游戏添砖加瓦，起到锦上添花的作用。<br>文章撰写仓促，部分内容做不到非常细致和详尽，也可能有错误，欢迎大佬前来指正！</p><p>额外优化内容：<br>（1）给文本和精灵分别添加 “边界限制” 能力即可；<br>（2）在启用测量为假的时候，给精灵添加一条动作：“取消绑定”</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;因群里有成员对这方面存在疑问，所以写一篇文章详细解释下游戏内性能相关。&lt;br&gt;
 需要注意的是，本人对于唤境中这些内容的最具体理解未必到位，因此可能出现一些技术细节上的错误，希望大佬能指出错误，感激不尽！&lt;br&gt;
-为了保证一般开发者也能看得懂，文章会尽量避免非常专业和硬核的描述，相应地就会降低严谨性。如果有兴趣深究，请查找更专业的资料。&lt;br&gt;
-此外，本文并非是针对唤境游戏的性能优化而写的，如果您的引擎或者制作的游戏出现卡顿，请前往 b 站查看小嗦大佬的教程。&lt;br&gt;
-传送门：&lt;a href=&#34;https://www.bilibili.com/video/BV1wg411E7oF&#34;&gt;https://www.bilibili.com/video/BV1wg411E7oF&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;一-性能相关概念基础内容&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#一-性能相关概念基础内容&#34;&gt;#&lt;/a&gt; 一、性能相关概念（基础内容）&lt;/h2&gt;
-&lt;p&gt;通常情况下，我们会通过几个方面来评估一个游戏运行的性能表现，分别是帧率、帧生成时间、CPU 占用、GPU 占用、内存占用、显存占用等。&lt;/p&gt;
-&lt;h3 id=&#34;1-帧率-fps&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#1-帧率-fps&#34;&gt;#&lt;/a&gt; 1. 帧率 / FPS&lt;/h3&gt;
-&lt;p&gt;游戏之所以能呈现动态的画面，是因为它会以一个很快的速度生成画面，每秒几十张甚至上百张，其中每个画面就被称为一 “帧” 。因此，帧是游戏画面在时间上的最小单位。&lt;br&gt;
-于是，我们有了帧率的概念。帧率，就是每秒钟游戏生成的帧数量。很明显的，帧率越高，我们肉眼感觉到的画面就越流畅，反之则越卡顿。当帧率为 0 时，游戏就停止在一张静态的图片上。&lt;br&gt;
-一般而言，当帧率达到 60 时，人眼观察到的画面就可以称为 “比较流畅” 了。&lt;/p&gt;
-&lt;h3 id=&#34;2帧生成时间或帧间隔-frametime&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#2帧生成时间或帧间隔-frametime&#34;&gt;#&lt;/a&gt; 2. 帧生成时间（或帧间隔）/ FRAMETIME&lt;/h3&gt;
-&lt;p&gt;有了帧率的概念，我们就可以引入帧生成时间的概念了。&lt;br&gt;
-游戏引擎每生成一帧画面，都需要消耗一定的时间，这个时间就称为帧生成时间。&lt;br&gt;
-帧生成时间波动是造成瞬间卡顿的原因之一。设想一个极端情况，在运行的某一秒里，游戏花了 0.9 秒来渲染第一帧，然后在剩下 0.1 秒里渲染了剩下的 59 帧。这时候的平均帧率还是 60，但是你在玩的时候就会明显感觉到游戏发生了一次剧烈的卡顿，因为这 0.9 秒的时间内游戏处于静止状态。&lt;br&gt;
-帧生成时间和间隔的定义，严格来说并不是完全一致的，但本文并不是进行画面技术研究，所以暂且认为它们是同一个概念。&lt;/p&gt;
-&lt;h3 id=&#34;3cpu占用-cpu&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#3cpu占用-cpu&#34;&gt;#&lt;/a&gt; 3.CPU 占用 / CPU&lt;/h3&gt;
-&lt;p&gt;在计算机中，CPU 负责通用计算，也就是任何计算理论上都可以由 CPU 完成。在游戏中，控制游戏系统运行、通过公式计算数据、运行函数等都是由 CPU 完成的。最开始的时候，游戏画面的渲染也是由 CPU 完成的，但后来人们发现 CPU 难以胜任这一要求，于是将这个工作交由 GPU 完成。有关这一段历史的发展，详见 https://www.bilibili.com/video/BV1Hb41177JB&lt;br&gt;
- 对于现代电脑和手机来说，它们的 CPU 性能都相当强大，可以完成非常密集的运算需求。但它们的性能也不是无限的，而且在手机、笔记本电脑上，CPU 是耗电量非常大的元件。所以，CPU 会直接影响游戏的性能表现，降低 CPU 的占用率也可以有效提高游戏运行的效率，以及在低端设备上成功运行的可能性。&lt;/p&gt;
-&lt;h3 id=&#34;4gpu占用-gpu&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#4gpu占用-gpu&#34;&gt;#&lt;/a&gt; 4.GPU 占用 / GPU&lt;/h3&gt;
-&lt;p&gt;前面提到了，GPU 是用来替代 CPU 来完成画面渲染工作的硬件。所以，GPU 是离游戏实际画面最近的硬件，因为游戏画面就是由它生成的。&lt;br&gt;
-GPU 负责的内容就是渲染画面，例如显示图片、文字等。&lt;br&gt;
-对于唤境来说，由于唤境只是 2D 游戏引擎，因此对于现代 GPU 来说压力比较低，但还是存在运行效率过低的情况。&lt;br&gt;
-有关 GPU 运行解析的内容请见官方教程&lt;a href=&#34;https://evkworld.cn/wiki/58&#34;&gt; https://evkworld.cn/wiki/58&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&#34;5显存占用-vram-video-memory-image-memory等&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#5显存占用-vram-video-memory-image-memory等&#34;&gt;#&lt;/a&gt; 5. 显存占用 / (VRAM、VIDEO MEMORY、IMAGE MEMORY 等)&lt;/h3&gt;
-&lt;p&gt;显存，又称显示内存、显卡内存、图形内存、视频内存等，是显卡用来储存图像信息的临时空间。&lt;br&gt;
-对于集成显卡（例如手机）而言，显存就是从内存中分出来的部分；对于独立显卡（例如高性能电脑）而言，显存是单独集成在显卡中的一个存储器。所以，当游戏在手机上运行的时候，游戏会同时消耗两份内存空间，一部分用于程序运行，另一部分充当显存。因此，如果您的游戏在电脑上运行很正常，而在低端手机上就无法运行或者特别卡顿，则有可能是因为游戏消耗了较多的显存和内存。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;二-唤境中跟性能有关的表达式&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#二-唤境中跟性能有关的表达式&#34;&gt;#&lt;/a&gt; 二、唤境中跟性能有关的表达式&lt;/h2&gt;
-&lt;p&gt;唤境引擎并没有提供性能监控相关的组件和能力，但可以通过表达式获取到性能数据。&lt;br&gt;
-所有相关表达式都在系统部分中。&lt;/p&gt;
-&lt;h3 id=&#34;1帧率&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#1帧率&#34;&gt;#&lt;/a&gt; 1. 帧率&lt;/h3&gt;
-&lt;p&gt;表达式：fps&lt;br&gt;
- 刷新频率：每秒 1 次&lt;br&gt;
-返回值类型：整数&lt;br&gt;
-建议使用方法：直接通过表达式获取帧率即可。&lt;br&gt;
-&lt;img src=&#34;../_resources/ba2e311e9e59cfd649509ccc2fa99a0b.png&#34; alt=&#34;ba2e311e9e59cfd649509ccc2fa99a0b.png&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;2帧生成时间帧间隔&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#2帧生成时间帧间隔&#34;&gt;#&lt;/a&gt; 2. 帧生成时间（帧间隔）&lt;/h3&gt;
-&lt;p&gt;表达式：dt&lt;br&gt;
- 刷新频率：每帧 1 次&lt;br&gt;
-返回值类型：单精度浮点数，即 6 位小数&lt;br&gt;
-（当测量单帧间隔时会返回 10 位小数）&lt;br&gt;
-其它：引擎内描述为 “时间间隔”&lt;br&gt;
- 建议使用方法：先将数据乘以 1000，然后使用 roundto () 将其化简到 1-3 位小数，最后加上单位 “ms”（毫秒），即可得到友好的数字展示。&lt;br&gt;
-&lt;img src=&#34;../_resources/fb34db0b029a4d27e4ad593e8cc363ac.png&#34; alt=&#34;fb34db0b029a4d27e4ad593e8cc363ac.png&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;3cpu占用cpu时间&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#3cpu占用cpu时间&#34;&gt;#&lt;/a&gt; 3.CPU 占用（CPU 时间）&lt;/h3&gt;
-&lt;p&gt;表达式：cpuutilisation&lt;br&gt;
- 刷新频率：每秒 1 次&lt;br&gt;
-其它：引擎内描述为 “CPU 在游戏中消耗的时间”&lt;br&gt;
- 返回值类型：双精度浮点数，即 18 位小数。&lt;br&gt;
-建议使用方法：先将数据乘以 100，然后使用 roundto () 将其简化到 1-2 位小数，最后加上百分比符号 “%”，即可得到友好的数字展示。&lt;br&gt;
-&lt;img src=&#34;../_resources/68f1e9a186fe3b6660d1936f792cefe6.png&#34; alt=&#34;68f1e9a186fe3b6660d1936f792cefe6.png&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;4gpu占用渲染消耗时间&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#4gpu占用渲染消耗时间&#34;&gt;#&lt;/a&gt; 4.GPU 占用（渲染消耗时间）&lt;/h3&gt;
-&lt;p&gt;表达式：gpuutilisation&lt;br&gt;
- 刷新频率：每秒 1 次&lt;br&gt;
-其它：引擎内描述为 “GPU 在游戏中消耗的时间”&lt;br&gt;
- 返回值类型：9 位小数。&lt;br&gt;
-建议使用方法：与 CPU 占用相同。&lt;br&gt;
-&lt;img src=&#34;../_resources/596e4d2898ce7eb638dca60f52193e12.png&#34; alt=&#34;596e4d2898ce7eb638dca60f52193e12.png&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;5显存占用&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#5显存占用&#34;&gt;#&lt;/a&gt; 5. 显存占用&lt;/h3&gt;
-&lt;p&gt;表达式：imagememoryusage&lt;br&gt;
- 刷新频率：每帧 1 次&lt;br&gt;
-返回值类型：9 位小数。&lt;br&gt;
-建议使用方法：直接通过表达式获取即可。&lt;br&gt;
-&lt;img src=&#34;../_resources/4b1452908420640a6ac75af4bb2b156e.png&#34; alt=&#34;4b1452908420640a6ac75af4bb2b156e.png&#34;&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;三-制作性能监控窗口&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#三-制作性能监控窗口&#34;&gt;#&lt;/a&gt; 三、制作性能监控窗口&lt;/h2&gt;
-&lt;p&gt;光了解了上面所有的信息，但如果不会用，那就都是白搭。接下来，我会一步步解释如何制作游戏内的性能监控悬浮窗。&lt;/p&gt;
-&lt;p&gt;1. 打开游戏项目，新建对象：一个文本、一个精灵和一个按钮，精灵的贴图替换成一张长方形图片即可&lt;br&gt;
-&lt;img src=&#34;../_resources/799e625f09a212d9e980f8cff86b3a2e.png&#34; alt=&#34;799e625f09a212d9e980f8cff86b3a2e.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;../_resources/c6d47b1f64216db3965c811b0afdb06e.png&#34; alt=&#34;c6d47b1f64216db3965c811b0afdb06e.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;2. 新建几个全局变量，“启用测量”、“悬浮窗 x”、“悬浮窗 y”。其中，第一个是布尔类型变量，是必需的；后两个是数值类型变量，不是必需的。&lt;br&gt;
-后两个的初始值不建议设为 0，应该根据你选择的默认位置来设置。&lt;br&gt;
-&lt;img src=&#34;../_resources/a974999ff46bbac77137dbfc7e819c24.png&#34; alt=&#34;a974999ff46bbac77137dbfc7e819c24.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;3. 新建一个图层组 “悬浮窗”，设置为全局图层组，然后将精灵、文本和按钮拖入该图层组中，调整文本和精灵的大小及属性，文本选择左对齐、上下居中对齐，大小跟精灵差不多一样大就行&lt;br&gt;
-&lt;img src=&#34;../_resources/7cf2b2e120c5da549d4cc1c5b5008a36.png&#34; alt=&#34;7cf2b2e120c5da549d4cc1c5b5008a36.png&#34;&gt;&lt;br&gt;
-&lt;img src=&#34;../_resources/2b26784c58f0c77a067d4447edbd42b4.png&#34; alt=&#34;2b26784c58f0c77a067d4447edbd42b4.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;4. 为文本添加拖拽和定时器能力，为精灵添加绑定能力&lt;br&gt;
-&lt;img src=&#34;../_resources/f2cc5d66755ee2eb24d199e7c453ae46.png&#34; alt=&#34;f2cc5d66755ee2eb24d199e7c453ae46.png&#34;&gt;&lt;br&gt;
-&lt;img src=&#34;../_resources/1751f48b11198c44c52e8e9cf67c033d.png&#34; alt=&#34;1751f48b11198c44c52e8e9cf67c033d.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;5. 新建一条全局事件表，名称为 “性能监控窗口”，或者任何你喜欢的名字。&lt;br&gt;
-&lt;img src=&#34;../_resources/3f181abb7a3ad49aaf2f1b81b178906a.png&#34; alt=&#34;3f181abb7a3ad49aaf2f1b81b178906a.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;6. 开始写事件。可以参考我下面的这种设计方案。&lt;br&gt;
-核心思路：&lt;br&gt;
-（1）当 “启用测量” 变量为 “真” 时，显示文本和精灵，否则隐藏；注意，不要重复触发，可以加入一个触发器（例如 “仅触发一次”）来解决；&lt;br&gt;
-（2）制作好看的文本排版；&lt;br&gt;
-（3）避免每帧检测和每帧改变文本；&lt;br&gt;
-（4）（可选）实现悬浮窗的拖动，以及位置记忆。&lt;br&gt;
-&lt;img src=&#34;../_resources/7b2602a886c2529d6189504f42ae5ff3.png&#34; alt=&#34;7b2602a886c2529d6189504f42ae5ff3.png&#34;&gt;&lt;br&gt;
- 文本内容供参考：&lt;br&gt;
-“帧率：” &amp;amp; fps &amp;amp; newline &amp;amp; “CPU：” &amp;amp; roundto (cpuutilisation*100,1) &amp;amp; “%” &amp;amp; newline &amp;amp; “显存：” &amp;amp; imagememoryusage &amp;amp; “mb”&lt;/p&gt;
-&lt;p&gt;7. 在每个你希望有监控悬浮窗的场景下都新建一个叫做 “悬浮窗” 的图层组，不需要放入任何内容，因为你之前已经选中了全局事件表。&lt;br&gt;
-然后将刚才写的全局事件表应用于每个你希望有悬浮窗的场景。&lt;br&gt;
-&lt;img src=&#34;../_resources/9de754a5f74cef3b19451317d1597aa9.png&#34; alt=&#34;9de754a5f74cef3b19451317d1597aa9.png&#34;&gt;&lt;br&gt;
-&lt;img src=&#34;../_resources/c383bbc3f3d2d8ddb921774cdc2be8c1.png&#34; alt=&#34;c383bbc3f3d2d8ddb921774cdc2be8c1.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;8. 检查效果&lt;br&gt;
-&lt;img src=&#34;../_resources/50611b15f85e9e7e7164bff667699f0d.png&#34; alt=&#34;50611b15f85e9e7e7164bff667699f0d.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;9. 可额外优化的内容&lt;/p&gt;
-&lt;p&gt;拖拽能力没有进行区域限制，可以直接把悬浮窗拖到屏幕外，如何解决？&lt;br&gt;
-・提示：只需要使用一个能力即可解决。&lt;/p&gt;
-&lt;p&gt;事件表里还有可以进一步优化的内容？&lt;br&gt;
-・提示：绑定能力。&lt;/p&gt;
-&lt;h2 id=&#34;四-总结&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#四-总结&#34;&gt;#&lt;/a&gt; 四、总结&lt;/h2&gt;
-&lt;p&gt;通过这一篇文章的解析和教学，你应该对唤境游戏的性能及其监控方法有了一定的了解。&lt;br&gt;
-在多数情况下，唤境游戏其实并不需要这么多高级的技术细节，但这类功能可以给你的游戏添砖加瓦，起到锦上添花的作用。&lt;br&gt;
-文章撰写仓促，部分内容做不到非常细致和详尽，也可能有错误，欢迎大佬前来指正！&lt;/p&gt;
-&lt;p&gt;额外优化内容：&lt;br&gt;
-（1）给文本和精灵分别添加 “边界限制” 能力即可；&lt;br&gt;
-（2）在启用测量为假的时候，给精灵添加一条动作：“取消绑定”&lt;/p&gt;
-</content>
-        <category term="开发" />
-        <category term="游戏引擎" />
-        <updated>2022-12-05T14:11:00.000Z</updated>
-    </entry>
-    <entry>
-        <id>https://zjxdiu.github.io/blog/S.O.S/</id>
-        <title>触动心灵的歌声：S.O.S</title>
-        <link rel="alternate" href="https://zjxdiu.github.io/blog/S.O.S/"/>
-        <content type="html">&lt;p&gt;&lt;a href=&#34;http://music.163.com/song?id=28279678&amp;amp;userid=438146708&#34;&gt;点击收听：S.O.S&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;../_resources/5606f288e66c105e4ddd37b5b8a9631b.png&#34; alt=&#34;5606f288e66c105e4ddd37b5b8a9631b.png&#34;&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;意志正在消沉，希望正在燃尽。&lt;br&gt;
-忽然听到了这样一个声音，她将我唤醒，又让我陷入无止尽的幻想。她给予我无穷无尽的力量，却又让我更深地沉醉。&lt;br&gt;
-在我有记忆以来，这是我听过的最美的歌声。她在歌曲中只出现在副歌部分，但那份空灵，蕴含在声音中的情感，却是狠狠地撞击我的心脏。我的灵魂发出呐喊，却无法挣脱，甘愿自己被她迷醉。&lt;br&gt;
-她的声音，几乎完美地符合我的审美感知。我相信，也有更多人会被她的声音吸引。&lt;br&gt;
-并不是很确定她的声音是否是歌曲信息中的那个歌手，但我确信自己不会忘记她带给我的感觉。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;她是海中的精灵，也是海洋之神的化身。&lt;br&gt;
-她的呼吸，会化作海浪和潮汐。挥手轻舞，就能平息一场海啸。从没有人见过她，但每个被她庇护的人都会梦到她。&lt;br&gt;
-传说，在大海的中央，会有一位看不见的海妖。每当船只丢失航线、误入她的领地时，她会唱起来自海洋的歌声，保护船只免遭暗礁和巨石的侵袭。&lt;br&gt;
-但是，这并不是无条件的施舍。&lt;br&gt;
-时常有游船丢失方向经过这里。其上的许多人类在得知自己可能无法抵达彼岸后，露出无尽的丑态。&lt;br&gt;
-人们将自己的行为解释为末日前最后的狂欢。&lt;br&gt;
-但她不会同意。&lt;br&gt;
-心存善念的人会被她迷惑，但最终会被海浪带回自己的故乡。&lt;br&gt;
-而欲望和恶念过多的人，会在自然的力量下灰飞烟灭。&lt;br&gt;
-但是，当她听到人们心中的祈祷、看到人们眼中的痛苦与绝望时&lt;br&gt;
-她总会感同身受。&lt;br&gt;
-所以，她的歌声，大多都是如赎罪之人的挽歌一般，绝望中带着希冀，从未断开内心中的那一丝神念。&lt;br&gt;
-人们的心灵会得到净化，他们会忘记自己的遭遇，但会平安回到家人面前。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;歌词如下&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;hljs stata&#34;&gt;C&amp;#x27;&lt;span class=&#34;hljs-keyword&#34;&gt;est&lt;/span&gt; un SOS,je suis touché&lt;span class=&#34;hljs-keyword&#34;&gt;e&lt;/span&gt; je suis à terre
-这是来自远方的求助（因迷茫而搁浅）
-Entends-tu &lt;span class=&#34;hljs-keyword&#34;&gt;ma&lt;/span&gt; &lt;span class=&#34;hljs-keyword&#34;&gt;d&lt;/span&gt;étresse, y&amp;#x27;a t-il quelqu&amp;#x27;un ?
-是否有人能感触到那一丝的痛苦？
-Je sens &lt;span class=&#34;hljs-keyword&#34;&gt;que&lt;/span&gt; je me perds
-我已彻底迷失了方向
-J&amp;#x27;ai tout quitté, mais ne &lt;span class=&#34;hljs-keyword&#34;&gt;m&lt;/span&gt;&amp;#x27;&lt;span class=&#34;hljs-keyword&#34;&gt;en&lt;/span&gt; veux pas
-不要怪我曾经的选择（舍弃一切）
-Fallait &lt;span class=&#34;hljs-keyword&#34;&gt;que&lt;/span&gt; je &lt;span class=&#34;hljs-keyword&#34;&gt;m&lt;/span&gt;&amp;#x27;&lt;span class=&#34;hljs-keyword&#34;&gt;en&lt;/span&gt; aille, je &lt;span class=&#34;hljs-keyword&#34;&gt;n&lt;/span&gt;&amp;#x27;étais plus moi
-只有选择离开，我才能（告被从前）做回自己
-Je suis tombé&lt;span class=&#34;hljs-keyword&#34;&gt;e&lt;/span&gt; tellement bas
-我也为此伤心难过到了极点
-&lt;span class=&#34;hljs-keyword&#34;&gt;Que&lt;/span&gt; plus personne ne me voit
-没人能真正理解我的苦处
-J&amp;#x27;ai sombré dans &lt;span class=&#34;hljs-keyword&#34;&gt;l&lt;/span&gt;&amp;#x27;anonymat
-我隐姓埋名
-Combattu le vide et le froid, le froid
-社会的打拼，让我倍感人情的冷漠
-J&amp;#x27;aimerais revenir , j&amp;#x27; &lt;span class=&#34;hljs-keyword&#34;&gt;n&lt;/span&gt;&amp;#x27;y arrive pas
-我真的很想回去，但却有不知该怎么办
-J&amp;#x27;aimerais revenir
-我真的很想回去
-Je suis rien, je suis personne
-我碌碌无为，卑躬屈膝
-J&amp;#x27;ai toute &lt;span class=&#34;hljs-keyword&#34;&gt;ma&lt;/span&gt; peine comme royaume
-属于我的世界充满痛苦
-Une seule arme &lt;span class=&#34;hljs-keyword&#34;&gt;m&lt;/span&gt;&amp;#x27;emprisonne
-我如囚徒般被困在那里
-Voir &lt;span class=&#34;hljs-keyword&#34;&gt;la&lt;/span&gt; lumière entre les barreaux
-隔着铁笼看到了远处那丝光明
-Et regarder comme le ciel &lt;span class=&#34;hljs-keyword&#34;&gt;est&lt;/span&gt; beau
-那湛蓝天空是多么的美好
-Entends-tu &lt;span class=&#34;hljs-keyword&#34;&gt;ma&lt;/span&gt; voix &lt;span class=&#34;hljs-keyword&#34;&gt;qui&lt;/span&gt; résonne (&lt;span class=&#34;hljs-keyword&#34;&gt;qui&lt;/span&gt; résonne) ?
-你能听到我歌声中的苦楚吗（歌声的回响）？
-C&amp;#x27;&lt;span class=&#34;hljs-keyword&#34;&gt;est&lt;/span&gt; un SOS ,je suis touché&lt;span class=&#34;hljs-keyword&#34;&gt;e&lt;/span&gt; je suis à terre
-这是来自远方的求助（因迷茫耳搁浅）
-Entends-tu &lt;span class=&#34;hljs-keyword&#34;&gt;ma&lt;/span&gt; &lt;span class=&#34;hljs-keyword&#34;&gt;d&lt;/span&gt;étresse, y&amp;#x27;a t-il quelqu&amp;#x27;un ?
-是否有人能感触到那一丝的痛苦？
-Je sens &lt;span class=&#34;hljs-keyword&#34;&gt;que&lt;/span&gt; je me perds ..
-我已彻底迷失了方向
-Le silence tue &lt;span class=&#34;hljs-keyword&#34;&gt;la&lt;/span&gt; souffrance &lt;span class=&#34;hljs-keyword&#34;&gt;en&lt;/span&gt; moi
-沉默只会让我更加的痛苦
-&lt;span class=&#34;hljs-keyword&#34;&gt;L&lt;/span&gt;&amp;#x27;entends-tu ? &lt;span class=&#34;hljs-keyword&#34;&gt;Est&lt;/span&gt;-ce &lt;span class=&#34;hljs-keyword&#34;&gt;que&lt;/span&gt; tu le vois ?
-你能听到，感受到它吗？
-Il &lt;span class=&#34;hljs-keyword&#34;&gt;te&lt;/span&gt; promet, fait &lt;span class=&#34;hljs-keyword&#34;&gt;de&lt;/span&gt; toi
-曾经的憧憬，早已变得
-Un objet sans éclat
-黯淡无光
-Alors j&amp;#x27;ai crié, j&amp;#x27;ai pensé à toi
-在泪眼交织中，我想起了你
-J&amp;#x27;ai noyé le ciel dans les vagues, les vagues
-我淹没在我的天空里，满是茫然、茫然
-Tous mes regrets, toute mon histoire
-所有的悔恨，所有的往事
-Je &lt;span class=&#34;hljs-keyword&#34;&gt;la&lt;/span&gt; reflè&lt;span class=&#34;hljs-keyword&#34;&gt;te&lt;/span&gt;
-让我幡然醒悟
-Je suis rien, je suis personne
-我碌碌无为，卑躬屈膝
-J&amp;#x27;ai toute &lt;span class=&#34;hljs-keyword&#34;&gt;ma&lt;/span&gt; peine comme royaume
-属于我的世界充满痛苦
-Une seule arme &lt;span class=&#34;hljs-keyword&#34;&gt;m&lt;/span&gt;&amp;#x27;emprisonne
-我如囚徒般被困在那里
-Voir &lt;span class=&#34;hljs-keyword&#34;&gt;la&lt;/span&gt; lumière entre les barreaux
-隔着铁笼看到了远处那丝光明
-Et regarder comme le ciel &lt;span class=&#34;hljs-keyword&#34;&gt;est&lt;/span&gt; beau
-那湛蓝天空是多么的美好
-Entends-tu &lt;span class=&#34;hljs-keyword&#34;&gt;ma&lt;/span&gt; voix &lt;span class=&#34;hljs-keyword&#34;&gt;qui&lt;/span&gt; résonne (&lt;span class=&#34;hljs-keyword&#34;&gt;qui&lt;/span&gt; résonne) ？
-你能听到我歌声中的苦楚吗（歌声回响）？
-C&amp;#x27;&lt;span class=&#34;hljs-keyword&#34;&gt;est&lt;/span&gt; un SOS, je suis touché&lt;span class=&#34;hljs-keyword&#34;&gt;e&lt;/span&gt; je suis à terre
-这是来自远方的求助（因迷茫而搁浅）
-Entends-tu &lt;span class=&#34;hljs-keyword&#34;&gt;ma&lt;/span&gt; &lt;span class=&#34;hljs-keyword&#34;&gt;d&lt;/span&gt;étresse, y&amp;#x27;a t-il quelqu&amp;#x27;un ?
-是否有人能感触到那一丝的苦楚？
-Je sens &lt;span class=&#34;hljs-keyword&#34;&gt;que&lt;/span&gt; je me perds ...
-我已彻底迷失了方向
-C&amp;#x27;&lt;span class=&#34;hljs-keyword&#34;&gt;est&lt;/span&gt; un SOS, je suis touché&lt;span class=&#34;hljs-keyword&#34;&gt;e&lt;/span&gt; je suis à terre
-这是来自远方的求助（因迷茫而搁浅）
-Entends-tu &lt;span class=&#34;hljs-keyword&#34;&gt;ma&lt;/span&gt; &lt;span class=&#34;hljs-keyword&#34;&gt;d&lt;/span&gt;étresse, y&amp;#x27;a t-il quelqu&amp;#x27;un ?
-是否有人能感触到那一丝的苦楚？
-Je sens &lt;span class=&#34;hljs-keyword&#34;&gt;que&lt;/span&gt; je me perds
-我已彻底迷失了方向
-C&amp;#x27;&lt;span class=&#34;hljs-keyword&#34;&gt;est&lt;/span&gt; un SOS, je suis touché&lt;span class=&#34;hljs-keyword&#34;&gt;e&lt;/span&gt; je suis à terre
-这是来自远方的求助（因迷茫而搁浅）
-Entends-tu &lt;span class=&#34;hljs-keyword&#34;&gt;ma&lt;/span&gt; &lt;span class=&#34;hljs-keyword&#34;&gt;d&lt;/span&gt;étresse, y&amp;#x27;a t-il quelqu&amp;#x27;un ?
-是否有人能感触到那一丝的苦楚？
-Je sens &lt;span class=&#34;hljs-keyword&#34;&gt;que&lt;/span&gt; je me perds
-我已彻底迷失了方向&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;p&gt;吐槽部分。&lt;br&gt;
-图是自己用 AI 画的，故事是自己写的，音乐听的是自己放慢的。&lt;br&gt;
-一边写一边听着这首歌，写到最后两句话，眼泪忽然就没绷住。&lt;br&gt;
-明明自己如此痛恨人性的丑陋，却仍然存有无尽的怜悯。哪怕在自己胡编乱造的故事中，都不曾改变。&lt;/p&gt;
-&lt;p&gt;一直以来，我的共情能力其实就很强。也不知道以后做带有刀片的剧情的时候，自己会不会先把眼泪流干。&lt;br&gt;
-但是，我又如此享受这种感觉。我不想做眼中只有利益，而忽略了感情的人。&lt;br&gt;
-也许，这就是神性与人性的冲突吧。作为人类，我们如此矛盾，却又如此和谐。&lt;/p&gt;
-</content>
-        <category term="分享" />
-        <updated>2022-12-03T02:49:00.000Z</updated>
-    </entry>
-    <entry>
-        <id>https://zjxdiu.github.io/blog/%E6%98%BE%E7%A4%BA%E5%99%A8%E8%B6%85%E9%A2%91/</id>
-        <title>超频你的显示器，获得更佳的流畅体验</title>
-        <link rel="alternate" href="https://zjxdiu.github.io/blog/%E6%98%BE%E7%A4%BA%E5%99%A8%E8%B6%85%E9%A2%91/"/>
-        <content type="html">&lt;h2 id=&#34;前言&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#前言&#34;&gt;#&lt;/a&gt; 前言&lt;/h2&gt;
+为了保证一般开发者也能看得懂，文章会尽量避免非常专业和硬核的描</summary>
+      
+    
+    
+    
+    <category term="杂项" scheme="https://zjxdiu.github.io/categories/%E6%9D%82%E9%A1%B9/"/>
+    
+    <category term="未分类" scheme="https://zjxdiu.github.io/categories/%E6%9D%82%E9%A1%B9/%E6%9C%AA%E5%88%86%E7%B1%BB/"/>
+    
+    
+    <category term="开发" scheme="https://zjxdiu.github.io/tags/%E5%BC%80%E5%8F%91/"/>
+    
+    <category term="游戏引擎" scheme="https://zjxdiu.github.io/tags/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>触动心灵的歌声：S.O.S</title>
+    <link href="https://zjxdiu.github.io/blog/S.O.S/"/>
+    <id>https://zjxdiu.github.io/blog/S.O.S/</id>
+    <published>2022-12-03T02:49:00.000Z</published>
+    <updated>2022-12-03T03:42:20.118Z</updated>
+    
+    <content type="html"><![CDATA[<p><a href="http://music.163.com/song?id=28279678&amp;userid=438146708">点击收听：S.O.S</a></p><p><img src="../_resources/5606f288e66c105e4ddd37b5b8a9631b.png" alt="5606f288e66c105e4ddd37b5b8a9631b.png"></p><hr><p>意志正在消沉，希望正在燃尽。<br>忽然听到了这样一个声音，她将我唤醒，又让我陷入无止尽的幻想。她给予我无穷无尽的力量，却又让我更深地沉醉。<br>在我有记忆以来，这是我听过的最美的歌声。她在歌曲中只出现在副歌部分，但那份空灵，蕴含在声音中的情感，却是狠狠地撞击我的心脏。我的灵魂发出呐喊，却无法挣脱，甘愿自己被她迷醉。<br>她的声音，几乎完美地符合我的审美感知。我相信，也有更多人会被她的声音吸引。<br>并不是很确定她的声音是否是歌曲信息中的那个歌手，但我确信自己不会忘记她带给我的感觉。</p><hr><p>她是海中的精灵，也是海洋之神的化身。<br>她的呼吸，会化作海浪和潮汐。挥手轻舞，就能平息一场海啸。从没有人见过她，但每个被她庇护的人都会梦到她。<br>传说，在大海的中央，会有一位看不见的海妖。每当船只丢失航线、误入她的领地时，她会唱起来自海洋的歌声，保护船只免遭暗礁和巨石的侵袭。<br>但是，这并不是无条件的施舍。<br>时常有游船丢失方向经过这里。其上的许多人类在得知自己可能无法抵达彼岸后，露出无尽的丑态。<br>人们将自己的行为解释为末日前最后的狂欢。<br>但她不会同意。<br>心存善念的人会被她迷惑，但最终会被海浪带回自己的故乡。<br>而欲望和恶念过多的人，会在自然的力量下灰飞烟灭。<br>但是，当她听到人们心中的祈祷、看到人们眼中的痛苦与绝望时<br>她总会感同身受。<br>所以，她的歌声，大多都是如赎罪之人的挽歌一般，绝望中带着希冀，从未断开内心中的那一丝神念。<br>人们的心灵会得到净化，他们会忘记自己的遭遇，但会平安回到家人面前。</p><hr><p>歌词如下</p><pre><code class="hljs stata">C&#x27;<span class="hljs-keyword">est</span> un SOS,je suis touché<span class="hljs-keyword">e</span> je suis à terre这是来自远方的求助（因迷茫而搁浅）Entends-tu <span class="hljs-keyword">ma</span> <span class="hljs-keyword">d</span>étresse, y&#x27;a t-il quelqu&#x27;un ?是否有人能感触到那一丝的痛苦？Je sens <span class="hljs-keyword">que</span> je me perds我已彻底迷失了方向J&#x27;ai tout quitté, mais ne <span class="hljs-keyword">m</span>&#x27;<span class="hljs-keyword">en</span> veux pas不要怪我曾经的选择（舍弃一切）Fallait <span class="hljs-keyword">que</span> je <span class="hljs-keyword">m</span>&#x27;<span class="hljs-keyword">en</span> aille, je <span class="hljs-keyword">n</span>&#x27;étais plus moi只有选择离开，我才能（告被从前）做回自己Je suis tombé<span class="hljs-keyword">e</span> tellement bas我也为此伤心难过到了极点<span class="hljs-keyword">Que</span> plus personne ne me voit没人能真正理解我的苦处J&#x27;ai sombré dans <span class="hljs-keyword">l</span>&#x27;anonymat我隐姓埋名Combattu le vide et le froid, le froid社会的打拼，让我倍感人情的冷漠J&#x27;aimerais revenir , j&#x27; <span class="hljs-keyword">n</span>&#x27;y arrive pas我真的很想回去，但却有不知该怎么办J&#x27;aimerais revenir我真的很想回去Je suis rien, je suis personne我碌碌无为，卑躬屈膝J&#x27;ai toute <span class="hljs-keyword">ma</span> peine comme royaume属于我的世界充满痛苦Une seule arme <span class="hljs-keyword">m</span>&#x27;emprisonne我如囚徒般被困在那里Voir <span class="hljs-keyword">la</span> lumière entre les barreaux隔着铁笼看到了远处那丝光明Et regarder comme le ciel <span class="hljs-keyword">est</span> beau那湛蓝天空是多么的美好Entends-tu <span class="hljs-keyword">ma</span> voix <span class="hljs-keyword">qui</span> résonne (<span class="hljs-keyword">qui</span> résonne) ?你能听到我歌声中的苦楚吗（歌声的回响）？C&#x27;<span class="hljs-keyword">est</span> un SOS ,je suis touché<span class="hljs-keyword">e</span> je suis à terre这是来自远方的求助（因迷茫耳搁浅）Entends-tu <span class="hljs-keyword">ma</span> <span class="hljs-keyword">d</span>étresse, y&#x27;a t-il quelqu&#x27;un ?是否有人能感触到那一丝的痛苦？Je sens <span class="hljs-keyword">que</span> je me perds ..我已彻底迷失了方向Le silence tue <span class="hljs-keyword">la</span> souffrance <span class="hljs-keyword">en</span> moi沉默只会让我更加的痛苦<span class="hljs-keyword">L</span>&#x27;entends-tu ? <span class="hljs-keyword">Est</span>-ce <span class="hljs-keyword">que</span> tu le vois ?你能听到，感受到它吗？Il <span class="hljs-keyword">te</span> promet, fait <span class="hljs-keyword">de</span> toi曾经的憧憬，早已变得Un objet sans éclat黯淡无光Alors j&#x27;ai crié, j&#x27;ai pensé à toi在泪眼交织中，我想起了你J&#x27;ai noyé le ciel dans les vagues, les vagues我淹没在我的天空里，满是茫然、茫然Tous mes regrets, toute mon histoire所有的悔恨，所有的往事Je <span class="hljs-keyword">la</span> reflè<span class="hljs-keyword">te</span>让我幡然醒悟Je suis rien, je suis personne我碌碌无为，卑躬屈膝J&#x27;ai toute <span class="hljs-keyword">ma</span> peine comme royaume属于我的世界充满痛苦Une seule arme <span class="hljs-keyword">m</span>&#x27;emprisonne我如囚徒般被困在那里Voir <span class="hljs-keyword">la</span> lumière entre les barreaux隔着铁笼看到了远处那丝光明Et regarder comme le ciel <span class="hljs-keyword">est</span> beau那湛蓝天空是多么的美好Entends-tu <span class="hljs-keyword">ma</span> voix <span class="hljs-keyword">qui</span> résonne (<span class="hljs-keyword">qui</span> résonne) ？你能听到我歌声中的苦楚吗（歌声回响）？C&#x27;<span class="hljs-keyword">est</span> un SOS, je suis touché<span class="hljs-keyword">e</span> je suis à terre这是来自远方的求助（因迷茫而搁浅）Entends-tu <span class="hljs-keyword">ma</span> <span class="hljs-keyword">d</span>étresse, y&#x27;a t-il quelqu&#x27;un ?是否有人能感触到那一丝的苦楚？Je sens <span class="hljs-keyword">que</span> je me perds ...我已彻底迷失了方向C&#x27;<span class="hljs-keyword">est</span> un SOS, je suis touché<span class="hljs-keyword">e</span> je suis à terre这是来自远方的求助（因迷茫而搁浅）Entends-tu <span class="hljs-keyword">ma</span> <span class="hljs-keyword">d</span>étresse, y&#x27;a t-il quelqu&#x27;un ?是否有人能感触到那一丝的苦楚？Je sens <span class="hljs-keyword">que</span> je me perds我已彻底迷失了方向C&#x27;<span class="hljs-keyword">est</span> un SOS, je suis touché<span class="hljs-keyword">e</span> je suis à terre这是来自远方的求助（因迷茫而搁浅）Entends-tu <span class="hljs-keyword">ma</span> <span class="hljs-keyword">d</span>étresse, y&#x27;a t-il quelqu&#x27;un ?是否有人能感触到那一丝的苦楚？Je sens <span class="hljs-keyword">que</span> je me perds我已彻底迷失了方向</code></pre><hr><p>吐槽部分。<br>图是自己用 AI 画的，故事是自己写的，音乐听的是自己放慢的。<br>一边写一边听着这首歌，写到最后两句话，眼泪忽然就没绷住。<br>明明自己如此痛恨人性的丑陋，却仍然存有无尽的怜悯。哪怕在自己胡编乱造的故事中，都不曾改变。</p><p>一直以来，我的共情能力其实就很强。也不知道以后做带有刀片的剧情的时候，自己会不会先把眼泪流干。<br>但是，我又如此享受这种感觉。我不想做眼中只有利益，而忽略了感情的人。<br>也许，这就是神性与人性的冲突吧。作为人类，我们如此矛盾，却又如此和谐。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;&lt;a href=&quot;http://music.163.com/song?id=28279678&amp;amp;userid=438146708&quot;&gt;点击收听：S.O.S&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../_resources/5606f288e66c105e4ddd37</summary>
+      
+    
+    
+    
+    <category term="杂项" scheme="https://zjxdiu.github.io/categories/%E6%9D%82%E9%A1%B9/"/>
+    
+    <category term="日志" scheme="https://zjxdiu.github.io/categories/%E6%9D%82%E9%A1%B9/%E6%97%A5%E5%BF%97/"/>
+    
+    
+    <category term="分享" scheme="https://zjxdiu.github.io/tags/%E5%88%86%E4%BA%AB/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>超频你的显示器，获得更佳的流畅体验</title>
+    <link href="https://zjxdiu.github.io/blog/%E6%98%BE%E7%A4%BA%E5%99%A8%E8%B6%85%E9%A2%91/"/>
+    <id>https://zjxdiu.github.io/blog/%E6%98%BE%E7%A4%BA%E5%99%A8%E8%B6%85%E9%A2%91/</id>
+    <published>2022-12-02T06:33:00.000Z</published>
+    <updated>2022-12-02T07:25:24.816Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a class="markdownIt-Anchor" href="#前言">#</a> 前言</h2><p>显示器超频？显示器还能超频？<br>当然是可以的。从定义上来说，任何以时钟频率进行周期性工作的硬件都有超频的说法，只不过我们平时主要讨论的是 CPU、显卡、内存等核心电脑硬件的超频。<br>某种意义上来说，显示器超频实际上是一个很古老的话题。在以前的 “大屁股” 显示器（即 CRT 技术的显示器）时代，超频就已经存在了。由于最开始的显示器都是纯模拟信号，输入的电压经过放大后直接作用于偏转电场，从而实现画面绘制，那时候的显示器超频是真正意义上的物理超频。只要阴极射线管的水平够好、电场板的素质优秀，显示器的各项工作参数完全可以自定义。<br>后来用了 LCD 和纯数字信号传输，超频的内容发生了一些变化；不过多数面板仍然会有超频能力，这取决于厂家的配置与面板本身的素质。<br><img src="../_resources/95a04f46fce4449551b3b11e14510900.png" alt="95a04f46fce4449551b3b11e14510900.png"><br><em> 图：LCD 与 CRT 显示器原理对比</em></p><h2 id="什么是显示器超频"><a class="markdownIt-Anchor" href="#什么是显示器超频">#</a> 什么是显示器超频</h2><p>所谓的显示器超频，实际上是针对其运行参数<strong>垂直刷新率</strong>而言的。<br>在以前的 CRT 显示器上，显示画面需要电子枪从左往右依次发射电子、扫描一行，点亮一行的荧光像素，随后在垂直同步信号的作用下迅速回到左侧，同时跳转到下一行，重新进行下一行的扫描。以此类推，直到整个荧幕被扫描完成后，电场会使电子偏转到左上角，重复这个过程。（此处还有水平同步信号在起作用，不详细说明）<br>玩过模拟示波器的朋友肯定能理解垂直信号的作用，实际上就是示波器中的扫描电路，选择合适的扫描信号就能使波形稳定。<br>因此，如果能调节垂直（和水平）同步信号，使其可以在更短的时间内完成一次完整的扫描，则显示器的<strong>刷新率</strong>就能得到提升。<br>这就是显示器超频，我们希望提升其垂直刷新率，使其比标称值更高，这样才会有更好的体验。</p><h2 id="显示器超频的影响因素"><a class="markdownIt-Anchor" href="#显示器超频的影响因素">#</a> 显示器超频的影响因素</h2><p>要完成一次好的显示器超频，我们通常认为有以下几点因素会影响结果。</p><ul><li>面板类型与素质</li><li>厂商限制</li><li>接口类型与传输质量</li><li>合适的配置</li><li>其它因素</li></ul><p>以上因素中，面板和厂商在购买后就固定了，无法更改。<br>接口类型以 DP、HDMI（高版本）为优。</p><p><strong>请不要将显示器的超频能力纳入选购的考虑范围之中，如果想获得高刷屏的体验，那么建议选购原生的高刷显示器。本文的核心目的是科普，而不是鼓励大家要求厂商提供超频能力。</strong></p><h2 id="如何超频"><a class="markdownIt-Anchor" href="#如何超频">#</a> 如何超频</h2><h3 id="超频前的准备"><a class="markdownIt-Anchor" href="#超频前的准备">#</a> 超频前的准备</h3><ol><li>检查接口协议与传输质量<br>请使用优质 DP 或 HDMI 线连接电脑与显示器，以获得更佳的超频能力。<br>该项主要影响传输带宽，对于特定版本的 DP 或 HDMI 接口而言，其能提供的带宽是有限的。详情可查阅百度。<br>只需要记得一点，如果带宽受限，那么降低分辨率有助于获得更高的刷新率。但是对于多数平民显示器而言，即使使用最高分辨率，也不太会出现带宽不足的问题。</li><li>检查视频信号源<br>目前来说，英特尔核心显卡并不支持显示器超频（至少笔记本的不行）。如果您使用台式机，请确保视频信号是独立显卡输出的。如果使用笔记本，请连接到笔记本上的 type-c 接口，一般而言这个接口的显示输出是直接连接独立显卡的。<br>如果使用不支持独显直连输出的笔记本（或者没有独显），则大概率不能成功。<br>不过，即便如此，您还是可以进行尝试。大多数出厂 60Hz 的显示器都可以直接提升到 75Hz，带来一定程度上的体验提升。不过有一个例外，笔记本自带的屏幕完全不支持超频。</li><li>环境条件<br>尽管现代显示器对工作环境的承受范围极大，环境因素的影响极其小，合适的环境仍然有助于提高超频成功率。<br>主要包括合适的工作温度（尤其是不能过低），湿度，电压值与稳定性，甚至摆放方向等。</li></ol><h3 id="开始超频"><a class="markdownIt-Anchor" href="#开始超频">#</a> 开始超频</h3><ul><li>对于非独立显卡、英特尔核心显卡：<br>请进入显卡控制面板（以下以新版英特尔核心显卡为例）<br><img src="../_resources/ce3133202184eb787a2034f31476db94.png" alt="ce3133202184eb787a2034f31476db94.png"><br> 点击<strong>显示器</strong>，<strong>分辨率旁边的加号</strong><br><img src="../_resources/245a61028b5e9c9e71d6d6abb786ff57.png" alt="245a61028b5e9c9e71d6d6abb786ff57.png"><br> 检查是否有刷新率的选项。如果有，可以尝试输入目标刷新率，然后单击确定。<br>若不成功或没有输入刷新率的地方，则您的显卡不支持硬超频。<br>请尝试点击<strong>刷新率</strong>旁的下拉框<br><img src="../_resources/319d41963a5966fc42fe60ac72c0cb2f.png" alt="319d41963a5966fc42fe60ac72c0cb2f.png"><br> 若有多个选项，选择最高的。若有 I 和 P 两种，请选择 P。<br>至此，显示器超频结束。</li></ul><hr><ul><li>对于英伟达、AMD 独立显卡：<br>请进入显卡控制面板（以下以英伟达显卡为例）；应该能在 [开始] 菜单里找到。<br>若电脑里找不到该软件，请重装显卡驱动程序。<br><img src="../_resources/345495b609471f763f8ec8bfc8df62df.png" alt="345495b609471f763f8ec8bfc8df62df.png"><br> 在屏幕左侧，单击 [更改分辨率]。<br>如果没有此选项，则说明显示器没有连接到独立显卡上。<br><img src="../_resources/2e632685ea988d1cf03dc6d60b7493ac.png" alt="2e632685ea988d1cf03dc6d60b7493ac.png"><br> 点击 [自定义]。<br><img src="../_resources/ec04c76fa5c31fbee854410f0c96b663.png" alt="ec04c76fa5c31fbee854410f0c96b663.png"><br> 勾选 [启用显示器未显示的分辨率]，然后点击 [创建自定义分辨率]。<br><img src="../_resources/ed628697647b0ae7a7af0b97615d93e1.png" alt="ed628697647b0ae7a7af0b97615d93e1.png"><br> 在 [刷新率] 中输入目标刷新率，然后可以点击 [测试] 按钮进行测试。<br>在 [计时 - 标准] 选项中选择 [协同视频计时标准（CVT）降低清屏时间]，可能有助于提高成功率。<br><img src="../_resources/79a358cee11fbd4de054a918720205a4.png" alt="79a358cee11fbd4de054a918720205a4.png"><br> 单击 [测试] 按钮，显示器将黑屏进行切换。<br>如果成功，则您将很快看到电脑画面。如果半成功，则可能会看到画面上出现抖动、条纹、异常颜色等。<br>如果失败，显示器提示不支持或一直黑屏，等待 15s 后会自动退出测试状态。或者，可以按 Esc 键快速返回。<br>当测试到稳定的刷新率后，在提示框中点击 [是]，即可保存该分辨率。<br>返回上一步的 [更改刷新率]，应该能在列表最顶上看到刚刚创建的分辨率。<br>选中后，单击软件右下角的 [应用]，超频结束。</li></ul><hr><h3 id="超频提示"><a class="markdownIt-Anchor" href="#超频提示">#</a> 超频提示</h3><ul><li>尽管超频一般不会造成伤害，仍可能导致面板发热加剧、液晶老化速率提高等问题。因此，从理论上讲，不建议长时间超频。</li><li>在超频过程中，可以使用以下方法先确定显示器能承受的最大刷新率：<ul><li>先将刷新率定到目标值</li><li>若成功，则进一步定到下个目标值；否则，应选择当前刷新率与目标值的中间值。</li><li>重复以上取中值的过程，通过二分法可以快速定位到最大刷新率。</li><li>确定了最大值后，请适当降低到附近合适的数值使用。例如，若最大刷新率为 96Hz，请保持在 90Hz 即可。</li></ul></li><li>若超频过程中显示器出现严重事故（如一直黑屏、闪屏等），请断开视频连接线，然后断开显示器电源；等待几分钟或使其完全放电后重新接入电源，检查显示器是否能正常开机，然后再接入电脑。由于现代显示器的保护功能极佳，真正发生无法挽回事故的可能性极低，近乎不存在，但并不为 0。</li></ul><h3 id="超频经验"><a class="markdownIt-Anchor" href="#超频经验">#</a> 超频经验</h3><p>对于一般的 1080P、60Hz 显示器而言，75Hz 是日常使用的较佳水平。某些素质较高的显示器可能会一路支持到 80、90 甚至 110Hz，全看厂商良心与运气。<br>对于 2K、60Hz 的显示器，一般也可以使用 75Hz。我自己的 2K60 显示器最大支持 98Hz，稳定值是 96Hz，最终保持在 90Hz 使用。<br>对于 144Hz 的显示器，一般直接上 165Hz 是没有问题的。较好的面板可以尝试 180Hz。<br>更高的不知道，我没钱（</p><hr><h2 id="总结"><a class="markdownIt-Anchor" href="#总结">#</a> 总结</h2><p>没啥可总结的，超个频，获得更好的体验和更高的风险，这是一种交易。权衡结果全由你自己掌控。<br>任何问题欢迎留言！</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#前言&quot;&gt;#&lt;/a&gt; 前言&lt;/h2&gt;
 &lt;p&gt;显示器超频？显示器还能超频？&lt;br&gt;
-当然是可以的。从定义上来说，任何以时钟频率进行周期性工作的硬件都有超频的说法，只不过我们平时主要讨论的是 CPU、显卡、内存等核心电脑硬件的超频。&lt;br&gt;
-某种意义上来说，显示器超频实际上是一个很古老的话题。在以前的 “大屁股” 显示器（即 CRT 技术的显示器）时代，超频就已经存在了。由于最开始的显示器都是纯模拟信号，输入的电压经过放大后直接作用于偏转电场，从而实现画面绘制，那时候的显示器超频是真正意义上的物理超频。只要阴极射线管的水平够好、电场板的素质优秀，显示器的各项工作参数完全可以自定义。&lt;br&gt;
-后来用了 LCD 和纯数字信号传输，超频的内容发生了一些变化；不过多数面板仍然会有超频能力，这取决于厂家的配置与面板本身的素质。&lt;br&gt;
-&lt;img src=&#34;../_resources/95a04f46fce4449551b3b11e14510900.png&#34; alt=&#34;95a04f46fce4449551b3b11e14510900.png&#34;&gt;&lt;br&gt;
-&lt;em&gt; 图：LCD 与 CRT 显示器原理对比&lt;/em&gt;&lt;/p&gt;
-&lt;h2 id=&#34;什么是显示器超频&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#什么是显示器超频&#34;&gt;#&lt;/a&gt; 什么是显示器超频&lt;/h2&gt;
-&lt;p&gt;所谓的显示器超频，实际上是针对其运行参数&lt;strong&gt;垂直刷新率&lt;/strong&gt;而言的。&lt;br&gt;
-在以前的 CRT 显示器上，显示画面需要电子枪从左往右依次发射电子、扫描一行，点亮一行的荧光像素，随后在垂直同步信号的作用下迅速回到左侧，同时跳转到下一行，重新进行下一行的扫描。以此类推，直到整个荧幕被扫描完成后，电场会使电子偏转到左上角，重复这个过程。（此处还有水平同步信号在起作用，不详细说明）&lt;br&gt;
-玩过模拟示波器的朋友肯定能理解垂直信号的作用，实际上就是示波器中的扫描电路，选择合适的扫描信号就能使波形稳定。&lt;br&gt;
-因此，如果能调节垂直（和水平）同步信号，使其可以在更短的时间内完成一次完整的扫描，则显示器的&lt;strong&gt;刷新率&lt;/strong&gt;就能得到提升。&lt;br&gt;
-这就是显示器超频，我们希望提升其垂直刷新率，使其比标称值更高，这样才会有更好的体验。&lt;/p&gt;
-&lt;h2 id=&#34;显示器超频的影响因素&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#显示器超频的影响因素&#34;&gt;#&lt;/a&gt; 显示器超频的影响因素&lt;/h2&gt;
-&lt;p&gt;要完成一次好的显示器超频，我们通常认为有以下几点因素会影响结果。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;面板类型与素质&lt;/li&gt;
-&lt;li&gt;厂商限制&lt;/li&gt;
-&lt;li&gt;接口类型与传输质量&lt;/li&gt;
-&lt;li&gt;合适的配置&lt;/li&gt;
-&lt;li&gt;其它因素&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;以上因素中，面板和厂商在购买后就固定了，无法更改。&lt;br&gt;
-接口类型以 DP、HDMI（高版本）为优。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;请不要将显示器的超频能力纳入选购的考虑范围之中，如果想获得高刷屏的体验，那么建议选购原生的高刷显示器。本文的核心目的是科普，而不是鼓励大家要求厂商提供超频能力。&lt;/strong&gt;&lt;/p&gt;
-&lt;h2 id=&#34;如何超频&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#如何超频&#34;&gt;#&lt;/a&gt; 如何超频&lt;/h2&gt;
-&lt;h3 id=&#34;超频前的准备&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#超频前的准备&#34;&gt;#&lt;/a&gt; 超频前的准备&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;检查接口协议与传输质量&lt;br&gt;
-请使用优质 DP 或 HDMI 线连接电脑与显示器，以获得更佳的超频能力。&lt;br&gt;
-该项主要影响传输带宽，对于特定版本的 DP 或 HDMI 接口而言，其能提供的带宽是有限的。详情可查阅百度。&lt;br&gt;
-只需要记得一点，如果带宽受限，那么降低分辨率有助于获得更高的刷新率。但是对于多数平民显示器而言，即使使用最高分辨率，也不太会出现带宽不足的问题。&lt;/li&gt;
-&lt;li&gt;检查视频信号源&lt;br&gt;
-目前来说，英特尔核心显卡并不支持显示器超频（至少笔记本的不行）。如果您使用台式机，请确保视频信号是独立显卡输出的。如果使用笔记本，请连接到笔记本上的 type-c 接口，一般而言这个接口的显示输出是直接连接独立显卡的。&lt;br&gt;
-如果使用不支持独显直连输出的笔记本（或者没有独显），则大概率不能成功。&lt;br&gt;
-不过，即便如此，您还是可以进行尝试。大多数出厂 60Hz 的显示器都可以直接提升到 75Hz，带来一定程度上的体验提升。不过有一个例外，笔记本自带的屏幕完全不支持超频。&lt;/li&gt;
-&lt;li&gt;环境条件&lt;br&gt;
-尽管现代显示器对工作环境的承受范围极大，环境因素的影响极其小，合适的环境仍然有助于提高超频成功率。&lt;br&gt;
-主要包括合适的工作温度（尤其是不能过低），湿度，电压值与稳定性，甚至摆放方向等。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h3 id=&#34;开始超频&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#开始超频&#34;&gt;#&lt;/a&gt; 开始超频&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;对于非独立显卡、英特尔核心显卡：&lt;br&gt;
-请进入显卡控制面板（以下以新版英特尔核心显卡为例）&lt;br&gt;
-&lt;img src=&#34;../_resources/ce3133202184eb787a2034f31476db94.png&#34; alt=&#34;ce3133202184eb787a2034f31476db94.png&#34;&gt;&lt;br&gt;
- 点击&lt;strong&gt;显示器&lt;/strong&gt;，&lt;strong&gt;分辨率旁边的加号&lt;/strong&gt;&lt;br&gt;
-&lt;img src=&#34;../_resources/245a61028b5e9c9e71d6d6abb786ff57.png&#34; alt=&#34;245a61028b5e9c9e71d6d6abb786ff57.png&#34;&gt;&lt;br&gt;
- 检查是否有刷新率的选项。如果有，可以尝试输入目标刷新率，然后单击确定。&lt;br&gt;
-若不成功或没有输入刷新率的地方，则您的显卡不支持硬超频。&lt;br&gt;
-请尝试点击&lt;strong&gt;刷新率&lt;/strong&gt;旁的下拉框&lt;br&gt;
-&lt;img src=&#34;../_resources/319d41963a5966fc42fe60ac72c0cb2f.png&#34; alt=&#34;319d41963a5966fc42fe60ac72c0cb2f.png&#34;&gt;&lt;br&gt;
- 若有多个选项，选择最高的。若有 I 和 P 两种，请选择 P。&lt;br&gt;
-至此，显示器超频结束。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;ul&gt;
-&lt;li&gt;对于英伟达、AMD 独立显卡：&lt;br&gt;
-请进入显卡控制面板（以下以英伟达显卡为例）；应该能在 [开始] 菜单里找到。&lt;br&gt;
-若电脑里找不到该软件，请重装显卡驱动程序。&lt;br&gt;
-&lt;img src=&#34;../_resources/345495b609471f763f8ec8bfc8df62df.png&#34; alt=&#34;345495b609471f763f8ec8bfc8df62df.png&#34;&gt;&lt;br&gt;
- 在屏幕左侧，单击 [更改分辨率]。&lt;br&gt;
-如果没有此选项，则说明显示器没有连接到独立显卡上。&lt;br&gt;
-&lt;img src=&#34;../_resources/2e632685ea988d1cf03dc6d60b7493ac.png&#34; alt=&#34;2e632685ea988d1cf03dc6d60b7493ac.png&#34;&gt;&lt;br&gt;
- 点击 [自定义]。&lt;br&gt;
-&lt;img src=&#34;../_resources/ec04c76fa5c31fbee854410f0c96b663.png&#34; alt=&#34;ec04c76fa5c31fbee854410f0c96b663.png&#34;&gt;&lt;br&gt;
- 勾选 [启用显示器未显示的分辨率]，然后点击 [创建自定义分辨率]。&lt;br&gt;
-&lt;img src=&#34;../_resources/ed628697647b0ae7a7af0b97615d93e1.png&#34; alt=&#34;ed628697647b0ae7a7af0b97615d93e1.png&#34;&gt;&lt;br&gt;
- 在 [刷新率] 中输入目标刷新率，然后可以点击 [测试] 按钮进行测试。&lt;br&gt;
-在 [计时 - 标准] 选项中选择 [协同视频计时标准（CVT）降低清屏时间]，可能有助于提高成功率。&lt;br&gt;
-&lt;img src=&#34;../_resources/79a358cee11fbd4de054a918720205a4.png&#34; alt=&#34;79a358cee11fbd4de054a918720205a4.png&#34;&gt;&lt;br&gt;
- 单击 [测试] 按钮，显示器将黑屏进行切换。&lt;br&gt;
-如果成功，则您将很快看到电脑画面。如果半成功，则可能会看到画面上出现抖动、条纹、异常颜色等。&lt;br&gt;
-如果失败，显示器提示不支持或一直黑屏，等待 15s 后会自动退出测试状态。或者，可以按 Esc 键快速返回。&lt;br&gt;
-当测试到稳定的刷新率后，在提示框中点击 [是]，即可保存该分辨率。&lt;br&gt;
-返回上一步的 [更改刷新率]，应该能在列表最顶上看到刚刚创建的分辨率。&lt;br&gt;
-选中后，单击软件右下角的 [应用]，超频结束。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&#34;超频提示&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#超频提示&#34;&gt;#&lt;/a&gt; 超频提示&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;尽管超频一般不会造成伤害，仍可能导致面板发热加剧、液晶老化速率提高等问题。因此，从理论上讲，不建议长时间超频。&lt;/li&gt;
-&lt;li&gt;在超频过程中，可以使用以下方法先确定显示器能承受的最大刷新率：
-&lt;ul&gt;
-&lt;li&gt;先将刷新率定到目标值&lt;/li&gt;
-&lt;li&gt;若成功，则进一步定到下个目标值；否则，应选择当前刷新率与目标值的中间值。&lt;/li&gt;
-&lt;li&gt;重复以上取中值的过程，通过二分法可以快速定位到最大刷新率。&lt;/li&gt;
-&lt;li&gt;确定了最大值后，请适当降低到附近合适的数值使用。例如，若最大刷新率为 96Hz，请保持在 90Hz 即可。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;若超频过程中显示器出现严重事故（如一直黑屏、闪屏等），请断开视频连接线，然后断开显示器电源；等待几分钟或使其完全放电后重新接入电源，检查显示器是否能正常开机，然后再接入电脑。由于现代显示器的保护功能极佳，真正发生无法挽回事故的可能性极低，近乎不存在，但并不为 0。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;超频经验&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#超频经验&#34;&gt;#&lt;/a&gt; 超频经验&lt;/h3&gt;
-&lt;p&gt;对于一般的 1080P、60Hz 显示器而言，75Hz 是日常使用的较佳水平。某些素质较高的显示器可能会一路支持到 80、90 甚至 110Hz，全看厂商良心与运气。&lt;br&gt;
-对于 2K、60Hz 的显示器，一般也可以使用 75Hz。我自己的 2K60 显示器最大支持 98Hz，稳定值是 96Hz，最终保持在 90Hz 使用。&lt;br&gt;
-对于 144Hz 的显示器，一般直接上 165Hz 是没有问题的。较好的面板可以尝试 180Hz。&lt;br&gt;
-更高的不知道，我没钱（&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;总结&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#总结&#34;&gt;#&lt;/a&gt; 总结&lt;/h2&gt;
-&lt;p&gt;没啥可总结的，超个频，获得更好的体验和更高的风险，这是一种交易。权衡结果全由你自己掌控。&lt;br&gt;
-任何问题欢迎留言！&lt;/p&gt;
-</content>
-        <category term="超频" />
-        <category term="硬件" />
-        <updated>2022-12-02T06:33:00.000Z</updated>
-    </entry>
-    <entry>
-        <id>https://zjxdiu.github.io/blog/%E6%89%B9%E5%A4%84%E7%90%86%E4%BC%98%E5%8C%96Hexo%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/</id>
-        <title>使用批处理和Joplin执行并优化Hexo博客工作流程</title>
-        <link rel="alternate" href="https://zjxdiu.github.io/blog/%E6%89%B9%E5%A4%84%E7%90%86%E4%BC%98%E5%8C%96Hexo%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/"/>
-        <content type="html">&lt;p&gt;使用静态部署的方式使用 Hexo，我们经常会遇到一个很烦人的问题，就是部署麻烦。&lt;br&gt;
+当然是可以的。从定义上来说，任何以时钟频率进行周期性工作的硬件都有超频的说法，只不过我们平时主要讨论的是</summary>
+      
+    
+    
+    
+    <category term="学习" scheme="https://zjxdiu.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="计算机" scheme="https://zjxdiu.github.io/categories/%E5%AD%A6%E4%B9%A0/%E8%AE%A1%E7%AE%97%E6%9C%BA/"/>
+    
+    
+    <category term="超频" scheme="https://zjxdiu.github.io/tags/%E8%B6%85%E9%A2%91/"/>
+    
+    <category term="硬件" scheme="https://zjxdiu.github.io/tags/%E7%A1%AC%E4%BB%B6/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用批处理和Joplin执行并优化Hexo博客工作流程</title>
+    <link href="https://zjxdiu.github.io/blog/%E6%89%B9%E5%A4%84%E7%90%86%E4%BC%98%E5%8C%96Hexo%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/"/>
+    <id>https://zjxdiu.github.io/blog/%E6%89%B9%E5%A4%84%E7%90%86%E4%BC%98%E5%8C%96Hexo%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/</id>
+    <published>2022-11-27T13:53:00.000Z</published>
+    <updated>2023-01-09T13:15:26.090Z</updated>
+    
+    <content type="html"><![CDATA[<p>使用静态部署的方式使用 Hexo，我们经常会遇到一个很烦人的问题，就是部署麻烦。<br>每次写一篇文章，就要经历<strong> Hexo clean、Hexo g、Hexo s、Hexo d</strong> 四连，一开始还好，写多了之后烦不胜烦。</p><p>同时，由于我个人使用 Joplin 进行文章撰写，这个软件虽然简洁，但并不好用；图片虽然可以直接复制，但不能修改输出目录，图片资源默认保存在与 <code>/blog/</code>  平行的 <code>/_resources/</code>  文件夹中。</p><p>因此，结合我最为擅长的 batch 脚本语言，我就萌生了使用批处理来优化整个流程的想法。</p><hr><h3 id="1-git安装配置不确定是否有必要"><a class="markdownIt-Anchor" href="#1-git安装配置不确定是否有必要">#</a> 1. Git 安装配置（不确定是否有必要）</h3><p>在安装 Git 的过程中，我们会有一个配置终端的过程，此处其实是建议选择第一项（使用 MinTTY），但我当时选择了第二项即使用系统的 cmd 来作 git bash 的终端。<br><img src="../_resources/aca6779be5b5f5c9d88dc1215456c295-2.png" alt="aca6779be5b5f5c9d88dc1215456c295.png"><br> 如果选择了第一项，可能也是能正常使用批处理来代替执行的，应该不用担心。</p><hr><h3 id="2-站点配置"><a class="markdownIt-Anchor" href="#2-站点配置">#</a> 2. 站点配置</h3><p>blog 根目录下的_config.yml 文件：</p><pre><code class="hljs yaml"><span class="hljs-string">......</span><span class="hljs-attr">post_asset_folder:</span> <span class="hljs-literal">false</span><span class="hljs-attr">relative_link:</span> <span class="hljs-literal">false</span><span class="hljs-string">......</span></code></pre><p>使用 Joplin 写文章的话应该关闭这两项（至少我测试下来这样是没问题的）</p><hr><h3 id="3-脚本编写"><a class="markdownIt-Anchor" href="#3-脚本编写">#</a> 3. 脚本编写</h3><p>在 blog 根目录下新建 “程序名.bat”，开始编写功能。<br>先放源码：</p><pre><code class="hljs batch">@echo offsetlocal EnableDelayedExpansiongoto start:acrem 请设置%targetlable%变量，以确保正常跳转至目标位置clscolor 0Fgoto %targetlabel%:startif &quot;%targetlabel%&quot;==&quot;&quot; (set &quot;targetlabel=start&quot;&amp;&amp;goto ac)echo ------------------------------------------------echo  1.执行完整的检查和推送blog流程echo  2.快速上载blogecho  3.本地预览echo  4.单独执行指令echo ------------------------------------------------echo.choice /c 1234if &quot;%errorlevel%&quot;==&quot;4&quot; goto newif &quot;%errorlevel%&quot;==&quot;3&quot; (set &quot;targetlabel=local&quot;&amp;&amp;goto ac)if &quot;%errorlevel%&quot;==&quot;2&quot; (set &quot;targetlabel=fast&quot;&amp;&amp;goto ac)if &quot;%errorlevel%&quot;==&quot;1&quot; (set &quot;targetlabel=full&quot;&amp;&amp;goto ac)pause&amp;exit:newecho 正在创建新的cmd实例...echo ------------------------------------------------echo 命令提示：echo hexo cleanecho hexo gecho hexo secho hexo decho ------------------------------------------------start cmdecho 按任意键返回菜单...pause &gt;nulset &quot;targetlabel=start&quot;&amp;&amp;goto ac:localecho ------------------------------------------------echo                  本地预览模式echo ------------------------------------------------echo 启动预览...cmd /c &quot;hexo clean &amp; hexo g &amp; xcopy D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y &amp; echo 2&gt;D:\blog\.deploy_git\.nojekyll &amp; start http://localhost:4000/ &amp; hexo s&quot;echo 按任意键返回菜单...pause &gt;nulset &quot;targetlabel=start&quot;&amp;&amp;goto ac:fastecho ------------------------------------------------echo                  快速上载blogecho ------------------------------------------------cmd /c &quot;hexo clean &amp; hexo g &amp; xcopy D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y &amp; echo 2&gt;D:\blog\.deploy_git\.nojekyll &amp; hexo d&quot;echo ------------------------------------------------echo 完成，2秒后退出...ping localhost -n 3 &gt;nulexit:fullecho ------------------------------------------------echo                  完整流程向导echo              按0为确定，按1为跳过echo ------------------------------------------------goto clean:cleanecho 第一步：清理缓存choice /c 01if &quot;%errorlevel%&quot;==&quot;2&quot; goto generatecmd /c &quot;hexo clean&quot;goto generate:generateecho ------------------------------------------------echo 第二步：生成页面choice /c 01if &quot;%errorlevel%&quot;==&quot;2&quot; goto checkcmd /c &quot;xcopy D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y &amp; echo 2&gt;D:\blog\.deploy_git\.nojekyll &amp; hexo g&quot;goto check:checkecho ------------------------------------------------echo 第三步：本地预览choice /c 01if &quot;%errorlevel%&quot;==&quot;2&quot; goto deploystart http://localhost:4000/cmd /c &quot;hexo s&quot;goto deploy:deployecho ------------------------------------------------echo 第四步：上传到远程服务器choice /c 01if &quot;%errorlevel%&quot;==&quot;2&quot; goto donecmd /c &quot;hexo d&quot;goto done:doneecho ------------------------------------------------echo 流程已完成，按任意键返回菜单...pause &gt;nulset &quot;targetlabel=start&quot;&amp;&amp;goto ac</code></pre><p>我自认为自己的批处理写得都算比较清晰的了，虽然注释很少，但结合文字应该能看懂每一步是在干什么。<br>如果要使用，请把里面所有的 <code>D:\blog\source\_posts\_resources</code>  替换为你 Joplin 每次导出时的资源目录，把所有的 <code>D:\blog\public\blog\_resources\</code>  替换为你的博客站点目录，注意不要动 <code>\public\...</code>  后面的内容。</p><p>如果要更换功能模块，也应按照这里的写法，使用  <code>cmd /c 命令内容 &amp; 第二条命令 &amp; 后面的很多命令</code>  来执行，除了 start 用于启动网页之外尽量不要直接在批处理中使用模块的命令，否则容易直接闪退。</p><p>创建 <code>.nojekyll</code>  文件的目的是防止 GitHub 忽略掉下划线开头的文件夹，即 <code>_resources</code></p><hr><h3 id="4-工作流程"><a class="markdownIt-Anchor" href="#4-工作流程">#</a> 4. 工作流程</h3><p>现在，我们可以愉快地写文章了。<br>打开 Joplin，新建笔记（记得都放在同一个笔记本下），笔记的名字是文件名，写上 Front-matter 内容，之后就如同在 word 中一样写稿。<br>图片直接粘贴即可，需要的话修改 [ ] 里的内容，这是属于 markdown 语法的一部分，不详细说明。<br>写完的文章直接往 <code>blog\source\_posts</code>  里面一存，然后打开脚本按个 2，等两分钟就部署到 Github Pages 上了。<br><strong>愉快地工作吧！</strong><br><img src="../_resources/cf0fb99a327ef788a844524d6eb74278.png" alt="cf0fb99a327ef788a844524d6eb74278.png"></p><p>补充点内容，修改文章稍微有点麻烦，因为 Joplin 非常笨，它不会识别已有的文件，发现重名了直接加后缀，连带着里面的图片也都加后缀、重新复制到 <code>_resources</code>  里面了；对于我这种硬盘空间够、平时图片不多的人来说倒是无所谓，但部署了之后文章会重复显示好几篇。所以不能直接导出文章，需要手动删除旧的，然后再从 Joplin 中导出即可。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;使用静态部署的方式使用 Hexo，我们经常会遇到一个很烦人的问题，就是部署麻烦。&lt;br&gt;
 每次写一篇文章，就要经历&lt;strong&gt; Hexo clean、Hexo g、Hexo s、Hexo d&lt;/strong&gt; 四连，一开始还好，写多了之后烦不胜烦。&lt;/p&gt;
-&lt;p&gt;同时，由于我个人使用 Joplin 进行文章撰写，这个软件虽然简洁，但并不好用；图片虽然可以直接复制，但不能修改输出目录，图片资源默认保存在与 &lt;code&gt;/blog/&lt;/code&gt;  平行的 &lt;code&gt;/_resources/&lt;/code&gt;  文件夹中。&lt;/p&gt;
-&lt;p&gt;因此，结合我最为擅长的 batch 脚本语言，我就萌生了使用批处理来优化整个流程的想法。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&#34;1-git安装配置不确定是否有必要&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#1-git安装配置不确定是否有必要&#34;&gt;#&lt;/a&gt; 1. Git 安装配置（不确定是否有必要）&lt;/h3&gt;
-&lt;p&gt;在安装 Git 的过程中，我们会有一个配置终端的过程，此处其实是建议选择第一项（使用 MinTTY），但我当时选择了第二项即使用系统的 cmd 来作 git bash 的终端。&lt;br&gt;
-&lt;img src=&#34;../_resources/aca6779be5b5f5c9d88dc1215456c295-2.png&#34; alt=&#34;aca6779be5b5f5c9d88dc1215456c295.png&#34;&gt;&lt;br&gt;
- 如果选择了第一项，可能也是能正常使用批处理来代替执行的，应该不用担心。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&#34;2-站点配置&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#2-站点配置&#34;&gt;#&lt;/a&gt; 2. 站点配置&lt;/h3&gt;
-&lt;p&gt;blog 根目录下的_config.yml 文件：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;hljs yaml&#34;&gt;&lt;span class=&#34;hljs-string&#34;&gt;......&lt;/span&gt;
-&lt;span class=&#34;hljs-attr&#34;&gt;post_asset_folder:&lt;/span&gt; &lt;span class=&#34;hljs-literal&#34;&gt;false&lt;/span&gt;
-&lt;span class=&#34;hljs-attr&#34;&gt;relative_link:&lt;/span&gt; &lt;span class=&#34;hljs-literal&#34;&gt;false&lt;/span&gt;
-&lt;span class=&#34;hljs-string&#34;&gt;......&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;使用 Joplin 写文章的话应该关闭这两项（至少我测试下来这样是没问题的）&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&#34;3-脚本编写&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#3-脚本编写&#34;&gt;#&lt;/a&gt; 3. 脚本编写&lt;/h3&gt;
-&lt;p&gt;在 blog 根目录下新建 “程序名.bat”，开始编写功能。&lt;br&gt;
-先放源码：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;hljs batch&#34;&gt;@echo off
-setlocal EnableDelayedExpansion
-goto start
-:ac
-rem 请设置%targetlable%变量，以确保正常跳转至目标位置
-cls
-color 0F
-goto %targetlabel%
-:start
-if &amp;quot;%targetlabel%&amp;quot;==&amp;quot;&amp;quot; (set &amp;quot;targetlabel=start&amp;quot;&amp;amp;&amp;amp;goto ac)
-echo ------------------------------------------------
-echo  1.执行完整的检查和推送blog流程
-echo  2.快速上载blog
-echo  3.本地预览
-echo  4.单独执行指令
-echo ------------------------------------------------
-echo.
-choice /c 1234
-if &amp;quot;%errorlevel%&amp;quot;==&amp;quot;4&amp;quot; goto new
-if &amp;quot;%errorlevel%&amp;quot;==&amp;quot;3&amp;quot; (set &amp;quot;targetlabel=local&amp;quot;&amp;amp;&amp;amp;goto ac)
-if &amp;quot;%errorlevel%&amp;quot;==&amp;quot;2&amp;quot; (set &amp;quot;targetlabel=fast&amp;quot;&amp;amp;&amp;amp;goto ac)
-if &amp;quot;%errorlevel%&amp;quot;==&amp;quot;1&amp;quot; (set &amp;quot;targetlabel=full&amp;quot;&amp;amp;&amp;amp;goto ac)
-pause&amp;amp;exit
-:new
-echo 正在创建新的cmd实例...
-echo ------------------------------------------------
-echo 命令提示：
-echo hexo clean
-echo hexo g
-echo hexo s
-echo hexo d
-echo ------------------------------------------------
-start cmd
-echo 按任意键返回菜单...
-pause &amp;gt;nul
-set &amp;quot;targetlabel=start&amp;quot;&amp;amp;&amp;amp;goto ac
-:local
-echo ------------------------------------------------
-echo                  本地预览模式
-echo ------------------------------------------------
-echo 启动预览...
-cmd /c &amp;quot;hexo clean &amp;amp; hexo g &amp;amp; xcopy D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y &amp;amp; echo 2&amp;gt;D:\blog\.deploy_git\.nojekyll &amp;amp; start http://localhost:4000/ &amp;amp; hexo s&amp;quot;
-echo 按任意键返回菜单...
-pause &amp;gt;nul
-set &amp;quot;targetlabel=start&amp;quot;&amp;amp;&amp;amp;goto ac
-:fast
-echo ------------------------------------------------
-echo                  快速上载blog
-echo ------------------------------------------------
-cmd /c &amp;quot;hexo clean &amp;amp; hexo g &amp;amp; xcopy D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y &amp;amp; echo 2&amp;gt;D:\blog\.deploy_git\.nojekyll &amp;amp; hexo d&amp;quot;
-echo ------------------------------------------------
-echo 完成，2秒后退出...
-ping localhost -n 3 &amp;gt;nul
-exit
-:full
-echo ------------------------------------------------
-echo                  完整流程向导
-echo              按0为确定，按1为跳过
-echo ------------------------------------------------
-goto clean
-:clean
-echo 第一步：清理缓存
-choice /c 01
-if &amp;quot;%errorlevel%&amp;quot;==&amp;quot;2&amp;quot; goto generate
-cmd /c &amp;quot;hexo clean&amp;quot;
-goto generate
-:generate
-echo ------------------------------------------------
-echo 第二步：生成页面
-choice /c 01
-if &amp;quot;%errorlevel%&amp;quot;==&amp;quot;2&amp;quot; goto check
-cmd /c &amp;quot;xcopy D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y &amp;amp; echo 2&amp;gt;D:\blog\.deploy_git\.nojekyll &amp;amp; hexo g&amp;quot;
-goto check
-:check
-echo ------------------------------------------------
-echo 第三步：本地预览
-choice /c 01
-if &amp;quot;%errorlevel%&amp;quot;==&amp;quot;2&amp;quot; goto deploy
-start http://localhost:4000/
-cmd /c &amp;quot;hexo s&amp;quot;
-goto deploy
-:deploy
-echo ------------------------------------------------
-echo 第四步：上传到远程服务器
-choice /c 01
-if &amp;quot;%errorlevel%&amp;quot;==&amp;quot;2&amp;quot; goto done
-cmd /c &amp;quot;hexo d&amp;quot;
-goto done
-:done
-echo ------------------------------------------------
-echo 流程已完成，按任意键返回菜单...
-pause &amp;gt;nul
-set &amp;quot;targetlabel=start&amp;quot;&amp;amp;&amp;amp;goto ac&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;我自认为自己的批处理写得都算比较清晰的了，虽然注释很少，但结合文字应该能看懂每一步是在干什么。&lt;br&gt;
-如果要使用，请把里面所有的 &lt;code&gt;D:\blog\source\_posts\_resources&lt;/code&gt;  替换为你 Joplin 每次导出时的资源目录，把所有的 &lt;code&gt;D:\blog\public\blog\_resources\&lt;/code&gt;  替换为你的博客站点目录，注意不要动 &lt;code&gt;\public\...&lt;/code&gt;  后面的内容。&lt;/p&gt;
-&lt;p&gt;如果要更换功能模块，也应按照这里的写法，使用  &lt;code&gt;cmd /c 命令内容 &amp;amp; 第二条命令 &amp;amp; 后面的很多命令&lt;/code&gt;  来执行，除了 start 用于启动网页之外尽量不要直接在批处理中使用模块的命令，否则容易直接闪退。&lt;/p&gt;
-&lt;p&gt;创建 &lt;code&gt;.nojekyll&lt;/code&gt;  文件的目的是防止 GitHub 忽略掉下划线开头的文件夹，即 &lt;code&gt;_resources&lt;/code&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&#34;4-工作流程&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#4-工作流程&#34;&gt;#&lt;/a&gt; 4. 工作流程&lt;/h3&gt;
-&lt;p&gt;现在，我们可以愉快地写文章了。&lt;br&gt;
-打开 Joplin，新建笔记（记得都放在同一个笔记本下），笔记的名字是文件名，写上 Front-matter 内容，之后就如同在 word 中一样写稿。&lt;br&gt;
-图片直接粘贴即可，需要的话修改 [ ] 里的内容，这是属于 markdown 语法的一部分，不详细说明。&lt;br&gt;
-写完的文章直接往 &lt;code&gt;blog\source\_posts&lt;/code&gt;  里面一存，然后打开脚本按个 2，等两分钟就部署到 Github Pages 上了。&lt;br&gt;
-&lt;strong&gt;愉快地工作吧！&lt;/strong&gt;&lt;br&gt;
-&lt;img src=&#34;../_resources/cf0fb99a327ef788a844524d6eb74278.png&#34; alt=&#34;cf0fb99a327ef788a844524d6eb74278.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;补充点内容，修改文章稍微有点麻烦，因为 Joplin 非常笨，它不会识别已有的文件，发现重名了直接加后缀，连带着里面的图片也都加后缀、重新复制到 &lt;code&gt;_resources&lt;/code&gt;  里面了；对于我这种硬盘空间够、平时图片不多的人来说倒是无所谓，但部署了之后文章会重复显示好几篇。所以不能直接导出文章，需要手动删除旧的，然后再从 Joplin 中导出即可。&lt;/p&gt;
-</content>
-        <category term="软件" />
-        <updated>2022-11-27T13:53:00.000Z</updated>
-    </entry>
-    <entry>
-        <id>https://zjxdiu.github.io/blog/%E9%9A%8F%E8%AE%B020221125/</id>
-        <title>疫情爆炸，如何积极面对</title>
-        <link rel="alternate" href="https://zjxdiu.github.io/blog/%E9%9A%8F%E8%AE%B020221125/"/>
-        <content type="html">&lt;p&gt;&lt;img src=&#34;../_resources/bae16920a3e51780c72e170d6411a8ac.png&#34; alt=&#34;bae16920a3e51780c72e170d6411a8ac.png&#34;&gt;&lt;br&gt;
+&lt;p&gt;同时，</summary>
+      
+    
+    
+    
+    <category term="学习" scheme="https://zjxdiu.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="软件" scheme="https://zjxdiu.github.io/categories/%E5%AD%A6%E4%B9%A0/%E8%BD%AF%E4%BB%B6/"/>
+    
+    
+    <category term="软件" scheme="https://zjxdiu.github.io/tags/%E8%BD%AF%E4%BB%B6/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>疫情爆炸，如何积极面对</title>
+    <link href="https://zjxdiu.github.io/blog/%E9%9A%8F%E8%AE%B020221125/"/>
+    <id>https://zjxdiu.github.io/blog/%E9%9A%8F%E8%AE%B020221125/</id>
+    <published>2022-11-27T03:48:00.000Z</published>
+    <updated>2022-11-27T10:18:21.495Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="../_resources/bae16920a3e51780c72e170d6411a8ac.png" alt="bae16920a3e51780c72e170d6411a8ac.png"><br> 人在上课，突闻噩耗。<br>虽然现在的新冠并没有两年前那么恐怖，见者九死一生，但仍然是流感中较为严重的一类。</p><p>最近全国各地都突然严重爆发，我学校的老校区也出现了阳性感染者，这实在不是什么好消息。<br>不过，疫情虽然对经济冲击严重，但我们仍然可能可以从另一个角度思考问题，试图以积极的方式面对。</p><hr><p>在 2020 年中，大约是（延期后的）高考结束的那个暑期，我们经历了一次非常恐怖的矿潮。那时候，显卡的价格飞涨到一个离谱都不足以形容的地步，而正值开学季的准大学生们则欲哭无泪：想买电脑，根本抢不到！<br>尽管当时笔记本电脑缺货更多是由于芯片供应短缺造成的，但挖矿的影响同样不可忽视。而就在大家想着如何用合理的价格买到自己心仪的显卡时，有一些人则希望大家能够从另一个角度来看待这个问题。</p><blockquote><p>“<em>有时候达成你的目标和需求不止一种方法；面对畸形的市场，与其抱怨，不如换一种新的思维来看待这件事</em>”</p></blockquote><p>这句话确实给了我不少启发和灵感。</p><hr><h3 id="这是一个给你折腾机会的完美时机"><a class="markdownIt-Anchor" href="#这是一个给你折腾机会的完美时机">#</a> 这是一个给你折腾机会的完美时机</h3><p>所谓折腾，就是你可以干任何以前你想干但缺乏时机的事。当然，如果你想环游世界，那可能还是之后再说吧（？）<br>举个例子，我利用高中被疫情困在家里的时间，自己学习了非常多的东西，包括但不限于：</p><ul><li>网络工程与应用</li><li>服务器搭建与优化</li><li>网页前端设计</li><li>游戏开发入门</li></ul><p>这些都是我理解的 “折腾”，平时由于高三学习压力较大、学校里不能自由使用手机和电脑，这些东西都没有机会学习和实践。<br>而利用好了这几个月，我认为我在折腾中收获颇丰，并为进入大学后的生活提供了十足的帮助。</p><p><img src="../_resources/a5e6e966826c7b2508826b512966be12.png" alt="a5e6e966826c7b2508826b512966be12.png"><br> 这是我在一个月内做的网页前端设计，并应用于自己家庭的内网中，以便实现我的学习电脑与打印服务器电脑（配置很低很卡）之间进行快速的文件传输和通信。</p><hr><h3 id="这是一个可以锻炼你眼光的合理时机"><a class="markdownIt-Anchor" href="#这是一个可以锻炼你眼光的合理时机">#</a> 这是一个可以锻炼你眼光的合理时机</h3><p>如果要折腾，你肯定免不了要花点钱，有的甚至开销很大（比如我喜欢折腾电脑硬件，这就是花费很高的一种）。但正是因为花销大，才能锻炼我的眼光，确切来说是我选购东西的眼光。</p><p>最近正在考虑折腾一个服务器电脑。家里有闲置的笔记本和台式机，也许我可以改造台式机，重新选择 ITX 机箱和静音散热器，并将其作为服务器主机使用。<br>或者，也可以另外花费 240 左右购买 J1900 准系统迷你主机，这种方案的优势是被动散热无噪音、寿命长，硬盘我已经有一块可用的 SSD，还可以顺便折腾 Windows server 2007 等系统，加上我本人对能折腾的迷你电脑比较感兴趣，这似乎是不错的选择。<br>然而，这个方案最大的问题就是开销更多；买一个 ITX 机箱 + 低噪散热器的价格显然低于准系统 + 内存的价格，所以这就对我的选购能力提出了严峻的挑战。虽然我并没有实际购买，但在这个过程中，我能感觉到自己网购眼光的提升。</p><hr><h3 id="总结"><a class="markdownIt-Anchor" href="#总结">#</a> 总结</h3><p>积极面对这 ** 的世界，听起来并不是一件轻松的事，毕竟谁能在生存受阻的情况下坦然自若呢？但是，苦中作乐本就是身具人性的最大优势，而我们不应该让其淹没在无穷无尽的原始需求中。<br>最后，为这个尚存一线美好的世界送上祝福，希望每个真诚的人都能被温柔以待。<br><img src="../_resources/a15b89a10fa9a65103dc7e49a3856ea7.png" alt="a15b89a10fa9a65103dc7e49a3856ea7.png"></p><hr>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;&lt;img src=&quot;../_resources/bae16920a3e51780c72e170d6411a8ac.png&quot; alt=&quot;bae16920a3e51780c72e170d6411a8ac.png&quot;&gt;&lt;br&gt;
  人在上课，突闻噩耗。&lt;br&gt;
-虽然现在的新冠并没有两年前那么恐怖，见者九死一生，但仍然是流感中较为严重的一类。&lt;/p&gt;
-&lt;p&gt;最近全国各地都突然严重爆发，我学校的老校区也出现了阳性感染者，这实在不是什么好消息。&lt;br&gt;
-不过，疫情虽然对经济冲击严重，但我们仍然可能可以从另一个角度思考问题，试图以积极的方式面对。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;在 2020 年中，大约是（延期后的）高考结束的那个暑期，我们经历了一次非常恐怖的矿潮。那时候，显卡的价格飞涨到一个离谱都不足以形容的地步，而正值开学季的准大学生们则欲哭无泪：想买电脑，根本抢不到！&lt;br&gt;
-尽管当时笔记本电脑缺货更多是由于芯片供应短缺造成的，但挖矿的影响同样不可忽视。而就在大家想着如何用合理的价格买到自己心仪的显卡时，有一些人则希望大家能够从另一个角度来看待这个问题。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;“&lt;em&gt;有时候达成你的目标和需求不止一种方法；面对畸形的市场，与其抱怨，不如换一种新的思维来看待这件事&lt;/em&gt;”&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;这句话确实给了我不少启发和灵感。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&#34;这是一个给你折腾机会的完美时机&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#这是一个给你折腾机会的完美时机&#34;&gt;#&lt;/a&gt; 这是一个给你折腾机会的完美时机&lt;/h3&gt;
-&lt;p&gt;所谓折腾，就是你可以干任何以前你想干但缺乏时机的事。当然，如果你想环游世界，那可能还是之后再说吧（？）&lt;br&gt;
-举个例子，我利用高中被疫情困在家里的时间，自己学习了非常多的东西，包括但不限于：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;网络工程与应用&lt;/li&gt;
-&lt;li&gt;服务器搭建与优化&lt;/li&gt;
-&lt;li&gt;网页前端设计&lt;/li&gt;
-&lt;li&gt;游戏开发入门&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;这些都是我理解的 “折腾”，平时由于高三学习压力较大、学校里不能自由使用手机和电脑，这些东西都没有机会学习和实践。&lt;br&gt;
-而利用好了这几个月，我认为我在折腾中收获颇丰，并为进入大学后的生活提供了十足的帮助。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;../_resources/a5e6e966826c7b2508826b512966be12.png&#34; alt=&#34;a5e6e966826c7b2508826b512966be12.png&#34;&gt;&lt;br&gt;
- 这是我在一个月内做的网页前端设计，并应用于自己家庭的内网中，以便实现我的学习电脑与打印服务器电脑（配置很低很卡）之间进行快速的文件传输和通信。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&#34;这是一个可以锻炼你眼光的合理时机&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#这是一个可以锻炼你眼光的合理时机&#34;&gt;#&lt;/a&gt; 这是一个可以锻炼你眼光的合理时机&lt;/h3&gt;
-&lt;p&gt;如果要折腾，你肯定免不了要花点钱，有的甚至开销很大（比如我喜欢折腾电脑硬件，这就是花费很高的一种）。但正是因为花销大，才能锻炼我的眼光，确切来说是我选购东西的眼光。&lt;/p&gt;
-&lt;p&gt;最近正在考虑折腾一个服务器电脑。家里有闲置的笔记本和台式机，也许我可以改造台式机，重新选择 ITX 机箱和静音散热器，并将其作为服务器主机使用。&lt;br&gt;
-或者，也可以另外花费 240 左右购买 J1900 准系统迷你主机，这种方案的优势是被动散热无噪音、寿命长，硬盘我已经有一块可用的 SSD，还可以顺便折腾 Windows server 2007 等系统，加上我本人对能折腾的迷你电脑比较感兴趣，这似乎是不错的选择。&lt;br&gt;
-然而，这个方案最大的问题就是开销更多；买一个 ITX 机箱 + 低噪散热器的价格显然低于准系统 + 内存的价格，所以这就对我的选购能力提出了严峻的挑战。虽然我并没有实际购买，但在这个过程中，我能感觉到自己网购眼光的提升。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&#34;总结&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#总结&#34;&gt;#&lt;/a&gt; 总结&lt;/h3&gt;
-&lt;p&gt;积极面对这 ** 的世界，听起来并不是一件轻松的事，毕竟谁能在生存受阻的情况下坦然自若呢？但是，苦中作乐本就是身具人性的最大优势，而我们不应该让其淹没在无穷无尽的原始需求中。&lt;br&gt;
-最后，为这个尚存一线美好的世界送上祝福，希望每个真诚的人都能被温柔以待。&lt;br&gt;
-&lt;img src=&#34;../_resources/a15b89a10fa9a65103dc7e49a3856ea7.png&#34; alt=&#34;a15b89a10fa9a65103dc7e49a3856ea7.png&#34;&gt;&lt;/p&gt;
-&lt;hr&gt;
-</content>
-        <category term="日常" />
-        <category term="生活" />
-        <updated>2022-11-27T03:48:00.000Z</updated>
-    </entry>
-    <entry>
-        <id>https://zjxdiu.github.io/blog/WPS-word/</id>
-        <title>WPS word如何设置图片背景，如何解决图片变成平铺问题</title>
-        <link rel="alternate" href="https://zjxdiu.github.io/blog/WPS-word/"/>
-        <content type="html">&lt;h2 id=&#34;wps-word如何设置图片背景如何解决图片变成平铺问题&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#wps-word如何设置图片背景如何解决图片变成平铺问题&#34;&gt;#&lt;/a&gt; WPS word 如何设置图片背景，如何解决图片变成平铺问题&lt;/h2&gt;
-&lt;p&gt;问题描述：在 WPS word 中插入背景图片，导出为 PDF、打印后发现图片变成平铺，如图所示&lt;br&gt;
-&lt;img src=&#34;../_resources/1bed71e7e0b967daa78642a737810d17.png&#34; alt=&#34;1bed71e7e0b967daa78642a737810d17.png&#34;&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;1. 打开需要插入背景图片的文档&lt;br&gt;
- 2. 点击：页面布局、背景、其它背景、纹理&lt;br&gt;
-&lt;img src=&#34;../_resources/88b258680c69021372dab599663945bd.png&#34; alt=&#34;88b258680c69021372dab599663945bd.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;3. 选择 “其它纹理”，选择图片后点击确定&lt;br&gt;
-&lt;img src=&#34;../_resources/a4d5ca84c954b134351ea2d9c8d9881c.png&#34; alt=&#34;a4d5ca84c954b134351ea2d9c8d9881c.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;4. 现在背景图片应该可以正常导出了。&lt;/p&gt;
-&lt;hr&gt;
-</content>
-        <category term="软件" />
-        <updated>2022-11-26T15:18:00.000Z</updated>
-    </entry>
-    <entry>
-        <id>https://zjxdiu.github.io/blog/FTIR%E5%8E%9F%E7%90%86%E8%AF%A6%E8%A7%A3/</id>
-        <title>傅里叶变换红外光谱技术原理详解</title>
-        <link rel="alternate" href="https://zjxdiu.github.io/blog/FTIR%E5%8E%9F%E7%90%86%E8%AF%A6%E8%A7%A3/"/>
-        <content type="html">&lt;h2 id=&#34;目录&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#目录&#34;&gt;#&lt;/a&gt; 目录&lt;/h2&gt;
+虽然现在的新冠并没有两</summary>
+      
+    
+    
+    
+    <category term="杂项" scheme="https://zjxdiu.github.io/categories/%E6%9D%82%E9%A1%B9/"/>
+    
+    <category term="生活" scheme="https://zjxdiu.github.io/categories/%E6%9D%82%E9%A1%B9/%E7%94%9F%E6%B4%BB/"/>
+    
+    
+    <category term="日常" scheme="https://zjxdiu.github.io/tags/%E6%97%A5%E5%B8%B8/"/>
+    
+    <category term="生活" scheme="https://zjxdiu.github.io/tags/%E7%94%9F%E6%B4%BB/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>WPS word如何设置图片背景，如何解决图片变成平铺问题</title>
+    <link href="https://zjxdiu.github.io/blog/WPS-word/"/>
+    <id>https://zjxdiu.github.io/blog/WPS-word/</id>
+    <published>2022-11-26T15:18:00.000Z</published>
+    <updated>2022-11-27T10:18:21.497Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="wps-word如何设置图片背景如何解决图片变成平铺问题"><a class="markdownIt-Anchor" href="#wps-word如何设置图片背景如何解决图片变成平铺问题">#</a> WPS word 如何设置图片背景，如何解决图片变成平铺问题</h2><p>问题描述：在 WPS word 中插入背景图片，导出为 PDF、打印后发现图片变成平铺，如图所示<br><img src="../_resources/1bed71e7e0b967daa78642a737810d17.png" alt="1bed71e7e0b967daa78642a737810d17.png"></p><hr><p>1. 打开需要插入背景图片的文档<br> 2. 点击：页面布局、背景、其它背景、纹理<br><img src="../_resources/88b258680c69021372dab599663945bd.png" alt="88b258680c69021372dab599663945bd.png"></p><p>3. 选择 “其它纹理”，选择图片后点击确定<br><img src="../_resources/a4d5ca84c954b134351ea2d9c8d9881c.png" alt="a4d5ca84c954b134351ea2d9c8d9881c.png"></p><p>4. 现在背景图片应该可以正常导出了。</p><hr>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;wps-word如何设置图片背景如何解决图片变成平铺问题&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#wps-word如何设置图片背景如何解决图片变成平铺问题&quot;&gt;#&lt;/a&gt; WPS word 如何设置图片背景，如何解决图片变成平铺问题</summary>
+      
+    
+    
+    
+    <category term="学习" scheme="https://zjxdiu.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="软件" scheme="https://zjxdiu.github.io/categories/%E5%AD%A6%E4%B9%A0/%E8%BD%AF%E4%BB%B6/"/>
+    
+    
+    <category term="软件" scheme="https://zjxdiu.github.io/tags/%E8%BD%AF%E4%BB%B6/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>傅里叶变换红外光谱技术原理详解</title>
+    <link href="https://zjxdiu.github.io/blog/FTIR%E5%8E%9F%E7%90%86%E8%AF%A6%E8%A7%A3/"/>
+    <id>https://zjxdiu.github.io/blog/FTIR%E5%8E%9F%E7%90%86%E8%AF%A6%E8%A7%A3/</id>
+    <published>2022-11-26T13:02:00.000Z</published>
+    <updated>2022-11-27T10:18:21.490Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="目录"><a class="markdownIt-Anchor" href="#目录">#</a> 目录</h2><p>一、物理基础<br> 1.1 红外光谱基本原理<br> 1.2 FTIR 光谱仪构成与基本运行过程<br> 1.3 干涉现象<br> 1.3.1 波的叠加<br>二、信号与系统<br> 2.1 数字、模拟信号<br> 2.1.1 信号<br> 2.1.2 模拟信号<br> 2.1.3 数字信号<br> 2.2 信号转换<br> 2.2.1 采样与 A/D 转换<br> 2.2.2 奈奎斯特采样定理<br> 2.2.3 混叠<br> 2.3 傅里叶变换（FT）<br>三、FT 在 FTIR 中的具体原理<br> 3.1 仪器工作流程详解<br> 3.2 信号检测与采样<br> 3.3 数据处理<br>四、总结与展望<br> 4.1 总结与心得<br> 4.2 未来展望</p><h1 id="傅里叶变换红外光谱技术原理详解"><a class="markdownIt-Anchor" href="#傅里叶变换红外光谱技术原理详解">#</a> 傅里叶变换红外光谱技术原理详解</h1><h2 id="一-物理基础"><a class="markdownIt-Anchor" href="#一-物理基础">#</a> 一、物理基础</h2><h3 id="11-红外光谱基本原理"><a class="markdownIt-Anchor" href="#11-红外光谱基本原理">#</a> 1.1 红外光谱基本原理</h3><p>当一束红外光射到物质上，可能发生：吸收、透过、反射、散射或者激发荧光。其中，我们需要的部分是吸收的量。然而，对于仪器来说，直接测量吸光度似乎并不现实；因此，我们一般采用已知强度的光源以及透过量来代替吸光度。<br>红外光，本质上是一段频率特殊、无法被人眼看见的电磁波，其波长一般为 0.75-1000nm，频率约为 300GHz~430THz。与之相似的包括微波（或 Wi-Fi、5G 网络的毫米波）、FM 广播等无线电波和其它。<br>对于红外光谱分析，我们一般选用其中的一段波长（或频率、波数）为目标光。采用色散元件，我们可以将光源发射的连续光谱（类似包含全部可见光波长而显白色的太阳光）分解为需要的单色光（只包含一种波长的光），然后让其通过样品、测定吸光度。<br>其余的红外光谱原理可查阅课本，此处不再赘述。</p><h3 id="12-ftir光谱仪构成与基本运行过程"><a class="markdownIt-Anchor" href="#12-ftir光谱仪构成与基本运行过程">#</a> 1.2 FTIR 光谱仪构成与基本运行过程</h3><p>FTIR 光谱仪，即 Fourier Transform Infrared Radiation Spectrometer，傅里叶变换红外辐射光谱仪（以下简称 FTIR 或 FFTIR），就是一种用于红外光谱测定的仪器。与普通的红外光谱仪不同，FTIR 不具有单色器，而是以迈克尔逊干涉仪取代，并且对计算机系统尤为依赖、几乎不可能通过人力来计算其光谱图。<br>FTIR 的运行流程可以概括为：光源发射红外线 – 干涉仪动作产生干涉光 – 干涉光通过样品到达检测器 – 光电二极管或其它检测器将光强转换为电信号 – 传入计算机进行数据处理。其中，光源发射的红外线包括整个需要测定的频率范围，而干涉仪需要持续动作以产生需要的干涉光；干涉光的性质与检测器信号是一一对应且已知的。</p><h3 id="13-干涉现象"><a class="markdownIt-Anchor" href="#13-干涉现象">#</a> 1.3 干涉现象</h3><p>1801 年，英国物理学家托马斯・杨在实验室里成功地观察到了光的干涉，以下就是经典的双缝干涉实验。<br><img src="../_resources/d6cfc0c663cbda269660f8f4e96683a7.png" alt="双缝干涉现象.png"></p><p>简而言之，同一束光线从不同的位置发出时，在后面的空间内就会发生干涉现象；或者说，当一束光 “碰到” 另一束光时，两束光发生干涉现象。通俗的例子是，当身边有一个持续频率的声音（例如蜂鸣器报警），人站在房间的不同位置就会听到音量大小不同，在某些角落时这个声音甚至会几乎完全消失，这也是干涉现象的一种体现。</p><h4 id="131-波的叠加"><a class="markdownIt-Anchor" href="#131-波的叠加">#</a> 1.3.1 波的叠加</h4><p>我们都知道如何画 y=sin x 的函数图像，它是一个正弦曲线。但是，如果在同一个空间和时间内，有另一个波源发射了另一个正弦曲线，并且它的解析式是 y=sin (1.1x)，这时候两个波发生叠加，我们又如何画出 y= (sin x) + sin (1.1x) 的曲线图呢？<br><img src="../_resources/d02ac3e559fc44f7eb9ca6216a6c5b97.png" alt="波的叠加图.png"></p><p>使用现代化的图形计算器，我们可以很轻松地通过计算机画出上述叠加波的函数图像。很明显，叠加波的振幅（也就是一个周期内的最大 y 值）在周期性变化，但我们仍然可以看到 sin x 的痕迹；似乎就是 sin x 的振幅被周期性地 “压缩”，而这个压缩的方式仍然是一个正弦样子。<br>也许这些内容已经难以理解了，但我们只需要知道，多个波在叠加之后会产生新的波，而这个叠加波的形态与每个单独的波似乎没有太过直接的关联。</p><h2 id="二-信号与系统"><a class="markdownIt-Anchor" href="#二-信号与系统">#</a> 二、信号与系统</h2><h3 id="21-数字-模拟信号"><a class="markdownIt-Anchor" href="#21-数字-模拟信号">#</a> 2.1 数字、模拟信号</h3><h4 id="211-信号"><a class="markdownIt-Anchor" href="#211-信号">#</a> 2.1.1 信号</h4><p>所谓信号，指的是能传递信息的某种载体。例如现在屏幕上显示的文字，就是一种传递文字信息的信号。这是一个抽象的概念，但有太多实际的例子。接下来的篇幅里，我们将大量使用声音，一种最常见的信号为例，讲解信号与系统的浅层内容。</p><h4 id="212-模拟信号"><a class="markdownIt-Anchor" href="#212-模拟信号">#</a> 2.1.2 模拟信号</h4><p>所谓模拟信号，指的其实是连续的信号；例如我们听到的声音，实际上是声源产生的机械振动，导致空气被压缩和扩张，这个不断变化的气压传入耳朵，再通过复杂的器官系统，我们就能听到声音。这个过程中，物体的机械振动是连续的，它并不会突变。如果难以理解，那么可以想象一下，如果一个物体的振动发生了一次突变，这意味着它振动面上的分子发生了瞬间移动，也就是在 0 秒内产生了大于 0 的位移，其速度超过了光速；显然，这对于声波来说是不可能的。因此，我们听到的声音就是连续的信号。</p><h4 id="213-数字信号"><a class="markdownIt-Anchor" href="#213-数字信号">#</a> 2.1.3 数字信号</h4><p>数字信号，也可以叫离散信号，是信号的一种类型。这个名词听上去很高级，但实际上它跟模拟信号没有太大的区别。它们都是信号，只不过形式不同。<br>我们知道，模拟信号是连续的信号。仍然以声波为例，如果我们将声音与时间的关系画在一张图上，这就是所谓的声波图。<br><img src="../_resources/3ac9e78249d54b91cda7d894e5a661c3.png" alt="声波图1.png"></p><p>现在，假设我们希望保存下来这一段声波，并希望它能在一定条件下重现出来。但是，模拟信号是连续的，这意味着它在时间上不存在断点，它包含的数值为无穷多个。显然，计算机无法记录无穷多个数据，实际上我们也没有必要全部记录下来。我们只需要每隔一段时间记录一个数据，这样就可以将无限的数据变成有限，并且似乎也有很大的希望能够重现出来（至少在能接受的损失范围内）。这个过程与逻辑将在下文介绍。</p><h3 id="22-信号转换"><a class="markdownIt-Anchor" href="#22-信号转换">#</a> 2.2 信号转换</h3><h4 id="221-采样与ad转换"><a class="markdownIt-Anchor" href="#221-采样与ad转换">#</a> 2.2.1 采样与 A/D 转换</h4><p>刚才我们提到了模拟信号转换到数字信号的过程。实际上，这就是 ADC（Analog to Digital Converter，模拟到数字转换）的工作原理。我们只需要在尽可能短的时间间隔内记录数据，这样至少主观上我们就可以重现它。<br><img src="../_resources/4561bc52e3a14c62efb44bf598c3ee35.png" alt="采样过程.png"></p><p>这张图展示的就是一个正弦波经过转换后的结果，每个圆圈代表一个数据点；这样，无限的信号变成了有限的数据点，我们也能通过点的走向看出来它是一个正弦波。这个过程，我们称之为 “采样”（Sampling）。采样的结果，就是将连续信号转换为有限个的采样点（Sample）。<br>反之，我们也可以通过 DAC 过程，将采样后的离散信号再次转换回模拟信号；这样，你存储在手机里的音乐就能再次变成连续的电信号，并通过扬声器的振膜再变成机械振动。由于这个过程涉及过多的电子工程学内容，并且对于本文所论述的信号处理而言没有太大价值，因此不在此处展开。</p><h4 id="222-奈奎斯特采样定理"><a class="markdownIt-Anchor" href="#222-奈奎斯特采样定理">#</a> 2.2.2 奈奎斯特采样定理</h4><p>现在，我们知道了采样的过程，就是用大量的数据点来描述原信号。但是，这个大量到底是多少？我们说 “尽可能短的时间间隔内”，这个间隔到底是多少？<br>在回答以上问题之前，我们先想象一下刚才的采样图：里面有很多的数据点，因此我们可以 “脑补” 出原来的信号。但是如果数据点太少，我们还能这样 “脑补” 吗？显然，可能就会有损失，甚至会丢失。<br>庆幸的是，我们有一个定理，它给出了这个最小数据点数的限制，它就叫奈奎斯特采样定理。<br>奈奎斯特定理的原文是：任何有限带宽的连续信号都可以被完美转换为数字信号，只要采样频率高于原信号中最高频率分量的 2 倍。<br>太长了看不懂，没关系，我们分别来解释一下它的含义。</p><p>首先，我们要知道采样率的定义。刚才说到的 “最小时间间隔”，其实就是指采样点的间隔；而它的倒数就是采样率。采样率的含义是，每秒的采样点数量，单位是 Hz（赫兹）。<br>然后，我们有一个信号频率的概念；我们知道，人耳能听到的声音频率范围是 20-20kHz，这里的频率指的是声源机械振动的频率。<br>现在，我们希望录音机能够回放的声音频率覆盖人耳的听觉频率范围，这样它录制的声音才跟最开始的声音能尽可能地一致。现在就轮到奈奎斯特定理上场了，我们的录音机采样率需要＞20kHz x 2 = 40kHz，才能保证它可以记录到人耳的听觉上限。<br>没错，奈奎斯特定理就是这么简单的应用。如果我们想将一个最高频率为 100Hz 的信号无损转换为数字信号，我们的采样率就要大于 200Hz，仅此而已。实际上，多数现代音频以 44.1kHz 或 48kHz 的采样频率进行采样，以保证完全覆盖人耳听觉频率范围。<br>这就结束了吗？奈奎斯特定理真的能如此简单和完美地指导我们开发电子设备吗？显然不是的。它只是一种理想情况下的描述，实际上我们的仪器采样率都是有限的，存储设备的空间也是有限的，这就意味着很多时候我们的采样率并不能达到要求的 2 倍于最高频率（我们称之为奈奎斯特频率，以下简称 Nf），而这时候，我们就遇到了采样过程的最大问题 —— 混叠。</p><p>这里还有一个小插曲，你可能会说，采样之后的数字信号是离散的数据点，它怎么能够无损转换回模拟信号呢？我难道不可以在数据点之间随便画我想要的图形吗？<br>很抱歉，你确实不可以。这就是奈奎斯特采样定理的美丽之处了，它从数学上证明了，我们还原回去的那个信号，就是这一段数字信号转换到模拟信号时的唯一解。如果你试图在其中画更多的内容，那么它就会产生高于奈奎斯特频率的内容，那么在还原时由于频率的限制，这些内容就会丢失，最后仍然会变成原来的波形。</p><h4 id="223-混叠"><a class="markdownIt-Anchor" href="#223-混叠">#</a> 2.2.3 混叠</h4><p>什么是混叠（Aliasing）？<br>我们从一个生活中常见的例子来说明 —— 车轮效应。<br>如果你在电视上看节目，或者自己拍摄视频，然后画面里包含了汽车、自行车的车轮运动，你可能会注意到一个奇怪的现象：当车从停止开始加速时，你看到画面里的车轮逐渐加快；但当加速到一定水平后，不仅车轮没有更快，反而逐渐开始减速，直到某个时候车轮在画面里看起来跟静止一样；如果车继续加速，你甚至会看到车轮开始反方向旋转。<br>没错，这就是混叠；确切来说，是图像信息在时间域上的混叠。<br>发生车轮效应的原因是，摄像机的拍摄并不是记录连续的运动画面，而是相当于一个快速连拍的过程，它每秒拍摄一定数量（一般是 24 或 30）的照片，然后在你观看视频的时候以相同的速度快速播放照片；由于人眼的视觉暂留，我们就看到的连续的运动画面。<br>但是，你可能已经注意到了，这里摄像机并没有记录原始的连续画面，它的工作更像是一个 “采样” 的过程。是的，这确实是一种采样，并且我们看到了采样过程中最大的问题：混叠。它发生在采样速率小于 Nf 的时候，并且会导致一些严重的后果（例如车轮反转）。<br>理解起来也很容易。假设我们的手机每秒拍 30 张照片（在视频里称为 “帧”），这意味着相邻两帧的间隔是 1/30s=33.3ms。如果车轮的运动速度够快，那么就可能发生一个情况：在这 33.3ms 的时间间隔之内，车轮刚好转过了一圈（或 1/n 圈，取决于车轮形状），这意味着第二帧和第一帧的画面是完全一样的。以此类推，如果车速维持在这个水平，那么我们将看到车轮一直静止。<br>在信号领域，混叠的含义几乎是一样的，当我们的信号包含了大于采样率的频率，此时就会发生混叠现象，这会向已经采样的数据添加伪影，并且一旦它进入了数字信号，就无法消除。<br>* 更多信息和通俗的动画解释：<a href="https://www.bilibili.com/video/BV14q4y1Z7bx">点击查看 b 站视频</a></p><h3 id="23-傅里叶变换ft"><a class="markdownIt-Anchor" href="#23-傅里叶变换ft">#</a> 2.3 傅里叶变换（FT）</h3><p>* 本节部分内容源自<a href="https://www.cnblogs.com/h2zZhou/p/8405717.html">原文地址</a>，作者：韩昊</p><p>现在，我们已经获得了一些采样好的数字信号，假设这些信号非常完美，不会发生混叠。我们随时可以用 DAC 过程将其转换回模拟信号，也可以存储在硬盘里以便之后使用。那么，我们还要傅里叶变换干什么？傅里叶变换到底是个什么东西？<br>我们用一个最直观的方式理解傅里叶变换。<br>在你的理解中，一段音乐是什么呢？<br><img src="../_resources/d91b563e232fd309b8767eb75ffdb1a3.png" alt="声波图2.png"><br> 这是我们对音乐最普遍的理解，一个随时间变化的振动。<br>但是，对于精通乐器的人来说，音乐更直观的理解也许是这样的：<br><img src="../_resources/f5352b530b102b22e4fc160fc4bac229.png" alt="五线谱图.png"></p><p>好了，傅里叶变换到此结束，我们继续下一章的学习。<br>什么？这还不够吗？<br>其实这是一个不太恰当的例子，但它通俗地解释了 FT（傅里叶变换）的过程：将一段随时间变化的声波（时域信息）转换为随时间变化的音调（频域信息）。FT 过程在无限的时间上识别信号，然后把其中的频率信息提取出来，并转换成有限的频率谱图。<br>不过，我们到底怎么实现 FT 呢，一段声波信号看起来那么复杂、毫无规律，我们怎么提取其中的频率信息？<br>傅里叶变换认为，所有的叠加波，都可以由有限或无限个已知或已知规律的正弦波叠加而成。而处理正弦波是非常轻松的，只需要找到它的周期，就能知道它的频率，还能得知它的表达式，甚至将其替换为另一个不同频率的正弦波。<br>如果还不够直观，我们看一下两段音乐的声波图：<br><img src="../_resources/71d799eeb29fc6ba5fbc0693c28c96aa.png" alt="声波图3.png"></p><p><img src="../_resources/be31756d0721cf2caaafc700b22aa00e.png" alt="声波图4.png"><br> 上图是电子音乐，包含强烈鼓点、贝斯（低频）声音，而下图则是钢琴曲，这些低频声音很少。<br>也许你已经看出来其中的区别了，低频声音占比高的声波，它的图像会呈现一个十分 “低频” 的起伏；而在同样的窗口内，低频占比小的声波则显得 “复杂” 很多，并且缺乏更大的起伏波浪。仔细观察上图，其实在起伏的过程中也包含很多小的尖刺，实际上这就是低频声音与高频声音叠加之后的结果。<br>现在，你已经掌握了用肉眼做傅里叶变换的能力（），但是这个计算精度很差，也只能区分少数的几个频率（这就是为什么人来算傅里叶变换几乎不可能的原因）。不过，计算机很擅长这个，让它来做 FT（确切来说是 FFT，快速傅里叶变换，是针对计算机的一种优化算法），我们就能得到音乐的频谱图（颜色越亮表示声音强度越高）：<br><img src="../_resources/f55b89e1692387413e2ee5f233dc93bb.png" alt="频谱图.png"></p><p>（准确地说，这张图是频谱随时间变化的图，因为音乐信号中的频率信息时刻变化）<br>这个图对于音频工程师来说简直就是一个神器；把声波转换为频率信息，我们可以发现很多原来不能发现的错误和问题；如果一些乐器声音太大导致刺耳的话，频谱图上就能看到高频部分的强度很高。<br>在其它需要分析信号的领域，FT 同样是好用的工具。它把复杂的信号做了简化，让我们能从另一个维度（视角）来观察信号。<br>* 如果还感有余力，则可以详细了解拉普拉斯变换，它又从另一个维度理解了信号。</p><h2 id="三-ft在ftir中的具体原理"><a class="markdownIt-Anchor" href="#三-ft在ftir中的具体原理">#</a> 三、FT 在 FTIR 中的具体原理</h2><h3 id="31-仪器工作流程详解"><a class="markdownIt-Anchor" href="#31-仪器工作流程详解">#</a> 3.1 仪器工作流程详解</h3><p>对于 FTIR 而言，我们有红外光源、干涉仪（包含两个反射镜，一个是动镜，一个是定镜），He-Ne 激光器，样品池，检测器，计算机系统。红外光源会持续发射连续的红外光谱，而动镜则利用激光校准、通过电机来调整位置，使之能够在确定的距离上进行移动；入射红外光在透镜作用下分成两束光，并在经过动镜和定镜后再次合为一束，在这个过程中两束光交汇即产生干涉现象，而其相位差就由动镜位置决定。动镜不断移动，干涉相位也在不断变化，这一束干涉光送入样品池后被吸收一部分，最后进入检测器和信号系统中。<br><img src="../_resources/d156e5d7fb71c932d8ebc2153d08941e.png" alt="光线走向FTIR.png"></p><p>这张图很好地解释了 FTIR 中各光线的走向。其中，Beamsplitter 是光波分束器，也叫半透半反射镜，它的作用是将红外光源发射的光线分为两束，一束为绿色实线，另一束为红色实线；它们分别到达定镜和动镜，并被反射回来（反射光用绿色、红色虚线表示）。反射光到达分束器时也会发生同样的现象，我们需要的光线是绿色穿透线和红色反射线（虚线），它们在分束器处就会发生干涉现象，最后干涉光到达样品。</p><h3 id="32-信号检测与采样"><a class="markdownIt-Anchor" href="#32-信号检测与采样">#</a> 3.2 信号检测与采样</h3><p>通过前文信号与系统部分的学习，我们知道，仪器是不能处理连续信号的，必须通过采样、转换为数字信号才可以进行处理和储存。不过，与音频（和大多数）信号不同的是，FTIR 中信号并不是随时间变化，而是随动镜位置变化的。当动镜固定在一个位置时，得到的信号永远是同一个值。这就给了我们的仪器一些 “可乘之机”。<br>如果了解过示波器或相关产品，那么你一定会知道，现在的实验室示波器带宽一般不会超过 10GHz（最大带宽，指在这个频率以内的信号都能被较为准确地还原和记录），而红外光的频率在 300GHz 到 430THz 之间，它们之间的差距非常大；尽管这个对比并不恰当，但我们依然能发现，通过时间来采样显然是不合适的。<br>理解了这些，我们就能知道 FTIR 到底是如何采集数据的了；动镜每次移动很短的距离，然后两束光的相位会发生变化（光程差改变），进而引起干涉发生在不同的光频率上。这个动镜单次移动的距离非常短，以至于要单独用 He-Ne 激光来进行位置调整。具体是如何做到的，我并没有找到对应的资料，如果有同学知道可以在评论区告知。</p><h3 id="33-数据处理"><a class="markdownIt-Anchor" href="#33-数据处理">#</a> 3.3 数据处理</h3><p>现在，动镜完整地移动了一个循环，其中每次停顿的时候检测器都记录了一个数值，这个数值代表动镜在这个位置的时候这种干涉光导致的透过程度。将这些数值与动镜位置的关系作图，即得干涉图。对干涉图作 FFT 运算，即得每个频率（波数）下的吸光度（透过率）。<br>如果难以理解，这里有一个解释的过程。<br>假设我们的红外光源只会发射两个频率的波（即两个单色光），它们的频率有一定的差异。现在，这两束光经过了一次完整的工作循环，则在干涉仪中，两束光会发生干涉现象，且这个干涉会随动镜位置的改变而变化。我们将动镜的位置类比到音频信号中的时间，将检测器的结果理解为量化后的强度值，则得到的干涉图实际上是一种强度 - 时间的时域图；FFT 可以将其转变为光谱图，实际上是一种强度 - 频率（波数）的频域图。只不过在音频信号中，频率指的是振动次数 / 秒，而光谱中频率指的是波数 / 厘米。<br><img src="../_resources/bb116765d12239882d80f86789823e40.png" alt="干涉与谱图.png"></p><p>左图为干涉图，右图为光谱图。可以将干涉图类比为时域信号图（如声波图），将光谱图类比为频域信号图（频谱图）。</p><h2 id="四-总结与展望"><a class="markdownIt-Anchor" href="#四-总结与展望">#</a> 四、总结与展望</h2><h3 id="41-总结与心得"><a class="markdownIt-Anchor" href="#41-总结与心得">#</a> 4.1 总结与心得</h3><p>FTIR 是目前应用最多的红外光谱分析原理，因为它与标准的红外光谱分析法相比，具有检测速度快、灵敏度更高、信噪比更高等优势。但目前大学相关仪器分析教材中并未详细描述 FTIR 的原理，甚至网络上都很难直接搜索到 FTIR 的详细原理（大部分都是以某乎的回答形式，而那些回答要么直接抄教材、FFT 部分一笔带过，要么过于复杂、直接摆上一长串的变换公式，这对于想稍微深入理解但又没有学习过信号与系统的化学相关专业学生来说实在不友好）。因此，我在查找了大量的资料的情况下才有了撰写这篇文章的想法。<br>我并不是多学位、辅修第二专业的学生，但我对音频处理、电子工程都有所了解和学习。这一次在食品专业课程中看到了相关的技术，我几乎是瞬间就产生了浓厚的兴趣。尽管学习的过程十分艰难，这篇文章最终还是诞生了，以期有相同兴趣的同学可以得到帮助。</p><h3 id="42-未来展望"><a class="markdownIt-Anchor" href="#42-未来展望">#</a> 4.2 未来展望</h3><p>由于大三时期学习事务繁多，本文从 2022 年 11 月 22 日开始编写，到 26 日了才勉强算接近尾声。因此，文章内仍然有很多错误没能及时发现与更正，若能指正，感激不尽。<br>实际上我还学习了更多的内容，例如旁瓣峰与窗函数、信号补零的影响等等，但最终都并未写入本文。若有兴趣了解，可联系我提供相关学习资料地址等。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;目录&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#目录&quot;&gt;#&lt;/a&gt; 目录&lt;/h2&gt;
 &lt;p&gt;一、物理基础&lt;br&gt;
  1.1 红外光谱基本原理&lt;br&gt;
  1.2 FTIR 光谱仪构成与基本运行过程&lt;br&gt;
  1.3 干涉现象&lt;br&gt;
- 1.3.1 波的叠加&lt;br&gt;
-二、信号与系统&lt;br&gt;
- 2.1 数字、模拟信号&lt;br&gt;
- 2.1.1 信号&lt;br&gt;
- 2.1.2 模拟信号&lt;br&gt;
- 2.1.3 数字信号&lt;br&gt;
- 2.2 信号转换&lt;br&gt;
- 2.2.1 采样与 A/D 转换&lt;br&gt;
- 2.2.2 奈奎斯特采样定理&lt;br&gt;
- 2.2.3 混叠&lt;br&gt;
- 2.3 傅里叶变换（FT）&lt;br&gt;
-三、FT 在 FTIR 中的具体原理&lt;br&gt;
- 3.1 仪器工作流程详解&lt;br&gt;
- 3.2 信号检测与采样&lt;br&gt;
- 3.3 数据处理&lt;br&gt;
-四、总结与展望&lt;br&gt;
- 4.1 总结与心得&lt;br&gt;
- 4.2 未来展望&lt;/p&gt;
-&lt;h1 id=&#34;傅里叶变换红外光谱技术原理详解&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#傅里叶变换红外光谱技术原理详解&#34;&gt;#&lt;/a&gt; 傅里叶变换红外光谱技术原理详解&lt;/h1&gt;
-&lt;h2 id=&#34;一-物理基础&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#一-物理基础&#34;&gt;#&lt;/a&gt; 一、物理基础&lt;/h2&gt;
-&lt;h3 id=&#34;11-红外光谱基本原理&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#11-红外光谱基本原理&#34;&gt;#&lt;/a&gt; 1.1 红外光谱基本原理&lt;/h3&gt;
-&lt;p&gt;当一束红外光射到物质上，可能发生：吸收、透过、反射、散射或者激发荧光。其中，我们需要的部分是吸收的量。然而，对于仪器来说，直接测量吸光度似乎并不现实；因此，我们一般采用已知强度的光源以及透过量来代替吸光度。&lt;br&gt;
-红外光，本质上是一段频率特殊、无法被人眼看见的电磁波，其波长一般为 0.75-1000nm，频率约为 300GHz~430THz。与之相似的包括微波（或 Wi-Fi、5G 网络的毫米波）、FM 广播等无线电波和其它。&lt;br&gt;
-对于红外光谱分析，我们一般选用其中的一段波长（或频率、波数）为目标光。采用色散元件，我们可以将光源发射的连续光谱（类似包含全部可见光波长而显白色的太阳光）分解为需要的单色光（只包含一种波长的光），然后让其通过样品、测定吸光度。&lt;br&gt;
-其余的红外光谱原理可查阅课本，此处不再赘述。&lt;/p&gt;
-&lt;h3 id=&#34;12-ftir光谱仪构成与基本运行过程&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#12-ftir光谱仪构成与基本运行过程&#34;&gt;#&lt;/a&gt; 1.2 FTIR 光谱仪构成与基本运行过程&lt;/h3&gt;
-&lt;p&gt;FTIR 光谱仪，即 Fourier Transform Infrared Radiation Spectrometer，傅里叶变换红外辐射光谱仪（以下简称 FTIR 或 FFTIR），就是一种用于红外光谱测定的仪器。与普通的红外光谱仪不同，FTIR 不具有单色器，而是以迈克尔逊干涉仪取代，并且对计算机系统尤为依赖、几乎不可能通过人力来计算其光谱图。&lt;br&gt;
-FTIR 的运行流程可以概括为：光源发射红外线 – 干涉仪动作产生干涉光 – 干涉光通过样品到达检测器 – 光电二极管或其它检测器将光强转换为电信号 – 传入计算机进行数据处理。其中，光源发射的红外线包括整个需要测定的频率范围，而干涉仪需要持续动作以产生需要的干涉光；干涉光的性质与检测器信号是一一对应且已知的。&lt;/p&gt;
-&lt;h3 id=&#34;13-干涉现象&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#13-干涉现象&#34;&gt;#&lt;/a&gt; 1.3 干涉现象&lt;/h3&gt;
-&lt;p&gt;1801 年，英国物理学家托马斯・杨在实验室里成功地观察到了光的干涉，以下就是经典的双缝干涉实验。&lt;br&gt;
-&lt;img src=&#34;../_resources/d6cfc0c663cbda269660f8f4e96683a7.png&#34; alt=&#34;双缝干涉现象.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;简而言之，同一束光线从不同的位置发出时，在后面的空间内就会发生干涉现象；或者说，当一束光 “碰到” 另一束光时，两束光发生干涉现象。通俗的例子是，当身边有一个持续频率的声音（例如蜂鸣器报警），人站在房间的不同位置就会听到音量大小不同，在某些角落时这个声音甚至会几乎完全消失，这也是干涉现象的一种体现。&lt;/p&gt;
-&lt;h4 id=&#34;131-波的叠加&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#131-波的叠加&#34;&gt;#&lt;/a&gt; 1.3.1 波的叠加&lt;/h4&gt;
-&lt;p&gt;我们都知道如何画 y=sin x 的函数图像，它是一个正弦曲线。但是，如果在同一个空间和时间内，有另一个波源发射了另一个正弦曲线，并且它的解析式是 y=sin (1.1x)，这时候两个波发生叠加，我们又如何画出 y= (sin x) + sin (1.1x) 的曲线图呢？&lt;br&gt;
-&lt;img src=&#34;../_resources/d02ac3e559fc44f7eb9ca6216a6c5b97.png&#34; alt=&#34;波的叠加图.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;使用现代化的图形计算器，我们可以很轻松地通过计算机画出上述叠加波的函数图像。很明显，叠加波的振幅（也就是一个周期内的最大 y 值）在周期性变化，但我们仍然可以看到 sin x 的痕迹；似乎就是 sin x 的振幅被周期性地 “压缩”，而这个压缩的方式仍然是一个正弦样子。&lt;br&gt;
-也许这些内容已经难以理解了，但我们只需要知道，多个波在叠加之后会产生新的波，而这个叠加波的形态与每个单独的波似乎没有太过直接的关联。&lt;/p&gt;
-&lt;h2 id=&#34;二-信号与系统&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#二-信号与系统&#34;&gt;#&lt;/a&gt; 二、信号与系统&lt;/h2&gt;
-&lt;h3 id=&#34;21-数字-模拟信号&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#21-数字-模拟信号&#34;&gt;#&lt;/a&gt; 2.1 数字、模拟信号&lt;/h3&gt;
-&lt;h4 id=&#34;211-信号&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#211-信号&#34;&gt;#&lt;/a&gt; 2.1.1 信号&lt;/h4&gt;
-&lt;p&gt;所谓信号，指的是能传递信息的某种载体。例如现在屏幕上显示的文字，就是一种传递文字信息的信号。这是一个抽象的概念，但有太多实际的例子。接下来的篇幅里，我们将大量使用声音，一种最常见的信号为例，讲解信号与系统的浅层内容。&lt;/p&gt;
-&lt;h4 id=&#34;212-模拟信号&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#212-模拟信号&#34;&gt;#&lt;/a&gt; 2.1.2 模拟信号&lt;/h4&gt;
-&lt;p&gt;所谓模拟信号，指的其实是连续的信号；例如我们听到的声音，实际上是声源产生的机械振动，导致空气被压缩和扩张，这个不断变化的气压传入耳朵，再通过复杂的器官系统，我们就能听到声音。这个过程中，物体的机械振动是连续的，它并不会突变。如果难以理解，那么可以想象一下，如果一个物体的振动发生了一次突变，这意味着它振动面上的分子发生了瞬间移动，也就是在 0 秒内产生了大于 0 的位移，其速度超过了光速；显然，这对于声波来说是不可能的。因此，我们听到的声音就是连续的信号。&lt;/p&gt;
-&lt;h4 id=&#34;213-数字信号&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#213-数字信号&#34;&gt;#&lt;/a&gt; 2.1.3 数字信号&lt;/h4&gt;
-&lt;p&gt;数字信号，也可以叫离散信号，是信号的一种类型。这个名词听上去很高级，但实际上它跟模拟信号没有太大的区别。它们都是信号，只不过形式不同。&lt;br&gt;
-我们知道，模拟信号是连续的信号。仍然以声波为例，如果我们将声音与时间的关系画在一张图上，这就是所谓的声波图。&lt;br&gt;
-&lt;img src=&#34;../_resources/3ac9e78249d54b91cda7d894e5a661c3.png&#34; alt=&#34;声波图1.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;现在，假设我们希望保存下来这一段声波，并希望它能在一定条件下重现出来。但是，模拟信号是连续的，这意味着它在时间上不存在断点，它包含的数值为无穷多个。显然，计算机无法记录无穷多个数据，实际上我们也没有必要全部记录下来。我们只需要每隔一段时间记录一个数据，这样就可以将无限的数据变成有限，并且似乎也有很大的希望能够重现出来（至少在能接受的损失范围内）。这个过程与逻辑将在下文介绍。&lt;/p&gt;
-&lt;h3 id=&#34;22-信号转换&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#22-信号转换&#34;&gt;#&lt;/a&gt; 2.2 信号转换&lt;/h3&gt;
-&lt;h4 id=&#34;221-采样与ad转换&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#221-采样与ad转换&#34;&gt;#&lt;/a&gt; 2.2.1 采样与 A/D 转换&lt;/h4&gt;
-&lt;p&gt;刚才我们提到了模拟信号转换到数字信号的过程。实际上，这就是 ADC（Analog to Digital Converter，模拟到数字转换）的工作原理。我们只需要在尽可能短的时间间隔内记录数据，这样至少主观上我们就可以重现它。&lt;br&gt;
-&lt;img src=&#34;../_resources/4561bc52e3a14c62efb44bf598c3ee35.png&#34; alt=&#34;采样过程.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;这张图展示的就是一个正弦波经过转换后的结果，每个圆圈代表一个数据点；这样，无限的信号变成了有限的数据点，我们也能通过点的走向看出来它是一个正弦波。这个过程，我们称之为 “采样”（Sampling）。采样的结果，就是将连续信号转换为有限个的采样点（Sample）。&lt;br&gt;
-反之，我们也可以通过 DAC 过程，将采样后的离散信号再次转换回模拟信号；这样，你存储在手机里的音乐就能再次变成连续的电信号，并通过扬声器的振膜再变成机械振动。由于这个过程涉及过多的电子工程学内容，并且对于本文所论述的信号处理而言没有太大价值，因此不在此处展开。&lt;/p&gt;
-&lt;h4 id=&#34;222-奈奎斯特采样定理&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#222-奈奎斯特采样定理&#34;&gt;#&lt;/a&gt; 2.2.2 奈奎斯特采样定理&lt;/h4&gt;
-&lt;p&gt;现在，我们知道了采样的过程，就是用大量的数据点来描述原信号。但是，这个大量到底是多少？我们说 “尽可能短的时间间隔内”，这个间隔到底是多少？&lt;br&gt;
-在回答以上问题之前，我们先想象一下刚才的采样图：里面有很多的数据点，因此我们可以 “脑补” 出原来的信号。但是如果数据点太少，我们还能这样 “脑补” 吗？显然，可能就会有损失，甚至会丢失。&lt;br&gt;
-庆幸的是，我们有一个定理，它给出了这个最小数据点数的限制，它就叫奈奎斯特采样定理。&lt;br&gt;
-奈奎斯特定理的原文是：任何有限带宽的连续信号都可以被完美转换为数字信号，只要采样频率高于原信号中最高频率分量的 2 倍。&lt;br&gt;
-太长了看不懂，没关系，我们分别来解释一下它的含义。&lt;/p&gt;
-&lt;p&gt;首先，我们要知道采样率的定义。刚才说到的 “最小时间间隔”，其实就是指采样点的间隔；而它的倒数就是采样率。采样率的含义是，每秒的采样点数量，单位是 Hz（赫兹）。&lt;br&gt;
-然后，我们有一个信号频率的概念；我们知道，人耳能听到的声音频率范围是 20-20kHz，这里的频率指的是声源机械振动的频率。&lt;br&gt;
-现在，我们希望录音机能够回放的声音频率覆盖人耳的听觉频率范围，这样它录制的声音才跟最开始的声音能尽可能地一致。现在就轮到奈奎斯特定理上场了，我们的录音机采样率需要＞20kHz x 2 = 40kHz，才能保证它可以记录到人耳的听觉上限。&lt;br&gt;
-没错，奈奎斯特定理就是这么简单的应用。如果我们想将一个最高频率为 100Hz 的信号无损转换为数字信号，我们的采样率就要大于 200Hz，仅此而已。实际上，多数现代音频以 44.1kHz 或 48kHz 的采样频率进行采样，以保证完全覆盖人耳听觉频率范围。&lt;br&gt;
-这就结束了吗？奈奎斯特定理真的能如此简单和完美地指导我们开发电子设备吗？显然不是的。它只是一种理想情况下的描述，实际上我们的仪器采样率都是有限的，存储设备的空间也是有限的，这就意味着很多时候我们的采样率并不能达到要求的 2 倍于最高频率（我们称之为奈奎斯特频率，以下简称 Nf），而这时候，我们就遇到了采样过程的最大问题 —— 混叠。&lt;/p&gt;
-&lt;p&gt;这里还有一个小插曲，你可能会说，采样之后的数字信号是离散的数据点，它怎么能够无损转换回模拟信号呢？我难道不可以在数据点之间随便画我想要的图形吗？&lt;br&gt;
-很抱歉，你确实不可以。这就是奈奎斯特采样定理的美丽之处了，它从数学上证明了，我们还原回去的那个信号，就是这一段数字信号转换到模拟信号时的唯一解。如果你试图在其中画更多的内容，那么它就会产生高于奈奎斯特频率的内容，那么在还原时由于频率的限制，这些内容就会丢失，最后仍然会变成原来的波形。&lt;/p&gt;
-&lt;h4 id=&#34;223-混叠&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#223-混叠&#34;&gt;#&lt;/a&gt; 2.2.3 混叠&lt;/h4&gt;
-&lt;p&gt;什么是混叠（Aliasing）？&lt;br&gt;
-我们从一个生活中常见的例子来说明 —— 车轮效应。&lt;br&gt;
-如果你在电视上看节目，或者自己拍摄视频，然后画面里包含了汽车、自行车的车轮运动，你可能会注意到一个奇怪的现象：当车从停止开始加速时，你看到画面里的车轮逐渐加快；但当加速到一定水平后，不仅车轮没有更快，反而逐渐开始减速，直到某个时候车轮在画面里看起来跟静止一样；如果车继续加速，你甚至会看到车轮开始反方向旋转。&lt;br&gt;
-没错，这就是混叠；确切来说，是图像信息在时间域上的混叠。&lt;br&gt;
-发生车轮效应的原因是，摄像机的拍摄并不是记录连续的运动画面，而是相当于一个快速连拍的过程，它每秒拍摄一定数量（一般是 24 或 30）的照片，然后在你观看视频的时候以相同的速度快速播放照片；由于人眼的视觉暂留，我们就看到的连续的运动画面。&lt;br&gt;
-但是，你可能已经注意到了，这里摄像机并没有记录原始的连续画面，它的工作更像是一个 “采样” 的过程。是的，这确实是一种采样，并且我们看到了采样过程中最大的问题：混叠。它发生在采样速率小于 Nf 的时候，并且会导致一些严重的后果（例如车轮反转）。&lt;br&gt;
-理解起来也很容易。假设我们的手机每秒拍 30 张照片（在视频里称为 “帧”），这意味着相邻两帧的间隔是 1/30s=33.3ms。如果车轮的运动速度够快，那么就可能发生一个情况：在这 33.3ms 的时间间隔之内，车轮刚好转过了一圈（或 1/n 圈，取决于车轮形状），这意味着第二帧和第一帧的画面是完全一样的。以此类推，如果车速维持在这个水平，那么我们将看到车轮一直静止。&lt;br&gt;
-在信号领域，混叠的含义几乎是一样的，当我们的信号包含了大于采样率的频率，此时就会发生混叠现象，这会向已经采样的数据添加伪影，并且一旦它进入了数字信号，就无法消除。&lt;br&gt;
-* 更多信息和通俗的动画解释：&lt;a href=&#34;https://www.bilibili.com/video/BV14q4y1Z7bx&#34;&gt;点击查看 b 站视频&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&#34;23-傅里叶变换ft&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#23-傅里叶变换ft&#34;&gt;#&lt;/a&gt; 2.3 傅里叶变换（FT）&lt;/h3&gt;
-&lt;p&gt;* 本节部分内容源自&lt;a href=&#34;https://www.cnblogs.com/h2zZhou/p/8405717.html&#34;&gt;原文地址&lt;/a&gt;，作者：韩昊&lt;/p&gt;
-&lt;p&gt;现在，我们已经获得了一些采样好的数字信号，假设这些信号非常完美，不会发生混叠。我们随时可以用 DAC 过程将其转换回模拟信号，也可以存储在硬盘里以便之后使用。那么，我们还要傅里叶变换干什么？傅里叶变换到底是个什么东西？&lt;br&gt;
-我们用一个最直观的方式理解傅里叶变换。&lt;br&gt;
-在你的理解中，一段音乐是什么呢？&lt;br&gt;
-&lt;img src=&#34;../_resources/d91b563e232fd309b8767eb75ffdb1a3.png&#34; alt=&#34;声波图2.png&#34;&gt;&lt;br&gt;
- 这是我们对音乐最普遍的理解，一个随时间变化的振动。&lt;br&gt;
-但是，对于精通乐器的人来说，音乐更直观的理解也许是这样的：&lt;br&gt;
-&lt;img src=&#34;../_resources/f5352b530b102b22e4fc160fc4bac229.png&#34; alt=&#34;五线谱图.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;好了，傅里叶变换到此结束，我们继续下一章的学习。&lt;br&gt;
-什么？这还不够吗？&lt;br&gt;
-其实这是一个不太恰当的例子，但它通俗地解释了 FT（傅里叶变换）的过程：将一段随时间变化的声波（时域信息）转换为随时间变化的音调（频域信息）。FT 过程在无限的时间上识别信号，然后把其中的频率信息提取出来，并转换成有限的频率谱图。&lt;br&gt;
-不过，我们到底怎么实现 FT 呢，一段声波信号看起来那么复杂、毫无规律，我们怎么提取其中的频率信息？&lt;br&gt;
-傅里叶变换认为，所有的叠加波，都可以由有限或无限个已知或已知规律的正弦波叠加而成。而处理正弦波是非常轻松的，只需要找到它的周期，就能知道它的频率，还能得知它的表达式，甚至将其替换为另一个不同频率的正弦波。&lt;br&gt;
-如果还不够直观，我们看一下两段音乐的声波图：&lt;br&gt;
-&lt;img src=&#34;../_resources/71d799eeb29fc6ba5fbc0693c28c96aa.png&#34; alt=&#34;声波图3.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;../_resources/be31756d0721cf2caaafc700b22aa00e.png&#34; alt=&#34;声波图4.png&#34;&gt;&lt;br&gt;
- 上图是电子音乐，包含强烈鼓点、贝斯（低频）声音，而下图则是钢琴曲，这些低频声音很少。&lt;br&gt;
-也许你已经看出来其中的区别了，低频声音占比高的声波，它的图像会呈现一个十分 “低频” 的起伏；而在同样的窗口内，低频占比小的声波则显得 “复杂” 很多，并且缺乏更大的起伏波浪。仔细观察上图，其实在起伏的过程中也包含很多小的尖刺，实际上这就是低频声音与高频声音叠加之后的结果。&lt;br&gt;
-现在，你已经掌握了用肉眼做傅里叶变换的能力（），但是这个计算精度很差，也只能区分少数的几个频率（这就是为什么人来算傅里叶变换几乎不可能的原因）。不过，计算机很擅长这个，让它来做 FT（确切来说是 FFT，快速傅里叶变换，是针对计算机的一种优化算法），我们就能得到音乐的频谱图（颜色越亮表示声音强度越高）：&lt;br&gt;
-&lt;img src=&#34;../_resources/f55b89e1692387413e2ee5f233dc93bb.png&#34; alt=&#34;频谱图.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;（准确地说，这张图是频谱随时间变化的图，因为音乐信号中的频率信息时刻变化）&lt;br&gt;
-这个图对于音频工程师来说简直就是一个神器；把声波转换为频率信息，我们可以发现很多原来不能发现的错误和问题；如果一些乐器声音太大导致刺耳的话，频谱图上就能看到高频部分的强度很高。&lt;br&gt;
-在其它需要分析信号的领域，FT 同样是好用的工具。它把复杂的信号做了简化，让我们能从另一个维度（视角）来观察信号。&lt;br&gt;
-* 如果还感有余力，则可以详细了解拉普拉斯变换，它又从另一个维度理解了信号。&lt;/p&gt;
-&lt;h2 id=&#34;三-ft在ftir中的具体原理&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#三-ft在ftir中的具体原理&#34;&gt;#&lt;/a&gt; 三、FT 在 FTIR 中的具体原理&lt;/h2&gt;
-&lt;h3 id=&#34;31-仪器工作流程详解&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#31-仪器工作流程详解&#34;&gt;#&lt;/a&gt; 3.1 仪器工作流程详解&lt;/h3&gt;
-&lt;p&gt;对于 FTIR 而言，我们有红外光源、干涉仪（包含两个反射镜，一个是动镜，一个是定镜），He-Ne 激光器，样品池，检测器，计算机系统。红外光源会持续发射连续的红外光谱，而动镜则利用激光校准、通过电机来调整位置，使之能够在确定的距离上进行移动；入射红外光在透镜作用下分成两束光，并在经过动镜和定镜后再次合为一束，在这个过程中两束光交汇即产生干涉现象，而其相位差就由动镜位置决定。动镜不断移动，干涉相位也在不断变化，这一束干涉光送入样品池后被吸收一部分，最后进入检测器和信号系统中。&lt;br&gt;
-&lt;img src=&#34;../_resources/d156e5d7fb71c932d8ebc2153d08941e.png&#34; alt=&#34;光线走向FTIR.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;这张图很好地解释了 FTIR 中各光线的走向。其中，Beamsplitter 是光波分束器，也叫半透半反射镜，它的作用是将红外光源发射的光线分为两束，一束为绿色实线，另一束为红色实线；它们分别到达定镜和动镜，并被反射回来（反射光用绿色、红色虚线表示）。反射光到达分束器时也会发生同样的现象，我们需要的光线是绿色穿透线和红色反射线（虚线），它们在分束器处就会发生干涉现象，最后干涉光到达样品。&lt;/p&gt;
-&lt;h3 id=&#34;32-信号检测与采样&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#32-信号检测与采样&#34;&gt;#&lt;/a&gt; 3.2 信号检测与采样&lt;/h3&gt;
-&lt;p&gt;通过前文信号与系统部分的学习，我们知道，仪器是不能处理连续信号的，必须通过采样、转换为数字信号才可以进行处理和储存。不过，与音频（和大多数）信号不同的是，FTIR 中信号并不是随时间变化，而是随动镜位置变化的。当动镜固定在一个位置时，得到的信号永远是同一个值。这就给了我们的仪器一些 “可乘之机”。&lt;br&gt;
-如果了解过示波器或相关产品，那么你一定会知道，现在的实验室示波器带宽一般不会超过 10GHz（最大带宽，指在这个频率以内的信号都能被较为准确地还原和记录），而红外光的频率在 300GHz 到 430THz 之间，它们之间的差距非常大；尽管这个对比并不恰当，但我们依然能发现，通过时间来采样显然是不合适的。&lt;br&gt;
-理解了这些，我们就能知道 FTIR 到底是如何采集数据的了；动镜每次移动很短的距离，然后两束光的相位会发生变化（光程差改变），进而引起干涉发生在不同的光频率上。这个动镜单次移动的距离非常短，以至于要单独用 He-Ne 激光来进行位置调整。具体是如何做到的，我并没有找到对应的资料，如果有同学知道可以在评论区告知。&lt;/p&gt;
-&lt;h3 id=&#34;33-数据处理&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#33-数据处理&#34;&gt;#&lt;/a&gt; 3.3 数据处理&lt;/h3&gt;
-&lt;p&gt;现在，动镜完整地移动了一个循环，其中每次停顿的时候检测器都记录了一个数值，这个数值代表动镜在这个位置的时候这种干涉光导致的透过程度。将这些数值与动镜位置的关系作图，即得干涉图。对干涉图作 FFT 运算，即得每个频率（波数）下的吸光度（透过率）。&lt;br&gt;
-如果难以理解，这里有一个解释的过程。&lt;br&gt;
-假设我们的红外光源只会发射两个频率的波（即两个单色光），它们的频率有一定的差异。现在，这两束光经过了一次完整的工作循环，则在干涉仪中，两束光会发生干涉现象，且这个干涉会随动镜位置的改变而变化。我们将动镜的位置类比到音频信号中的时间，将检测器的结果理解为量化后的强度值，则得到的干涉图实际上是一种强度 - 时间的时域图；FFT 可以将其转变为光谱图，实际上是一种强度 - 频率（波数）的频域图。只不过在音频信号中，频率指的是振动次数 / 秒，而光谱中频率指的是波数 / 厘米。&lt;br&gt;
-&lt;img src=&#34;../_resources/bb116765d12239882d80f86789823e40.png&#34; alt=&#34;干涉与谱图.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;左图为干涉图，右图为光谱图。可以将干涉图类比为时域信号图（如声波图），将光谱图类比为频域信号图（频谱图）。&lt;/p&gt;
-&lt;h2 id=&#34;四-总结与展望&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#四-总结与展望&#34;&gt;#&lt;/a&gt; 四、总结与展望&lt;/h2&gt;
-&lt;h3 id=&#34;41-总结与心得&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#41-总结与心得&#34;&gt;#&lt;/a&gt; 4.1 总结与心得&lt;/h3&gt;
-&lt;p&gt;FTIR 是目前应用最多的红外光谱分析原理，因为它与标准的红外光谱分析法相比，具有检测速度快、灵敏度更高、信噪比更高等优势。但目前大学相关仪器分析教材中并未详细描述 FTIR 的原理，甚至网络上都很难直接搜索到 FTIR 的详细原理（大部分都是以某乎的回答形式，而那些回答要么直接抄教材、FFT 部分一笔带过，要么过于复杂、直接摆上一长串的变换公式，这对于想稍微深入理解但又没有学习过信号与系统的化学相关专业学生来说实在不友好）。因此，我在查找了大量的资料的情况下才有了撰写这篇文章的想法。&lt;br&gt;
-我并不是多学位、辅修第二专业的学生，但我对音频处理、电子工程都有所了解和学习。这一次在食品专业课程中看到了相关的技术，我几乎是瞬间就产生了浓厚的兴趣。尽管学习的过程十分艰难，这篇文章最终还是诞生了，以期有相同兴趣的同学可以得到帮助。&lt;/p&gt;
-&lt;h3 id=&#34;42-未来展望&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#42-未来展望&#34;&gt;#&lt;/a&gt; 4.2 未来展望&lt;/h3&gt;
-&lt;p&gt;由于大三时期学习事务繁多，本文从 2022 年 11 月 22 日开始编写，到 26 日了才勉强算接近尾声。因此，文章内仍然有很多错误没能及时发现与更正，若能指正，感激不尽。&lt;br&gt;
-实际上我还学习了更多的内容，例如旁瓣峰与窗函数、信号补零的影响等等，但最终都并未写入本文。若有兴趣了解，可联系我提供相关学习资料地址等。&lt;/p&gt;
-</content>
-        <category term="化学" />
-        <category term="仪器分析" />
-        <category term="信号处理" />
-        <updated>2022-11-26T13:02:00.000Z</updated>
-    </entry>
-    <entry>
-        <id>https://zjxdiu.github.io/blog/%E9%9D%92%E7%BE%BD_blog%E5%BB%BA%E7%AB%8B%E5%AE%8C%E6%88%90%EF%BC%81/</id>
-        <title>博客成功建立！</title>
-        <link rel="alternate" href="https://zjxdiu.github.io/blog/%E9%9D%92%E7%BE%BD_blog%E5%BB%BA%E7%AB%8B%E5%AE%8C%E6%88%90%EF%BC%81/"/>
-        <content type="html">&lt;p&gt;本页面内容已移动，请从菜单 - 关于中进入查看！&lt;/p&gt;
-</content>
-        <updated>2022-11-24T13:27:00.000Z</updated>
-    </entry>
+ </summary>
+      
+    
+    
+    
+    <category term="专业" scheme="https://zjxdiu.github.io/categories/%E4%B8%93%E4%B8%9A/"/>
+    
+    <category term="多学科" scheme="https://zjxdiu.github.io/categories/%E4%B8%93%E4%B8%9A/%E5%A4%9A%E5%AD%A6%E7%A7%91/"/>
+    
+    
+    <category term="化学" scheme="https://zjxdiu.github.io/tags/%E5%8C%96%E5%AD%A6/"/>
+    
+    <category term="仪器分析" scheme="https://zjxdiu.github.io/tags/%E4%BB%AA%E5%99%A8%E5%88%86%E6%9E%90/"/>
+    
+    <category term="信号处理" scheme="https://zjxdiu.github.io/tags/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>博客成功建立！</title>
+    <link href="https://zjxdiu.github.io/blog/%E9%9D%92%E7%BE%BD_blog%E5%BB%BA%E7%AB%8B%E5%AE%8C%E6%88%90%EF%BC%81/"/>
+    <id>https://zjxdiu.github.io/blog/%E9%9D%92%E7%BE%BD_blog%E5%BB%BA%E7%AB%8B%E5%AE%8C%E6%88%90%EF%BC%81/</id>
+    <published>2022-11-24T13:27:00.000Z</published>
+    <updated>2022-11-29T13:23:48.936Z</updated>
+    
+    <content type="html"><![CDATA[<p>本页面内容已移动，请从菜单 - 关于中进入查看！</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;本页面内容已移动，请从菜单 - 关于中进入查看！&lt;/p&gt;
+</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
 </feed>
