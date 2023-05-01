@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Hexo批处理脚本更新，通过zerotier实现免费简易内网穿透 | 青羽~blog site</title>
+  <meta name="description" content="# 因为不知道写啥，就更新一些以前的东西吧  Hexo 批处理脚本 原文：使用批处理和 Joplin 执行并优化 Hexo 博客工作流程 更新脚本内容：  @echo off setlocal EnableDelayedExpansion goto start :ac rem 请设置%targetlable%变量，以确保正常跳转至目标位置 cls color 0F goto %targetlabe">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo批处理脚本更新，通过zerotier实现免费简易内网穿透">
+<meta property="og:url" content="https://zjxdiu.github.io/blog/%E9%9A%8F%E8%AE%B020230501/index.html">
+<meta property="og:site_name" content="青羽~blog site">
+<meta property="og:description" content="# 因为不知道写啥，就更新一些以前的东西吧  Hexo 批处理脚本 原文：使用批处理和 Joplin 执行并优化 Hexo 博客工作流程 更新脚本内容：  @echo off setlocal EnableDelayedExpansion goto start :ac rem 请设置%targetlable%变量，以确保正常跳转至目标位置 cls color 0F goto %targetlabe">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-05-01T03:01:00.000Z">
+<meta property="article:modified_time" content="2023-05-01T05:22:48.812Z">
+<meta property="article:author" content="zjxdiu">
+<meta property="article:tag" content="日常">
+<meta property="article:tag" content="开发">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://zjxdiu.github.io/blog/%E9%9A%8F%E8%AE%B020230501/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="青羽~blog site" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body class="main-center theme-purple" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">时间线</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">链接</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/zjxdiu" target="_blank" title="Github" ><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎访问！站点正在建设，如需联系请查看建站文章</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%AA%E5%99%A8%E5%88%86%E6%9E%90/" rel="tag">仪器分析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86/" rel="tag">信号处理</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E4%BA%AB/" rel="tag">分享</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8C%96%E5%AD%A6/" rel="tag">化学</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%80%E5%8F%91/" rel="tag">开发</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A5%E5%B8%B8/" rel="tag">日常</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B8%B8%E6%88%8F/" rel="tag">游戏</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E/" rel="tag">游戏引擎</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A1%AC%E4%BB%B6/" rel="tag">硬件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%84%91%E6%B4%9E/" rel="tag">脑洞</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B6%85%E9%A2%91/" rel="tag">超频</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6/" rel="tag">软件</a><span class="tag-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/%E4%BB%AA%E5%99%A8%E5%88%86%E6%9E%90/" style="font-size: 13px;">仪器分析</a> <a href="/tags/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86/" style="font-size: 13px;">信号处理</a> <a href="/tags/%E5%88%86%E4%BA%AB/" style="font-size: 13px;">分享</a> <a href="/tags/%E5%8C%96%E5%AD%A6/" style="font-size: 13px;">化学</a> <a href="/tags/%E5%BC%80%E5%8F%91/" style="font-size: 13.33px;">开发</a> <a href="/tags/%E6%97%A5%E5%B8%B8/" style="font-size: 14px;">日常</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 13.67px;">游戏</a> <a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E/" style="font-size: 13px;">游戏引擎</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 13px;">生活</a> <a href="/tags/%E7%A1%AC%E4%BB%B6/" style="font-size: 13px;">硬件</a> <a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 13.67px;">网络</a> <a href="/tags/%E8%84%91%E6%B4%9E/" style="font-size: 13px;">脑洞</a> <a href="/tags/%E8%B6%85%E9%A2%91/" style="font-size: 13px;">超频</a> <a href="/tags/%E8%BD%AF%E4%BB%B6/" style="font-size: 13.33px;">软件</a>
+    </div>
+  </div>
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-blog/随记20230501" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Hexo批处理脚本更新，通过zerotier实现免费简易内网穿透
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/blog/%E9%9A%8F%E8%AE%B020230501/" class="article-date">
+	  <time datetime="2023-05-01T03:01:00.000Z" itemprop="datePublished">2023-05-01</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E6%9D%82%E9%A1%B9/">杂项</a>►<a class="article-category-link" href="/categories/%E6%9D%82%E9%A1%B9/%E7%94%9F%E6%B4%BB/">生活</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E5%BC%80%E5%8F%91/" rel="tag">开发</a>, <a class="article-tag-link-link" href="/tags/%E6%97%A5%E5%B8%B8/" rel="tag">日常</a>
+  </span>
+
+
+        
+
+	<span class="article-read hidden-xs">
+    	<i class="icon icon-eye-fill" aria-hidden="true"></i>
+    	<span id="/blog/%E9%9A%8F%E8%AE%B020230501/" class="leancloud_visitors"  data-flag-title="Hexo批处理脚本更新，通过zerotier实现免费简易内网穿透">
+			<span class="leancloud-visitors-count">0</span>
+		</span>
+    </span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/blog/%E9%9A%8F%E8%AE%B020230501/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.6k(字)</span>
+	
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h3 id="因为不知道写啥就更新一些以前的东西吧"><a class="markdownIt-Anchor" href="#因为不知道写啥就更新一些以前的东西吧">#</a> 因为不知道写啥，就更新一些以前的东西吧</h3>
+<ul>
+<li>Hexo 批处理脚本<br>
+原文：<a href="https://zjxdiu.github.io/blog/%E6%89%B9%E5%A4%84%E7%90%86%E4%BC%98%E5%8C%96Hexo%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/">使用批处理和 Joplin 执行并优化 Hexo 博客工作流程</a><br>
+更新脚本内容：</li>
+</ul>
+<pre><code class="hljs bat">@<span class="hljs-built_in">echo</span> off
+<span class="hljs-built_in">setlocal</span> EnableDelayedExpansion
+<span class="hljs-keyword">goto</span> <span class="hljs-built_in">start</span>
+:ac
+<span class="hljs-comment">rem 请设置%targetlable%变量，以确保正常跳转至目标位置</span>
+<span class="hljs-built_in">cls</span>
+<span class="hljs-built_in">color</span> <span class="hljs-number">0</span>F
+<span class="hljs-keyword">goto</span> <span class="hljs-variable">%targetlabel%</span>
+:<span class="hljs-built_in">start</span>
+<span class="hljs-keyword">if</span> &quot;<span class="hljs-variable">%targetlabel%</span>&quot;==&quot;&quot; (<span class="hljs-built_in">set</span> &quot;targetlabel=<span class="hljs-built_in">start</span>&quot;&amp;&amp;<span class="hljs-keyword">goto</span> ac)
+<span class="hljs-built_in">echo</span> ------------------------------------------------
+<span class="hljs-built_in">echo</span>  <span class="hljs-number">1</span>.【完整】执行完整的检查和推送blog流程
+<span class="hljs-built_in">echo</span>  <span class="hljs-number">2</span>.【快速】快速上载blog
+<span class="hljs-built_in">echo</span>  <span class="hljs-number">3</span>.【预览】本地预览
+<span class="hljs-built_in">echo</span>  <span class="hljs-number">4</span>.单独执行指令
+<span class="hljs-built_in">echo</span>  <span class="hljs-number">5</span>.【标准】执行快速标准推送
+<span class="hljs-built_in">echo</span>  <span class="hljs-number">6</span>.【本地部署】执行标准推送，但部署到本地而非GitHub
+<span class="hljs-built_in">echo</span> ------------------------------------------------
+<span class="hljs-built_in">echo</span>.
+choice /c <span class="hljs-number">123456</span>
+<span class="hljs-keyword">if</span> &quot;<span class="hljs-variable">%errorlevel%</span>&quot;==&quot;<span class="hljs-number">6</span>&quot; <span class="hljs-keyword">goto</span> ldeploy
+<span class="hljs-keyword">if</span> &quot;<span class="hljs-variable">%errorlevel%</span>&quot;==&quot;<span class="hljs-number">5</span>&quot; <span class="hljs-keyword">goto</span> std
+<span class="hljs-keyword">if</span> &quot;<span class="hljs-variable">%errorlevel%</span>&quot;==&quot;<span class="hljs-number">4</span>&quot; <span class="hljs-keyword">goto</span> new
+<span class="hljs-keyword">if</span> &quot;<span class="hljs-variable">%errorlevel%</span>&quot;==&quot;<span class="hljs-number">3</span>&quot; (<span class="hljs-built_in">set</span> &quot;targetlabel=local&quot;&amp;&amp;<span class="hljs-keyword">goto</span> ac)
+<span class="hljs-keyword">if</span> &quot;<span class="hljs-variable">%errorlevel%</span>&quot;==&quot;<span class="hljs-number">2</span>&quot; (<span class="hljs-built_in">set</span> &quot;targetlabel=fast&quot;&amp;&amp;<span class="hljs-keyword">goto</span> ac)
+<span class="hljs-keyword">if</span> &quot;<span class="hljs-variable">%errorlevel%</span>&quot;==&quot;<span class="hljs-number">1</span>&quot; (<span class="hljs-built_in">set</span> &quot;targetlabel=full&quot;&amp;&amp;<span class="hljs-keyword">goto</span> ac)
+<span class="hljs-built_in">pause</span>&amp;<span class="hljs-keyword">exit</span>
+:ldeploy
+<span class="hljs-comment">REM 这一段是部署在本地，也就是复制一遍；可以根据情况改成复制到共享文件夹中</span>
+<span class="hljs-built_in">echo</span>.
+<span class="hljs-built_in">echo</span> ------------------------------------------------
+<span class="hljs-built_in">echo</span> 清理缓存...
+<span class="hljs-built_in">cmd</span> /c &quot;hexo clean&quot; &gt;<span class="hljs-built_in">nul</span>
+<span class="hljs-built_in">echo</span> 生成页面...
+<span class="hljs-built_in">cmd</span> /c &quot;hexo g&quot; &gt;<span class="hljs-built_in">nul</span>
+<span class="hljs-built_in">echo</span> 复制必要资源...
+<span class="hljs-built_in">cmd</span> /c &quot;<span class="hljs-built_in">xcopy</span> D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y&quot; &gt;<span class="hljs-built_in">nul</span>
+<span class="hljs-built_in">echo</span> 部署到本地服务器路径...
+<span class="hljs-built_in">cmd</span> /c &quot;<span class="hljs-built_in">xcopy</span> D:\blog\public\ D:\server\blog1\ /e /s /y&quot; &gt;<span class="hljs-built_in">nul</span>
+<span class="hljs-built_in">echo</span> 上传结束，打开网页中...
+<span class="hljs-built_in">cmd</span> /c &quot;<span class="hljs-built_in">start</span> C:\Users\zjxdiu\Downloads\实时工具\hfs.exe&quot;
+<span class="hljs-built_in">start</span> http://<span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>/
+<span class="hljs-built_in">echo</span> ------------------------------------------------
+<span class="hljs-built_in">echo</span> 完成，按任意键退出...
+<span class="hljs-built_in">pause</span>
+<span class="hljs-keyword">exit</span>
+:std
+<span class="hljs-built_in">echo</span>.
+<span class="hljs-built_in">echo</span> ------------------------------------------------
+<span class="hljs-built_in">echo</span> 启动本地预览...
+<span class="hljs-built_in">cmd</span> /c &quot;hexo clean &amp; hexo g &amp; <span class="hljs-built_in">xcopy</span> D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y &amp; <span class="hljs-built_in">echo</span> <span class="hljs-number">2</span>&gt;D:\blog\.deploy_git\.nojekyll &amp; <span class="hljs-built_in">start</span> http://localhost:<span class="hljs-number">4000</span>/ &amp; hexo s&quot;
+<span class="hljs-built_in">echo</span> ------------------------------------------------
+<span class="hljs-built_in">echo</span> 上载到远程服务器...
+<span class="hljs-built_in">echo</span> ------------------------------------------------
+<span class="hljs-built_in">cmd</span> /c &quot;hexo d&quot;
+<span class="hljs-built_in">echo</span> ------------------------------------------------
+<span class="hljs-built_in">echo</span> 完成，按任意键退出...
+<span class="hljs-built_in">pause</span>
+<span class="hljs-keyword">exit</span>
+:new
+<span class="hljs-built_in">echo</span> 正在创建新的<span class="hljs-built_in">cmd</span>实例...
+<span class="hljs-built_in">echo</span> ------------------------------------------------
+<span class="hljs-built_in">echo</span> 命令提示：
+<span class="hljs-built_in">echo</span> hexo clean
+<span class="hljs-built_in">echo</span> hexo g
+<span class="hljs-built_in">echo</span> hexo s
+<span class="hljs-built_in">echo</span> hexo d
+<span class="hljs-built_in">echo</span> ------------------------------------------------
+<span class="hljs-built_in">start</span> <span class="hljs-built_in">cmd</span>
+<span class="hljs-built_in">echo</span> 按任意键返回菜单...
+<span class="hljs-built_in">pause</span> &gt;<span class="hljs-built_in">nul</span>
+<span class="hljs-built_in">set</span> &quot;targetlabel=<span class="hljs-built_in">start</span>&quot;&amp;&amp;<span class="hljs-keyword">goto</span> ac
+:local
+<span class="hljs-built_in">echo</span> ------------------------------------------------
+<span class="hljs-built_in">echo</span>                  本地预览模式
+<span class="hljs-built_in">echo</span> ------------------------------------------------
+<span class="hljs-built_in">echo</span> 启动预览...
+<span class="hljs-built_in">cmd</span> /c &quot;hexo clean &amp; hexo g &amp; <span class="hljs-built_in">xcopy</span> D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y &amp; <span class="hljs-built_in">echo</span> <span class="hljs-number">2</span>&gt;D:\blog\.deploy_git\.nojekyll &amp; <span class="hljs-built_in">start</span> http://localhost:<span class="hljs-number">4000</span>/ &amp; hexo s&quot;
+<span class="hljs-built_in">echo</span> 按任意键返回菜单...
+<span class="hljs-built_in">pause</span> &gt;<span class="hljs-built_in">nul</span>
+<span class="hljs-built_in">set</span> &quot;targetlabel=<span class="hljs-built_in">start</span>&quot;&amp;&amp;<span class="hljs-keyword">goto</span> ac
+:fast
+<span class="hljs-built_in">echo</span> ------------------------------------------------
+<span class="hljs-built_in">echo</span>                  快速上载blog
+<span class="hljs-built_in">echo</span> ------------------------------------------------
+<span class="hljs-built_in">cmd</span> /c &quot;hexo clean &amp; hexo g &amp; <span class="hljs-built_in">xcopy</span> D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y &amp; <span class="hljs-built_in">echo</span> <span class="hljs-number">2</span>&gt;D:\blog\.deploy_git\.nojekyll &amp; hexo d&quot;
+<span class="hljs-built_in">echo</span> ------------------------------------------------
+<span class="hljs-built_in">echo</span> 完成，<span class="hljs-number">2</span>秒后退出...
+<span class="hljs-built_in">ping</span> localhost -n <span class="hljs-number">3</span> &gt;<span class="hljs-built_in">nul</span>
+<span class="hljs-keyword">exit</span>
+:full
+<span class="hljs-built_in">echo</span> ------------------------------------------------
+<span class="hljs-built_in">echo</span>                  完整流程向导
+<span class="hljs-built_in">echo</span>              按<span class="hljs-number">0</span>为确定，按<span class="hljs-number">1</span>为跳过
+<span class="hljs-built_in">echo</span> ------------------------------------------------
+<span class="hljs-keyword">goto</span> clean
+:clean
+<span class="hljs-built_in">echo</span> 第一步：清理缓存
+choice /c <span class="hljs-number">01</span>
+<span class="hljs-keyword">if</span> &quot;<span class="hljs-variable">%errorlevel%</span>&quot;==&quot;<span class="hljs-number">2</span>&quot; <span class="hljs-keyword">goto</span> generate
+<span class="hljs-built_in">cmd</span> /c &quot;hexo clean&quot;
+<span class="hljs-keyword">goto</span> generate
+:generate
+<span class="hljs-built_in">echo</span> ------------------------------------------------
+<span class="hljs-built_in">echo</span> 第二步：生成页面
+choice /c <span class="hljs-number">01</span>
+<span class="hljs-keyword">if</span> &quot;<span class="hljs-variable">%errorlevel%</span>&quot;==&quot;<span class="hljs-number">2</span>&quot; <span class="hljs-keyword">goto</span> check
+<span class="hljs-built_in">cmd</span> /c &quot;<span class="hljs-built_in">xcopy</span> D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y &amp; <span class="hljs-built_in">echo</span> <span class="hljs-number">2</span>&gt;D:\blog\.deploy_git\.nojekyll &amp; hexo g&quot;
+<span class="hljs-keyword">goto</span> check
+:check
+<span class="hljs-built_in">echo</span> ------------------------------------------------
+<span class="hljs-built_in">echo</span> 第三步：本地预览
+choice /c <span class="hljs-number">01</span>
+<span class="hljs-keyword">if</span> &quot;<span class="hljs-variable">%errorlevel%</span>&quot;==&quot;<span class="hljs-number">2</span>&quot; <span class="hljs-keyword">goto</span> deploy
+<span class="hljs-built_in">start</span> http://localhost:<span class="hljs-number">4000</span>/
+<span class="hljs-built_in">cmd</span> /c &quot;hexo s&quot;
+<span class="hljs-keyword">goto</span> deploy
+:deploy
+<span class="hljs-built_in">echo</span> ------------------------------------------------
+<span class="hljs-built_in">echo</span> 第四步：上传到远程服务器
+choice /c <span class="hljs-number">01</span>
+<span class="hljs-keyword">if</span> &quot;<span class="hljs-variable">%errorlevel%</span>&quot;==&quot;<span class="hljs-number">2</span>&quot; <span class="hljs-keyword">goto</span> done
+<span class="hljs-built_in">cmd</span> /c &quot;hexo d&quot;
+<span class="hljs-keyword">goto</span> done
+:done
+<span class="hljs-built_in">echo</span> ------------------------------------------------
+<span class="hljs-built_in">echo</span> 流程已完成，按任意键返回菜单...
+<span class="hljs-built_in">pause</span> &gt;<span class="hljs-built_in">nul</span>
+<span class="hljs-built_in">set</span> &quot;targetlabel=<span class="hljs-built_in">start</span>&quot;&amp;&amp;<span class="hljs-keyword">goto</span> ac</code></pre>
+<hr>
+<ul>
+<li>Zerotier 内网穿透<br>
+网上有一些教程，但是不够简洁易懂，所以写一个。</li>
+</ul>
+<ol>
+<li>进入<a target="_blank" rel="noopener" href="https://my.zerotier.com/">官网控制台</a>注册一个账号，可以不用现场注册，直接微软账号登录即可。</li>
+<li>选择 Create A Network</li>
+<li>点击刚创建的网络，进入配置界面
+<ul>
+<li>Name 随便写一个方便你记的名字</li>
+<li>Description 是介绍，可以写详细信息，如果以后忘了网络是干啥的可以看这个回顾</li>
+<li>Access Control 建议选 Private，这样你就拥有完全的管理权限</li>
+<li>下面的 IP 直接自动即可，或者手动选一个跟你目前局域网 IP 不冲突的地址段</li>
+<li>IPv6 Auto-Assign 根据情况选择，如果你们的网络成员都具有广域网 ipv6 连接则勾选第一项，否则不管</li>
+<li>最后复制 Network ID，就是一串数字和字母组成的字符串，发给你的成员<br>
+【以上步骤只需要网络管理员进行，成员不需要】<br>
+【以下内容每个人都要执行】</li>
+</ul>
+</li>
+<li>下载 Zerotier：<a target="_blank" rel="noopener" href="https://www.zerotier.com/download/">下载链接</a></li>
+<li>安装并从开始菜单里启动</li>
+<li>等任务栏出现程序图标，右键，选择 Join New Network</li>
+<li>输入刚才的 Network ID，确定
+<ul>
+<li>如果弹出询问弹窗，例如防火墙、是否启用网络发现等，均允许</li>
+</ul>
+</li>
+<li>等待几分钟，进入系统设置检查 IP 是否获取成功
+<ul>
+<li>分配成功说明连接成功，否则继续等待</li>
+</ul>
+</li>
+<li>【重要】任意成员加入网络时，需要进入<a target="_blank" rel="noopener" href="https://my.zerotier.com/">官网控制台</a>给成员左侧的 Auth 打勾，只有打勾的成员才能获取到 IP 并加入网络，否则无法连接</li>
+<li>在控制台页面可以看到每个人的虚拟局域网 IP，这个地址一旦分配就不会自动更改，因此你甚至可以做个 DNS 记录方便大家记（）</li>
+<li>ping 一下成员的 IP，确定连接通顺</li>
+<li>完成！现在你们已经相当于在一个局域网里了，只不过游戏房间和服务器可能不会自动查找到，手动输入地址即可。</li>
+</ol>
+<hr>
+<h3 id="查询精神状态"><a class="markdownIt-Anchor" href="#查询精神状态">#</a> 查询精神状态</h3>
+<p>最近玩 LLM 有点上瘾，推荐一个 chatGLM 项目<a target="_blank" rel="noopener" href="https://github.com/THUDM/ChatGLM-6B"> Github 地址</a>，可以部署在本地运行的对话机器人，这个 62 亿参数的模型只需要 6G 显存就能运行（当然，是 N 卡），可以说非常好玩了（）</p>
+<p>还想换个主题，或者再开一个功能更全面一些的，这个极简博客就当正式文章和简历发布地点。<br>
+就这样吧，最近作业很多但是都写完了，没有压力就没有折腾的欲望和动力 (T_T)</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://zjxdiu.github.io/blog/%E9%9A%8F%E8%AE%B020230501/" title="Hexo批处理脚本更新，通过zerotier实现免费简易内网穿透" target="_blank" rel="external">https://zjxdiu.github.io/blog/随记20230501/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/blog/dynv6_notes/" title="dynv6使用技巧（如何添加多个地址 子域名 等）"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/zjxdiu" target="_blank" title="Github" ><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'ZkMCrUSQDneRSAnbRh5WaJry-gzGzoHsz',
+    appKey: 'zUZV2LcazrzxOePqSCJPsWEK',
+    placeholder: '头像将根据昵称自动生成哦~',
+    avatar: 'identicon',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: true
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>

@@ -5,22 +5,458 @@
         <link>https://zjxdiu.github.io</link>
         <description>Shadow in front implying sun behind</description>
         <language>zh-CN</language>
-        <pubDate>Thu, 26 Jan 2023 23:51:00 +0800</pubDate>
-        <lastBuildDate>Thu, 26 Jan 2023 23:51:00 +0800</lastBuildDate>
-        <category>日常</category>
+        <pubDate>Mon, 01 May 2023 11:01:00 +0800</pubDate>
+        <lastBuildDate>Mon, 01 May 2023 11:01:00 +0800</lastBuildDate>
         <category>化学</category>
         <category>仪器分析</category>
         <category>信号处理</category>
-        <category>游戏</category>
         <category>网络</category>
-        <category>软件</category>
+        <category>日常</category>
         <category>分享</category>
+        <category>软件</category>
+        <category>游戏</category>
         <category>超频</category>
         <category>硬件</category>
-        <category>生活</category>
         <category>脑洞</category>
         <category>开发</category>
         <category>游戏引擎</category>
+        <category>生活</category>
+        <item>
+            <guid isPermalink="true">https://zjxdiu.github.io/blog/%E9%9A%8F%E8%AE%B020230501/</guid>
+            <title>Hexo批处理脚本更新，通过zerotier实现免费简易内网穿透</title>
+            <link>https://zjxdiu.github.io/blog/%E9%9A%8F%E8%AE%B020230501/</link>
+            <category>日常</category>
+            <category>开发</category>
+            <pubDate>Mon, 01 May 2023 11:01:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h3 id=&#34;因为不知道写啥就更新一些以前的东西吧&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#因为不知道写啥就更新一些以前的东西吧&#34;&gt;#&lt;/a&gt; 因为不知道写啥，就更新一些以前的东西吧&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Hexo 批处理脚本&lt;br&gt;
+原文：&lt;a href=&#34;https://zjxdiu.github.io/blog/%E6%89%B9%E5%A4%84%E7%90%86%E4%BC%98%E5%8C%96Hexo%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/&#34;&gt;使用批处理和 Joplin 执行并优化 Hexo 博客工作流程&lt;/a&gt;&lt;br&gt;
+更新脚本内容：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&#34;hljs bat&#34;&gt;@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; off
+&lt;span class=&#34;hljs-built_in&#34;&gt;setlocal&lt;/span&gt; EnableDelayedExpansion
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; &lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt;
+:ac
+&lt;span class=&#34;hljs-comment&#34;&gt;rem 请设置%targetlable%变量，以确保正常跳转至目标位置&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;cls&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;color&lt;/span&gt; &lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;F
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; &lt;span class=&#34;hljs-variable&#34;&gt;%targetlabel%&lt;/span&gt;
+:&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%targetlabel%&lt;/span&gt;&amp;quot;==&amp;quot;&amp;quot; (&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; &amp;quot;targetlabel=&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt;&amp;quot;&amp;amp;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; ac)
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;  &lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;.【完整】执行完整的检查和推送blog流程
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;  &lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;.【快速】快速上载blog
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;  &lt;span class=&#34;hljs-number&#34;&gt;3&lt;/span&gt;.【预览】本地预览
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;  &lt;span class=&#34;hljs-number&#34;&gt;4&lt;/span&gt;.单独执行指令
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;  &lt;span class=&#34;hljs-number&#34;&gt;5&lt;/span&gt;.【标准】执行快速标准推送
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;  &lt;span class=&#34;hljs-number&#34;&gt;6&lt;/span&gt;.【本地部署】执行标准推送，但部署到本地而非GitHub
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;.
+choice /c &lt;span class=&#34;hljs-number&#34;&gt;123456&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;6&lt;/span&gt;&amp;quot; &lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; ldeploy
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;5&lt;/span&gt;&amp;quot; &lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; std
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;4&lt;/span&gt;&amp;quot; &lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; new
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;3&lt;/span&gt;&amp;quot; (&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; &amp;quot;targetlabel=local&amp;quot;&amp;amp;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; ac)
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;quot; (&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; &amp;quot;targetlabel=fast&amp;quot;&amp;amp;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; ac)
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;&amp;quot; (&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; &amp;quot;targetlabel=full&amp;quot;&amp;amp;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; ac)
+&lt;span class=&#34;hljs-built_in&#34;&gt;pause&lt;/span&gt;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;exit&lt;/span&gt;
+:ldeploy
+&lt;span class=&#34;hljs-comment&#34;&gt;REM 这一段是部署在本地，也就是复制一遍；可以根据情况改成复制到共享文件夹中&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;.
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 清理缓存...
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;hexo clean&amp;quot; &amp;gt;&lt;span class=&#34;hljs-built_in&#34;&gt;nul&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 生成页面...
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;hexo g&amp;quot; &amp;gt;&lt;span class=&#34;hljs-built_in&#34;&gt;nul&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 复制必要资源...
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;&lt;span class=&#34;hljs-built_in&#34;&gt;xcopy&lt;/span&gt; D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y&amp;quot; &amp;gt;&lt;span class=&#34;hljs-built_in&#34;&gt;nul&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 部署到本地服务器路径...
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;&lt;span class=&#34;hljs-built_in&#34;&gt;xcopy&lt;/span&gt; D:\blog\public\ D:\server\blog1\ /e /s /y&amp;quot; &amp;gt;&lt;span class=&#34;hljs-built_in&#34;&gt;nul&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 上传结束，打开网页中...
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt; C:\Users\zjxdiu\Downloads\实时工具\hfs.exe&amp;quot;
+&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt; http://&lt;span class=&#34;hljs-number&#34;&gt;127&lt;/span&gt;.&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;.&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;.&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;/
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 完成，按任意键退出...
+&lt;span class=&#34;hljs-built_in&#34;&gt;pause&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;exit&lt;/span&gt;
+:std
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;.
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 启动本地预览...
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;hexo clean &amp;amp; hexo g &amp;amp; &lt;span class=&#34;hljs-built_in&#34;&gt;xcopy&lt;/span&gt; D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y &amp;amp; &lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;gt;D:\blog\.deploy_git\.nojekyll &amp;amp; &lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt; http://localhost:&lt;span class=&#34;hljs-number&#34;&gt;4000&lt;/span&gt;/ &amp;amp; hexo s&amp;quot;
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 上载到远程服务器...
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;hexo d&amp;quot;
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 完成，按任意键退出...
+&lt;span class=&#34;hljs-built_in&#34;&gt;pause&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;exit&lt;/span&gt;
+:new
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 正在创建新的&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt;实例...
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 命令提示：
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; hexo clean
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; hexo g
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; hexo s
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; hexo d
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt; &lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 按任意键返回菜单...
+&lt;span class=&#34;hljs-built_in&#34;&gt;pause&lt;/span&gt; &amp;gt;&lt;span class=&#34;hljs-built_in&#34;&gt;nul&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; &amp;quot;targetlabel=&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt;&amp;quot;&amp;amp;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; ac
+:local
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;                  本地预览模式
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 启动预览...
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;hexo clean &amp;amp; hexo g &amp;amp; &lt;span class=&#34;hljs-built_in&#34;&gt;xcopy&lt;/span&gt; D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y &amp;amp; &lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;gt;D:\blog\.deploy_git\.nojekyll &amp;amp; &lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt; http://localhost:&lt;span class=&#34;hljs-number&#34;&gt;4000&lt;/span&gt;/ &amp;amp; hexo s&amp;quot;
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 按任意键返回菜单...
+&lt;span class=&#34;hljs-built_in&#34;&gt;pause&lt;/span&gt; &amp;gt;&lt;span class=&#34;hljs-built_in&#34;&gt;nul&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; &amp;quot;targetlabel=&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt;&amp;quot;&amp;amp;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; ac
+:fast
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;                  快速上载blog
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;hexo clean &amp;amp; hexo g &amp;amp; &lt;span class=&#34;hljs-built_in&#34;&gt;xcopy&lt;/span&gt; D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y &amp;amp; &lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;gt;D:\blog\.deploy_git\.nojekyll &amp;amp; hexo d&amp;quot;
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 完成，&lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;秒后退出...
+&lt;span class=&#34;hljs-built_in&#34;&gt;ping&lt;/span&gt; localhost -n &lt;span class=&#34;hljs-number&#34;&gt;3&lt;/span&gt; &amp;gt;&lt;span class=&#34;hljs-built_in&#34;&gt;nul&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;exit&lt;/span&gt;
+:full
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;                  完整流程向导
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;              按&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;为确定，按&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;为跳过
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; clean
+:clean
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 第一步：清理缓存
+choice /c &lt;span class=&#34;hljs-number&#34;&gt;01&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;quot; &lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; generate
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;hexo clean&amp;quot;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; generate
+:generate
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 第二步：生成页面
+choice /c &lt;span class=&#34;hljs-number&#34;&gt;01&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;quot; &lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; check
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;&lt;span class=&#34;hljs-built_in&#34;&gt;xcopy&lt;/span&gt; D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y &amp;amp; &lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;gt;D:\blog\.deploy_git\.nojekyll &amp;amp; hexo g&amp;quot;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; check
+:check
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 第三步：本地预览
+choice /c &lt;span class=&#34;hljs-number&#34;&gt;01&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;quot; &lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; deploy
+&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt; http://localhost:&lt;span class=&#34;hljs-number&#34;&gt;4000&lt;/span&gt;/
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;hexo s&amp;quot;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; deploy
+:deploy
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 第四步：上传到远程服务器
+choice /c &lt;span class=&#34;hljs-number&#34;&gt;01&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;quot; &lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; done
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;hexo d&amp;quot;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; done
+:done
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 流程已完成，按任意键返回菜单...
+&lt;span class=&#34;hljs-built_in&#34;&gt;pause&lt;/span&gt; &amp;gt;&lt;span class=&#34;hljs-built_in&#34;&gt;nul&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; &amp;quot;targetlabel=&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt;&amp;quot;&amp;amp;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; ac&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;Zerotier 内网穿透&lt;br&gt;
+网上有一些教程，但是不够简洁易懂，所以写一个。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;进入&lt;a href=&#34;https://my.zerotier.com/&#34;&gt;官网控制台&lt;/a&gt;注册一个账号，可以不用现场注册，直接微软账号登录即可。&lt;/li&gt;
+&lt;li&gt;选择 Create A Network&lt;/li&gt;
+&lt;li&gt;点击刚创建的网络，进入配置界面
+&lt;ul&gt;
+&lt;li&gt;Name 随便写一个方便你记的名字&lt;/li&gt;
+&lt;li&gt;Description 是介绍，可以写详细信息，如果以后忘了网络是干啥的可以看这个回顾&lt;/li&gt;
+&lt;li&gt;Access Control 建议选 Private，这样你就拥有完全的管理权限&lt;/li&gt;
+&lt;li&gt;下面的 IP 直接自动即可，或者手动选一个跟你目前局域网 IP 不冲突的地址段&lt;/li&gt;
+&lt;li&gt;IPv6 Auto-Assign 根据情况选择，如果你们的网络成员都具有广域网 ipv6 连接则勾选第一项，否则不管&lt;/li&gt;
+&lt;li&gt;最后复制 Network ID，就是一串数字和字母组成的字符串，发给你的成员&lt;br&gt;
+【以上步骤只需要网络管理员进行，成员不需要】&lt;br&gt;
+【以下内容每个人都要执行】&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;下载 Zerotier：&lt;a href=&#34;https://www.zerotier.com/download/&#34;&gt;下载链接&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;安装并从开始菜单里启动&lt;/li&gt;
+&lt;li&gt;等任务栏出现程序图标，右键，选择 Join New Network&lt;/li&gt;
+&lt;li&gt;输入刚才的 Network ID，确定
+&lt;ul&gt;
+&lt;li&gt;如果弹出询问弹窗，例如防火墙、是否启用网络发现等，均允许&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;等待几分钟，进入系统设置检查 IP 是否获取成功
+&lt;ul&gt;
+&lt;li&gt;分配成功说明连接成功，否则继续等待&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;【重要】任意成员加入网络时，需要进入&lt;a href=&#34;https://my.zerotier.com/&#34;&gt;官网控制台&lt;/a&gt;给成员左侧的 Auth 打勾，只有打勾的成员才能获取到 IP 并加入网络，否则无法连接&lt;/li&gt;
+&lt;li&gt;在控制台页面可以看到每个人的虚拟局域网 IP，这个地址一旦分配就不会自动更改，因此你甚至可以做个 DNS 记录方便大家记（）&lt;/li&gt;
+&lt;li&gt;ping 一下成员的 IP，确定连接通顺&lt;/li&gt;
+&lt;li&gt;完成！现在你们已经相当于在一个局域网里了，只不过游戏房间和服务器可能不会自动查找到，手动输入地址即可。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;查询精神状态&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#查询精神状态&#34;&gt;#&lt;/a&gt; 查询精神状态&lt;/h3&gt;
+&lt;p&gt;最近玩 LLM 有点上瘾，推荐一个 chatGLM 项目&lt;a href=&#34;https://github.com/THUDM/ChatGLM-6B&#34;&gt; Github 地址&lt;/a&gt;，可以部署在本地运行的对话机器人，这个 62 亿参数的模型只需要 6G 显存就能运行（当然，是 N 卡），可以说非常好玩了（）&lt;/p&gt;
+&lt;p&gt;还想换个主题，或者再开一个功能更全面一些的，这个极简博客就当正式文章和简历发布地点。&lt;br&gt;
+就这样吧，最近作业很多但是都写完了，没有压力就没有折腾的欲望和动力 (T_T)&lt;/p&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">https://zjxdiu.github.io/blog/dynv6_notes/</guid>
+            <title>dynv6使用技巧（如何添加多个地址 子域名 等）</title>
+            <link>https://zjxdiu.github.io/blog/dynv6_notes/</link>
+            <category>网络</category>
+            <category>游戏</category>
+            <pubDate>Fri, 03 Mar 2023 17:00:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h2 id=&#34;前言&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#前言&#34;&gt;#&lt;/a&gt; 前言&lt;/h2&gt;
+&lt;p&gt;因为 ipv6 普及度日益增加，在自己的环境里搭建简易服务器的想法就逐渐发芽；无论是用于博客网站、NAS 或私有云的搭建，还是用来开游戏服务器，都能够简单易行地实现（因为有公网 ipv6）。&lt;br&gt;
+不过，很多时候家庭环境下 ipv6 地址也会发生变化，尤其是电脑重启、宽带重拨的时候，那么如何在没有固定 ipv6 的情况下让别人能更容易找到我们的地址呢？很简单，当然是用 DDNS 了。&lt;br&gt;
+DDNS，也就是动态 DNS，将一个变化的 IP 绑定到域名上，通过脚本定时检测和更新地址，这样即使地址变化，域名解析出来的地址也会跟着变化，仍然可以使用同一个域名定位到同一个地址。&lt;/p&gt;
+&lt;h2 id=&#34;使用dynv6&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#使用dynv6&#34;&gt;#&lt;/a&gt; 使用 dynv6&lt;/h2&gt;
+&lt;p&gt;官网：&lt;a href=&#34;https://dynv6.com/&#34;&gt;https://dynv6.com/&lt;/a&gt;&lt;br&gt;
+ 首先用邮箱注册一个账号，接着进入 My Zones，点击 Create New Zone，在 Name 里输入你想要的网址名称和后缀类型，下面的地址可以先点击 Set current address，这样网页就会填入你的外网 IP 地址（应注意检查，ipv4 基本不会是跟电脑一致，但 ipv6 需要一致）。&lt;br&gt;
+&lt;img src=&#34;../_resources/8007661dd2ee4a33be77ca500ec41a76.png&#34; alt=&#34;8007661dd2ee4a33be77ca500ec41a76.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;点击创建后，若网址没有冲突，则创建成功；直接点击这个域名，上面有两个选项是可以自己修改的：status 和 records。&lt;/p&gt;
+&lt;h2 id=&#34;创建dns记录&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#创建dns记录&#34;&gt;#&lt;/a&gt; 创建 DNS 记录&lt;/h2&gt;
+&lt;p&gt;在 Status 里，点击 Edit Zone，将 ipv6 地址再次设为你的公网 ipv6 并保存，这样主域名就会直接解析到你的电脑上；&lt;br&gt;
+在 Records 里，可以编辑或删除现有的 AAAA 记录，也可以新增其他 DNS 记录。&lt;/p&gt;
+&lt;h3 id=&#34;创建子域名&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#创建子域名&#34;&gt;#&lt;/a&gt; 创建子域名&lt;/h3&gt;
+&lt;p&gt;点击 Add Record，选择 AAAA 类型（A 是 ipv4，AAAA 是 ipv6，CNAME 是网站别名一般用不到），前面的 name 里填写子域名前缀（&lt;a href=&#34;http://xn--web-th2ek25abiifsffvwu74d.domainname.dynv6.net&#34;&gt;比如我要创建 web.domainname.dynv6.net&lt;/a&gt;，那就在这里写 web），后面的地址里填写目标 ipv6 即可。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;设置ddns自动更新&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#设置ddns自动更新&#34;&gt;#&lt;/a&gt; 设置 DDNS 自动更新&lt;/h2&gt;
+&lt;p&gt;提示：建议将此脚本部署于 Windows 服务器上，而非自己的电脑&lt;/p&gt;
+&lt;h3 id=&#34;下载wget和grep&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#下载wget和grep&#34;&gt;#&lt;/a&gt; 下载 wget 和 grep&lt;/h3&gt;
+&lt;p&gt;网上很多教程，这里列两个：&lt;br&gt;
+&lt;a href=&#34;https://www.cnblogs.com/shenxiaolin/p/16662793.html&#34;&gt;windows 下 grep 的安装与使用&lt;/a&gt;&lt;br&gt;
+&lt;a href=&#34;https://www.jianshu.com/p/a8dfc762ba3b&#34;&gt; win10 安装 wget&lt;/a&gt;&lt;br&gt;
+ 记得检查好环境变量，确定 cmd 下运行这两个命令有输出。&lt;/p&gt;
+&lt;h3 id=&#34;下载instsrvexe和srvanyexe&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#下载instsrvexe和srvanyexe&#34;&gt;#&lt;/a&gt; 下载 instsrv.exe 和 srvany.exe&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.cnblogs.com/zhaiqianfeng/p/4622561.html&#34;&gt;利用 instsrv 和 srvany 来手动安装服务&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;编写脚本&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#编写脚本&#34;&gt;#&lt;/a&gt; 编写脚本&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;在特定路径下创建文件夹，将上述 instsrv.exe、srvany.exe 以及后续脚本均放在此处；&lt;/li&gt;
+&lt;li&gt;创建 install_server.bat 文件：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;hljs bat&#34;&gt;@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; off
+&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; curexe=%~dp0
+&lt;span class=&#34;hljs-built_in&#34;&gt;cd&lt;/span&gt; /d &lt;span class=&#34;hljs-variable&#34;&gt;%curexe%&lt;/span&gt;
+&amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%curexe%&lt;/span&gt;instsrv.exe&amp;quot; ddns_dynv6 &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%curexe%&lt;/span&gt;srvany.exe&amp;quot;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ddns_dynv6 服务添加完成
+
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 修改服务路径
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM 添加注册表语法: reg add 注册表路径 /v 项名称 /t 值类型 /d 数据 /f 表示强行修改不提示&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM 名称 Application 值为你要作为服务运行的程序地址 /d对应的参数有斜杠不是为了转义引号，而是路径还有斜杠，默认将引号转义了，额外添加斜杠是为了保留引号&lt;/span&gt;
+ 
+&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; regpath=HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ddns_dynv6\Parameters\
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM 名称 AppDirectory 值为你要作为服务运行的程序所在文件夹路径&lt;/span&gt;
+reg add &lt;span class=&#34;hljs-variable&#34;&gt;%regpath%&lt;/span&gt; /v AppDirectory /t REG_SZ /d &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%curexe%&lt;/span&gt;\&amp;quot; /f
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM 名称 AppParameters 值为你要作为服务运行的程序启动所需要的参数&lt;/span&gt;
+reg add &lt;span class=&#34;hljs-variable&#34;&gt;%regpath%&lt;/span&gt; /v Application /t REG_SZ /d &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%curexe%&lt;/span&gt;dynv6.bat&amp;quot; /f
+ 
+&lt;span class=&#34;hljs-built_in&#34;&gt;net&lt;/span&gt; &lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt; ddns_dynv6
+ 
+&lt;span class=&#34;hljs-built_in&#34;&gt;pause&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;创建 remove_server.bat 文件：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;hljs bat&#34;&gt;@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; off
+&lt;span class=&#34;hljs-built_in&#34;&gt;net&lt;/span&gt; stop ddns_dynv6
+instsrv ddns_dynv6 remove
+&lt;span class=&#34;hljs-built_in&#34;&gt;pause&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;创建 dynv6.bat 文件：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;hljs bat&#34;&gt;@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; off
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; tempnum=
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; ipaddr=
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; oldipaddr=&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;.&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;.&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;.&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;rem domain=你注册的域名（dynv6.net 提供多种域名后缀可自行修改）&lt;/span&gt;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; domain=【在这里填写你记录的域名，填zone名称】
+&lt;span class=&#34;hljs-comment&#34;&gt;rem token=你注册后的钥匙（dynv6.net 提供）&lt;/span&gt;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; token=【在这里填写你的token，把这段文字和括号删掉然后粘贴】
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; IPV6_REGEX=&amp;quot;\(\([&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;-&lt;span class=&#34;hljs-number&#34;&gt;9&lt;/span&gt;A-Fa-f]\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;4&lt;/span&gt;\&amp;#125;:\)\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,\&amp;#125;\)\(\([&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;-&lt;span class=&#34;hljs-number&#34;&gt;9&lt;/span&gt;A-Fa-f]\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;4&lt;/span&gt;\&amp;#125;\)\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;\&amp;#125;\)\(\(:[&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;-&lt;span class=&#34;hljs-number&#34;&gt;9&lt;/span&gt;A-Fa-f]\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;4&lt;/span&gt;\&amp;#125;\)\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,\&amp;#125;\)&amp;quot;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; IPV4_REGEX=&amp;quot;[&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;-&lt;span class=&#34;hljs-number&#34;&gt;9&lt;/span&gt;]\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;3&lt;/span&gt;\&amp;#125;\.[&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;-&lt;span class=&#34;hljs-number&#34;&gt;9&lt;/span&gt;]\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;3&lt;/span&gt;\&amp;#125;\.[&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;-&lt;span class=&#34;hljs-number&#34;&gt;9&lt;/span&gt;]\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;3&lt;/span&gt;\&amp;#125;\.[&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;-&lt;span class=&#34;hljs-number&#34;&gt;9&lt;/span&gt;]\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;3&lt;/span&gt;\&amp;#125;&amp;quot;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; URL=&amp;quot;https://dynv6.com/api/update?hostname=&lt;span class=&#34;hljs-variable&#34;&gt;%domain%&lt;/span&gt;&amp;amp;token=&lt;span class=&#34;hljs-variable&#34;&gt;%token%&lt;/span&gt;&amp;amp;ipv4=&lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt;paddr&lt;span class=&#34;hljs-variable&#34;&gt;%%&amp;quot;&lt;/span&gt;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; URLV6=&amp;quot;https://dynv6.com/api/update?hostname=&lt;span class=&#34;hljs-variable&#34;&gt;%domain%&lt;/span&gt;&amp;amp;token=&lt;span class=&#34;hljs-variable&#34;&gt;%token%&lt;/span&gt;&amp;amp;ipv6=&lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt;paddr&lt;span class=&#34;hljs-variable&#34;&gt;%%&amp;amp;&lt;/span&gt;ipv6prefix=&lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt;paddr&lt;span class=&#34;hljs-variable&#34;&gt;%%&amp;quot;&lt;/span&gt;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; BIN=wget -t &lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt; --prefer-family=IPv6 --no-dns-cache --no-check-certificate
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;rem ***ipv4***（dynv6也提供ipv4动态域名服务）&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;rem for /F %%i in (&amp;#x27;nslookup %domain% ns1.dynv6.com ^|grep -m2 -o %IPV4_REGEX%&amp;#x27;) do ( set oldipaddr=%%i)&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;rem ***ipv6***&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;for&lt;/span&gt; /F &lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt; &lt;span class=&#34;hljs-keyword&#34;&gt;in&lt;/span&gt; (&amp;#x27;nslookup -qt^=AAAA &lt;span class=&#34;hljs-variable&#34;&gt;%domain%&lt;/span&gt; ns1.dynv6.com ^|grep -m2 -o &lt;span class=&#34;hljs-variable&#34;&gt;%IPV6_REGEX%&lt;/span&gt;&amp;#x27;) &lt;span class=&#34;hljs-keyword&#34;&gt;do&lt;/span&gt; ( &lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; oldipaddr=&lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt;)
+ 
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; Current &lt;span class=&#34;hljs-variable&#34;&gt;%domain%&lt;/span&gt; IP Add:&lt;span class=&#34;hljs-variable&#34;&gt;%oldipaddr%&lt;/span&gt;
+ 
+:start_ip1
+&lt;span class=&#34;hljs-comment&#34;&gt;rem @cls&lt;/span&gt;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ... 
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;.####从ip.sb获得地址####
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; ip6addr=null
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM ***ipv6***&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;for&lt;/span&gt; /F &lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt; &lt;span class=&#34;hljs-keyword&#34;&gt;in&lt;/span&gt; (&amp;#x27;&lt;span class=&#34;hljs-variable&#34;&gt;%BIN%&lt;/span&gt; -O- http://ip.sb  ^|grep -m &lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt; -o &lt;span class=&#34;hljs-variable&#34;&gt;%IPV6_REGEX%&lt;/span&gt;&amp;#x27;) &lt;span class=&#34;hljs-keyword&#34;&gt;do&lt;/span&gt; (&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; ipaddr=&lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt;)
+ 
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;&amp;quot; == &amp;quot;null&amp;quot; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 没有IPV6地址或获得IPV6地址失败
+timeout &lt;span class=&#34;hljs-number&#34;&gt;5&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; start_ip2
+) &lt;span class=&#34;hljs-keyword&#34;&gt;else&lt;/span&gt; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 获得IP地址:&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;，旧IP地址:&lt;span class=&#34;hljs-variable&#34;&gt;%oldipaddr%&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;hljs-keyword&#34;&gt;NOT&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%oldipaddr%&lt;/span&gt;&amp;quot; == &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;&amp;quot; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ---更新IP---
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; update_web_ip
+) &lt;span class=&#34;hljs-keyword&#34;&gt;else&lt;/span&gt; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; IP没有改变
+timeout &lt;span class=&#34;hljs-number&#34;&gt;300&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;cls&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; start_ip2
+))
+ 
+:start_ip2
+@&lt;span class=&#34;hljs-built_in&#34;&gt;ipconfig&lt;/span&gt; /flushdns
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ...
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;.####从checkip.dyndns.com获得地址####
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; ipaddr=null
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM ***ipv4***&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;rem for /F %%i in (&amp;#x27;%BIN% -O- http://checkip.dyndns.com ^|grep -m 1 -o %IPV4_REGEX%&amp;#x27;) do (set ipaddr=%%i)&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM ***ipv6***&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;for&lt;/span&gt; /F &lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt; &lt;span class=&#34;hljs-keyword&#34;&gt;in&lt;/span&gt; (&amp;#x27;&lt;span class=&#34;hljs-variable&#34;&gt;%BIN%&lt;/span&gt; -O- http://checkipv6.dyndns.com ^|grep -m &lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt; -o &lt;span class=&#34;hljs-variable&#34;&gt;%IPV6_REGEX%&lt;/span&gt;&amp;#x27;) &lt;span class=&#34;hljs-keyword&#34;&gt;do&lt;/span&gt; (&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; ipaddr=&lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt;)
+ 
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;&amp;quot; == &amp;quot;null&amp;quot; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 没有IP地址或获得IP地址失败
+timeout &lt;span class=&#34;hljs-number&#34;&gt;5&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; start_ip1
+) &lt;span class=&#34;hljs-keyword&#34;&gt;else&lt;/span&gt; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 获得IP地址:&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;，旧IP地址:&lt;span class=&#34;hljs-variable&#34;&gt;%oldipaddr%&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;hljs-keyword&#34;&gt;NOT&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%oldipaddr%&lt;/span&gt;&amp;quot; == &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;&amp;quot; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ---更新IP---
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; update_web_ip
+) &lt;span class=&#34;hljs-keyword&#34;&gt;else&lt;/span&gt; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; IP没有改变
+timeout &lt;span class=&#34;hljs-number&#34;&gt;300&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;cls&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; start_ip2
+))
+ 
+ 
+:update_web_ip
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ==============================================
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ipaddr=&amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;&amp;quot;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ==============================================
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; var=null
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM ***ipv4***&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;rem for /F &amp;quot;tokens=*&amp;quot; %%i in (&amp;#x27;%BIN% -O- %URL%&amp;#x27;) do (set var=%%i)&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM ***ipv6***&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;for&lt;/span&gt; /F &amp;quot;tokens=*&amp;quot; &lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt; &lt;span class=&#34;hljs-keyword&#34;&gt;in&lt;/span&gt; (&amp;#x27;&lt;span class=&#34;hljs-variable&#34;&gt;%BIN%&lt;/span&gt; -O- &lt;span class=&#34;hljs-variable&#34;&gt;%URLV6%&lt;/span&gt;&amp;#x27;) &lt;span class=&#34;hljs-keyword&#34;&gt;do&lt;/span&gt; (&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; var=&lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt;)
+ 
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 更新信息=&lt;span class=&#34;hljs-variable&#34;&gt;%var%&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%var%&lt;/span&gt;&amp;quot; == &amp;quot;addresses updated&amp;quot; &lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; end
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 更新失败
+timeout &lt;span class=&#34;hljs-number&#34;&gt;120&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; start_ip2
+ 
+:end
+&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; oldipaddr=&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 更新数据成功
+timeout &lt;span class=&#34;hljs-number&#34;&gt;300&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; start_ip2
+&lt;span class=&#34;hljs-comment&#34;&gt;&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM 以上每个TIMEOUT指令都表示等待一定时间（秒），可以按实际情况修改&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM 我这里的300秒应该是够用的，太短了占用过多资源，太长了更新不及时&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;开机自启动&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#开机自启动&#34;&gt;#&lt;/a&gt; 开机自启动&lt;/h2&gt;
+&lt;p&gt;创建一个计划任务即可，详情可百度教程&lt;/p&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">https://zjxdiu.github.io/blog/Network_progress_CSUST/</guid>
+            <title>长沙理工大学无线网络多设备共享解决方案</title>
+            <link>https://zjxdiu.github.io/blog/Network_progress_CSUST/</link>
+            <category>网络</category>
+            <pubDate>Fri, 24 Feb 2023 22:07:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1 id=&#34;本文未完成&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#本文未完成&#34;&gt;#&lt;/a&gt; 本文未完成&lt;/h1&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;引用&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#引用&#34;&gt;#&lt;/a&gt; 引用&lt;/h2&gt;
+&lt;p&gt;本文大部分内容可参考：&lt;br&gt;
+&lt;a href=&#34;https://www.mr-cn.net/2021/06/15/Share-your-network-in-CSUST/&#34;&gt;长沙理工大学：校园网解除共享限制&lt;/a&gt;&lt;br&gt;
+路由器刷机参考教程（非本次使用）：&lt;br&gt;
+&lt;a href=&#34;https://www.right.com.cn/FORUM/thread-489907-1-1.html&#34;&gt;极路由 Enjoy 1200  HC5861B OpenWRT 固件 Rosy 主题&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;原因与现象&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#原因与现象&#34;&gt;#&lt;/a&gt; 原因与现象&lt;/h2&gt;
+&lt;p&gt;为了维护运营商利益，校园网设置了一些检测与规则，对同时登录校园网的设备数量作出了严格的限制，并且不允许终端用户进行网络共享。&lt;br&gt;
+具体表现为，当用户使用电脑、手机等的热点、无线信号桥等方法时，只要有第二台设备联网，就会在一定条件下被检测发现，随后此账号将无法访问网络，并自动将网页重定向到登录界面（或 1.1.1.3，但这个页面不能加载出来）。&lt;/p&gt;
+&lt;h2 id=&#34;原理&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#原理&#34;&gt;#&lt;/a&gt; 原理&lt;/h2&gt;
+&lt;p&gt;根据引用文章，可以得知共享检测主要通过 80 端口下的 HTTP 报文中浏览器 UA 的区别来实现，可以看到这个限制条件比较多，而且检测周期并不短；因此会出现稳定共享的时间时长时短的现象。&lt;br&gt;
+此外，还可能会通过其他方法检测，包括但不限于 TTL、IPID、侵入式检测等等。&lt;/p&gt;
+&lt;h2 id=&#34;准备工作&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#准备工作&#34;&gt;#&lt;/a&gt; 准备工作&lt;/h2&gt;
+&lt;p&gt;为实现稳定的校园网共享，首先需要选择正确的系统：必须使用 OpenWRT 或 Pavanda 等软路由系统。&lt;br&gt;
+本文基于 Pavanda 操作。&lt;/p&gt;
+&lt;h3 id=&#34;路由选型&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#路由选型&#34;&gt;#&lt;/a&gt; 路由选型&lt;/h3&gt;
+&lt;p&gt;如果你还没有软路由或者合适的路由器，那么选购路由器就是第一步了。我最终的选择是二手极路由 Enjoy 1200，型号 HC5861B。极路由虽然已经倒闭，但它的产品可玩性和性价比确实是相对较好的。&lt;br&gt;
+淘宝入手价格 40 元，由商家代刷 Breed。&lt;br&gt;
+需要注意的是，这一款路由器不支持 USB，电源接口也是 12V DC 而非 5V Micro-USB，如果有这两个功能需求的话可以考虑极路由 3 或其他产品。&lt;/p&gt;
+&lt;h3 id=&#34;检查与刷机&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#检查与刷机&#34;&gt;#&lt;/a&gt; 检查与刷机&lt;/h3&gt;
+&lt;p&gt;收货后先简单清理积灰，检查网口是否有积聚大量灰尘，天线是否正常连接、旋转。&lt;br&gt;
+随后插入电源开机，连接电脑网口到路由器 LAN 1 口，等待 IP 自动配置完成，进入默认网关的地址（本次为 192.168.132.1，极路由原厂固件可能为 192.168.199.1）&lt;br&gt;
+使用默认的管理员账号密码（admin）登录后，发现这台机器已经刷好了老毛子固件（Padavan）了：&lt;br&gt;
+&lt;img src=&#34;../_resources/54de7cdf47ce563bb65d5c42e282e331.png&#34; alt=&#34;54de7cdf47ce563bb65d5c42e282e331.png&#34;&gt;&lt;br&gt;
+ 所以省下了很多时间，虽然我的计划是使用 OpenWrt，但 Padavan 本质上是一样的。&lt;br&gt;
+如果需要刷机教程，请参考引用文章，或直接搜索路由型号 + OpenWrt，即可找到一些刷机教程。&lt;/p&gt;
+&lt;h2 id=&#34;网络拓扑&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#网络拓扑&#34;&gt;#&lt;/a&gt; 网络拓扑&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;../_resources/15828e53952c884a9b9f9f1cc11b7c77.png&#34; alt=&#34;15828e53952c884a9b9f9f1cc11b7c77.png&#34;&gt;&lt;br&gt;
+ 我的目标是达成这样的拓扑，实际上就是一个无线 “路由”，也就是将无线信号作为 WAN，执行 NAT 和防火墙规则后建立子网，设备均接入子网中。&lt;/p&gt;
+&lt;h2 id=&#34;基础配置&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#基础配置&#34;&gt;#&lt;/a&gt; 基础配置&lt;/h2&gt;
+&lt;h3 id=&#34;路由器接入无线网络&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#路由器接入无线网络&#34;&gt;#&lt;/a&gt; 路由器接入无线网络&lt;/h3&gt;
+&lt;p&gt;直接参考这张图即可：&lt;br&gt;
+&lt;img src=&#34;../_resources/d6035076edef8fc78299e3af690eea62.png&#34; alt=&#34;d6035076edef8fc78299e3af690eea62.png&#34;&gt;&lt;br&gt;
+2.4G 和 5G 只能有一个用于 AP-Client，另一个必须禁用桥接。&lt;br&gt;
+需要注意的是，路由器需要用一个频段接入校园网，另一个频段用于发射信号；虽然可以选择 client+AP 来实现单频复用，实际上只用 5GHz 的话效果也不错，但我收到的这台路由器不知道为何 5G 能力极其孱弱（无遮挡 50cm 距离下 client 都不能跑满协商速率），而 2.4G 能力极强（对周围的无线鼠标、蓝牙手柄等造成严重干扰），因此这里不使用这种方法。&lt;br&gt;
+懒得删改的原文：&lt;br&gt;
+&lt;em&gt;这里还涉及到频段的选择，最开始我使用 2.4G 接入校园网、5G 用于共享，但随后我发现无线鼠标的工作会受到较严重的干扰（接收器也工作在 2.4G 频率上），因此后续改为 5G 接入、2.4G 共享。&lt;br&gt;
+此外，网络性能也是一个需要关心的重点，5GHz 总能提供更优秀的表现，但这里我们只能用于一个目的；由于我平时主要使用电脑上网，而电脑是通过网线连接到路由器的，因此选择 5G 接入是更好的。实际上，这种情况下 2.4G 的表现也不差，宿舍面积小、干扰少，多次测试下来延迟在 30ms 以内，速度 8-9MB/s，可以满足 1080P 视频观看和正常游戏。&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id=&#34;修改网络配置&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#修改网络配置&#34;&gt;#&lt;/a&gt; 修改网络配置&lt;/h3&gt;
+&lt;p&gt;如果对内网网段不敏感（例如你只想要正常上网，平时不开发网页、软件、游戏、不做任何测试，那么这一段可以跳过）&lt;br&gt;
+在左侧选择外部网络（WAN），可参考下图配置：&lt;br&gt;
+&lt;img src=&#34;../_resources/e613ab56c89c86b939bf67ab5601fc42.png&#34; alt=&#34;e613ab56c89c86b939bf67ab5601fc42.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;LAN 配置同理，设置想要的网段、DNS、静态路由等。&lt;/p&gt;
+&lt;h2 id=&#34;通过nat连接ipv6&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#通过nat连接ipv6&#34;&gt;#&lt;/a&gt; 通过 NAT 连接 ipv6&lt;/h2&gt;
+&lt;p&gt;由于我希望使用到正常的 ipv6，故单独在此写出方案；对于绝大多数日常网络而言，关闭 ipv6 可能反而有助于提高稳定性。&lt;br&gt;
+参考文章：&lt;a href=&#34;https://post.smzdm.com/p/ad9qkz9k/&#34;&gt;校园网环境下 Openwrt 配置 ipv6 教程 —— 以 nat6 为例&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;NAT 是什么？&lt;br&gt;
+NAT 是出现在 ipv4 中的技术；由于 ipv4 地址空间有限（总约 42 亿个），无法满足爆炸式增长的网络设备入网需求，因此出现了网络地址转换（Network Address Translation）技术；它的作用就是缓解 ipv4 地址消耗，尽量在 ipv6 部署完全之前满足原有上网需求。&lt;br&gt;
+它的工作原理很简单，我们平时使用路由器上网的时候就至少会有一次 NAT 过程，路由器将一个外网（WAN）的地址映射到多个内网地址（通常为 192.168.x.x 或 10.x.x.x），这样一个路由器下的设备就可以共用一个外网 IP，大幅缓解了地址消耗，同时解决了耗尽的影响。&lt;br&gt;
+NAT 有助于提高网络安全性，因为路由器上可以部署非常高效的防火墙，也可以天然阻断所有传入连接，但这样的技术也会带来问题；最大的问题无疑就是点对点连接变得不可能，因此游戏联机、网站建设等都会变得很困难。&lt;br&gt;
+在我的使用场景下，Minecraft 联机是最常见的点对点连接应用，此前的解决方案均为 FRP 内网穿透（见前文章）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;为什么我一定要有 ipv6 连接？&lt;br&gt;
+很简单，ipv6 地址池极大，运营商也并未刻意限制用户的 ipv6 访问（至少我没有遇到过哪个运营商在 ipv6 上用 NAT 的）&lt;strong&gt;（但是教育网除外）&lt;/strong&gt;。&lt;br&gt;
+因此，大多数用户只要开启了 ipv6，就能获取到公网 IP。这对于点对点连接来说无疑是非常有帮助的。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;教育网干了什么？&lt;br&gt;
+一般运营商在家用、商用宽带里分配的 ipv6 都是 / 64 的前缀，这意味着路由器拿到的地址里面还包含了大量的可用地址，用于给后续设备分配 ipv6 地址；&lt;br&gt;
+但教育网的 ipv6 则直接分配了 / 128 的地址，这就意味着它给你的地址只能用于一台设备。也就是说，想要共享 ipv6，必须使用 NAT。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;后续等待完善&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#后续等待完善&#34;&gt;#&lt;/a&gt; 后续等待完善&lt;/h1&gt;
+&lt;p&gt;可参考：&lt;a href=&#34;https://doge.uk/coding/padavan-ipv6-napt66.html&#34;&gt;Padavan 路由下使用 NAPT66 模块访问移动 IPV6 网络&lt;/a&gt;&lt;/p&gt;
+ ]]></description>
+        </item>
         <item>
             <guid isPermalink="true">https://zjxdiu.github.io/blog/another_toss_of_music_recording/</guid>
             <title>又一次折腾手机游戏《灵魂潮汐》音频录制的记录</title>
@@ -82,8 +518,8 @@ b 站，😃&lt;br&gt;
             <guid isPermalink="true">https://zjxdiu.github.io/blog/ipv6_toss/</guid>
             <title>记一次折腾电信ipv6中的各种问题</title>
             <link>https://zjxdiu.github.io/blog/ipv6_toss/</link>
-            <category>游戏</category>
             <category>网络</category>
+            <category>游戏</category>
             <pubDate>Fri, 20 Jan 2023 21:37:00 +0800</pubDate>
             <description><![CDATA[ &lt;p&gt;阅前提示：本文约 5000 字，预计阅读时长 &amp;gt; 5 分钟。&lt;/p&gt;
 &lt;h2 id=&#34;起因&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#起因&#34;&gt;#&lt;/a&gt; 起因&lt;/h2&gt;

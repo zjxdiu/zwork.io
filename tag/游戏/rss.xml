@@ -5,22 +5,194 @@
         <link>https://zjxdiu.github.io</link>
         <description>Shadow in front implying sun behind</description>
         <language>zh-CN</language>
-        <pubDate>Thu, 26 Jan 2023 23:51:00 +0800</pubDate>
-        <lastBuildDate>Thu, 26 Jan 2023 23:51:00 +0800</lastBuildDate>
-        <category>日常</category>
+        <pubDate>Fri, 03 Mar 2023 17:00:00 +0800</pubDate>
+        <lastBuildDate>Fri, 03 Mar 2023 17:00:00 +0800</lastBuildDate>
         <category>化学</category>
         <category>仪器分析</category>
         <category>信号处理</category>
-        <category>游戏</category>
         <category>网络</category>
-        <category>软件</category>
+        <category>日常</category>
         <category>分享</category>
+        <category>软件</category>
+        <category>游戏</category>
         <category>超频</category>
         <category>硬件</category>
-        <category>生活</category>
         <category>脑洞</category>
         <category>开发</category>
         <category>游戏引擎</category>
+        <category>生活</category>
+        <item>
+            <guid isPermalink="true">https://zjxdiu.github.io/blog/dynv6_notes/</guid>
+            <title>dynv6使用技巧（如何添加多个地址 子域名 等）</title>
+            <link>https://zjxdiu.github.io/blog/dynv6_notes/</link>
+            <category>网络</category>
+            <category>游戏</category>
+            <pubDate>Fri, 03 Mar 2023 17:00:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h2 id=&#34;前言&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#前言&#34;&gt;#&lt;/a&gt; 前言&lt;/h2&gt;
+&lt;p&gt;因为 ipv6 普及度日益增加，在自己的环境里搭建简易服务器的想法就逐渐发芽；无论是用于博客网站、NAS 或私有云的搭建，还是用来开游戏服务器，都能够简单易行地实现（因为有公网 ipv6）。&lt;br&gt;
+不过，很多时候家庭环境下 ipv6 地址也会发生变化，尤其是电脑重启、宽带重拨的时候，那么如何在没有固定 ipv6 的情况下让别人能更容易找到我们的地址呢？很简单，当然是用 DDNS 了。&lt;br&gt;
+DDNS，也就是动态 DNS，将一个变化的 IP 绑定到域名上，通过脚本定时检测和更新地址，这样即使地址变化，域名解析出来的地址也会跟着变化，仍然可以使用同一个域名定位到同一个地址。&lt;/p&gt;
+&lt;h2 id=&#34;使用dynv6&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#使用dynv6&#34;&gt;#&lt;/a&gt; 使用 dynv6&lt;/h2&gt;
+&lt;p&gt;官网：&lt;a href=&#34;https://dynv6.com/&#34;&gt;https://dynv6.com/&lt;/a&gt;&lt;br&gt;
+ 首先用邮箱注册一个账号，接着进入 My Zones，点击 Create New Zone，在 Name 里输入你想要的网址名称和后缀类型，下面的地址可以先点击 Set current address，这样网页就会填入你的外网 IP 地址（应注意检查，ipv4 基本不会是跟电脑一致，但 ipv6 需要一致）。&lt;br&gt;
+&lt;img src=&#34;../_resources/8007661dd2ee4a33be77ca500ec41a76.png&#34; alt=&#34;8007661dd2ee4a33be77ca500ec41a76.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;点击创建后，若网址没有冲突，则创建成功；直接点击这个域名，上面有两个选项是可以自己修改的：status 和 records。&lt;/p&gt;
+&lt;h2 id=&#34;创建dns记录&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#创建dns记录&#34;&gt;#&lt;/a&gt; 创建 DNS 记录&lt;/h2&gt;
+&lt;p&gt;在 Status 里，点击 Edit Zone，将 ipv6 地址再次设为你的公网 ipv6 并保存，这样主域名就会直接解析到你的电脑上；&lt;br&gt;
+在 Records 里，可以编辑或删除现有的 AAAA 记录，也可以新增其他 DNS 记录。&lt;/p&gt;
+&lt;h3 id=&#34;创建子域名&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#创建子域名&#34;&gt;#&lt;/a&gt; 创建子域名&lt;/h3&gt;
+&lt;p&gt;点击 Add Record，选择 AAAA 类型（A 是 ipv4，AAAA 是 ipv6，CNAME 是网站别名一般用不到），前面的 name 里填写子域名前缀（&lt;a href=&#34;http://xn--web-th2ek25abiifsffvwu74d.domainname.dynv6.net&#34;&gt;比如我要创建 web.domainname.dynv6.net&lt;/a&gt;，那就在这里写 web），后面的地址里填写目标 ipv6 即可。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;设置ddns自动更新&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#设置ddns自动更新&#34;&gt;#&lt;/a&gt; 设置 DDNS 自动更新&lt;/h2&gt;
+&lt;p&gt;提示：建议将此脚本部署于 Windows 服务器上，而非自己的电脑&lt;/p&gt;
+&lt;h3 id=&#34;下载wget和grep&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#下载wget和grep&#34;&gt;#&lt;/a&gt; 下载 wget 和 grep&lt;/h3&gt;
+&lt;p&gt;网上很多教程，这里列两个：&lt;br&gt;
+&lt;a href=&#34;https://www.cnblogs.com/shenxiaolin/p/16662793.html&#34;&gt;windows 下 grep 的安装与使用&lt;/a&gt;&lt;br&gt;
+&lt;a href=&#34;https://www.jianshu.com/p/a8dfc762ba3b&#34;&gt; win10 安装 wget&lt;/a&gt;&lt;br&gt;
+ 记得检查好环境变量，确定 cmd 下运行这两个命令有输出。&lt;/p&gt;
+&lt;h3 id=&#34;下载instsrvexe和srvanyexe&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#下载instsrvexe和srvanyexe&#34;&gt;#&lt;/a&gt; 下载 instsrv.exe 和 srvany.exe&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.cnblogs.com/zhaiqianfeng/p/4622561.html&#34;&gt;利用 instsrv 和 srvany 来手动安装服务&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;编写脚本&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#编写脚本&#34;&gt;#&lt;/a&gt; 编写脚本&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;在特定路径下创建文件夹，将上述 instsrv.exe、srvany.exe 以及后续脚本均放在此处；&lt;/li&gt;
+&lt;li&gt;创建 install_server.bat 文件：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;hljs bat&#34;&gt;@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; off
+&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; curexe=%~dp0
+&lt;span class=&#34;hljs-built_in&#34;&gt;cd&lt;/span&gt; /d &lt;span class=&#34;hljs-variable&#34;&gt;%curexe%&lt;/span&gt;
+&amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%curexe%&lt;/span&gt;instsrv.exe&amp;quot; ddns_dynv6 &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%curexe%&lt;/span&gt;srvany.exe&amp;quot;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ddns_dynv6 服务添加完成
+
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 修改服务路径
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM 添加注册表语法: reg add 注册表路径 /v 项名称 /t 值类型 /d 数据 /f 表示强行修改不提示&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM 名称 Application 值为你要作为服务运行的程序地址 /d对应的参数有斜杠不是为了转义引号，而是路径还有斜杠，默认将引号转义了，额外添加斜杠是为了保留引号&lt;/span&gt;
+ 
+&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; regpath=HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ddns_dynv6\Parameters\
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM 名称 AppDirectory 值为你要作为服务运行的程序所在文件夹路径&lt;/span&gt;
+reg add &lt;span class=&#34;hljs-variable&#34;&gt;%regpath%&lt;/span&gt; /v AppDirectory /t REG_SZ /d &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%curexe%&lt;/span&gt;\&amp;quot; /f
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM 名称 AppParameters 值为你要作为服务运行的程序启动所需要的参数&lt;/span&gt;
+reg add &lt;span class=&#34;hljs-variable&#34;&gt;%regpath%&lt;/span&gt; /v Application /t REG_SZ /d &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%curexe%&lt;/span&gt;dynv6.bat&amp;quot; /f
+ 
+&lt;span class=&#34;hljs-built_in&#34;&gt;net&lt;/span&gt; &lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt; ddns_dynv6
+ 
+&lt;span class=&#34;hljs-built_in&#34;&gt;pause&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;创建 remove_server.bat 文件：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;hljs bat&#34;&gt;@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; off
+&lt;span class=&#34;hljs-built_in&#34;&gt;net&lt;/span&gt; stop ddns_dynv6
+instsrv ddns_dynv6 remove
+&lt;span class=&#34;hljs-built_in&#34;&gt;pause&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;创建 dynv6.bat 文件：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;hljs bat&#34;&gt;@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; off
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; tempnum=
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; ipaddr=
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; oldipaddr=&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;.&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;.&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;.&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;rem domain=你注册的域名（dynv6.net 提供多种域名后缀可自行修改）&lt;/span&gt;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; domain=【在这里填写你记录的域名，填zone名称】
+&lt;span class=&#34;hljs-comment&#34;&gt;rem token=你注册后的钥匙（dynv6.net 提供）&lt;/span&gt;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; token=【在这里填写你的token，把这段文字和括号删掉然后粘贴】
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; IPV6_REGEX=&amp;quot;\(\([&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;-&lt;span class=&#34;hljs-number&#34;&gt;9&lt;/span&gt;A-Fa-f]\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;4&lt;/span&gt;\&amp;#125;:\)\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,\&amp;#125;\)\(\([&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;-&lt;span class=&#34;hljs-number&#34;&gt;9&lt;/span&gt;A-Fa-f]\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;4&lt;/span&gt;\&amp;#125;\)\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;\&amp;#125;\)\(\(:[&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;-&lt;span class=&#34;hljs-number&#34;&gt;9&lt;/span&gt;A-Fa-f]\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;4&lt;/span&gt;\&amp;#125;\)\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,\&amp;#125;\)&amp;quot;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; IPV4_REGEX=&amp;quot;[&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;-&lt;span class=&#34;hljs-number&#34;&gt;9&lt;/span&gt;]\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;3&lt;/span&gt;\&amp;#125;\.[&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;-&lt;span class=&#34;hljs-number&#34;&gt;9&lt;/span&gt;]\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;3&lt;/span&gt;\&amp;#125;\.[&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;-&lt;span class=&#34;hljs-number&#34;&gt;9&lt;/span&gt;]\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;3&lt;/span&gt;\&amp;#125;\.[&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;-&lt;span class=&#34;hljs-number&#34;&gt;9&lt;/span&gt;]\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;3&lt;/span&gt;\&amp;#125;&amp;quot;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; URL=&amp;quot;https://dynv6.com/api/update?hostname=&lt;span class=&#34;hljs-variable&#34;&gt;%domain%&lt;/span&gt;&amp;amp;token=&lt;span class=&#34;hljs-variable&#34;&gt;%token%&lt;/span&gt;&amp;amp;ipv4=&lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt;paddr&lt;span class=&#34;hljs-variable&#34;&gt;%%&amp;quot;&lt;/span&gt;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; URLV6=&amp;quot;https://dynv6.com/api/update?hostname=&lt;span class=&#34;hljs-variable&#34;&gt;%domain%&lt;/span&gt;&amp;amp;token=&lt;span class=&#34;hljs-variable&#34;&gt;%token%&lt;/span&gt;&amp;amp;ipv6=&lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt;paddr&lt;span class=&#34;hljs-variable&#34;&gt;%%&amp;amp;&lt;/span&gt;ipv6prefix=&lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt;paddr&lt;span class=&#34;hljs-variable&#34;&gt;%%&amp;quot;&lt;/span&gt;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; BIN=wget -t &lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt; --prefer-family=IPv6 --no-dns-cache --no-check-certificate
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;rem ***ipv4***（dynv6也提供ipv4动态域名服务）&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;rem for /F %%i in (&amp;#x27;nslookup %domain% ns1.dynv6.com ^|grep -m2 -o %IPV4_REGEX%&amp;#x27;) do ( set oldipaddr=%%i)&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;rem ***ipv6***&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;for&lt;/span&gt; /F &lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt; &lt;span class=&#34;hljs-keyword&#34;&gt;in&lt;/span&gt; (&amp;#x27;nslookup -qt^=AAAA &lt;span class=&#34;hljs-variable&#34;&gt;%domain%&lt;/span&gt; ns1.dynv6.com ^|grep -m2 -o &lt;span class=&#34;hljs-variable&#34;&gt;%IPV6_REGEX%&lt;/span&gt;&amp;#x27;) &lt;span class=&#34;hljs-keyword&#34;&gt;do&lt;/span&gt; ( &lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; oldipaddr=&lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt;)
+ 
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; Current &lt;span class=&#34;hljs-variable&#34;&gt;%domain%&lt;/span&gt; IP Add:&lt;span class=&#34;hljs-variable&#34;&gt;%oldipaddr%&lt;/span&gt;
+ 
+:start_ip1
+&lt;span class=&#34;hljs-comment&#34;&gt;rem @cls&lt;/span&gt;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ... 
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;.####从ip.sb获得地址####
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; ip6addr=null
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM ***ipv6***&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;for&lt;/span&gt; /F &lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt; &lt;span class=&#34;hljs-keyword&#34;&gt;in&lt;/span&gt; (&amp;#x27;&lt;span class=&#34;hljs-variable&#34;&gt;%BIN%&lt;/span&gt; -O- http://ip.sb  ^|grep -m &lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt; -o &lt;span class=&#34;hljs-variable&#34;&gt;%IPV6_REGEX%&lt;/span&gt;&amp;#x27;) &lt;span class=&#34;hljs-keyword&#34;&gt;do&lt;/span&gt; (&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; ipaddr=&lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt;)
+ 
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;&amp;quot; == &amp;quot;null&amp;quot; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 没有IPV6地址或获得IPV6地址失败
+timeout &lt;span class=&#34;hljs-number&#34;&gt;5&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; start_ip2
+) &lt;span class=&#34;hljs-keyword&#34;&gt;else&lt;/span&gt; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 获得IP地址:&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;，旧IP地址:&lt;span class=&#34;hljs-variable&#34;&gt;%oldipaddr%&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;hljs-keyword&#34;&gt;NOT&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%oldipaddr%&lt;/span&gt;&amp;quot; == &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;&amp;quot; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ---更新IP---
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; update_web_ip
+) &lt;span class=&#34;hljs-keyword&#34;&gt;else&lt;/span&gt; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; IP没有改变
+timeout &lt;span class=&#34;hljs-number&#34;&gt;300&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;cls&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; start_ip2
+))
+ 
+:start_ip2
+@&lt;span class=&#34;hljs-built_in&#34;&gt;ipconfig&lt;/span&gt; /flushdns
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ...
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;.####从checkip.dyndns.com获得地址####
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; ipaddr=null
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM ***ipv4***&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;rem for /F %%i in (&amp;#x27;%BIN% -O- http://checkip.dyndns.com ^|grep -m 1 -o %IPV4_REGEX%&amp;#x27;) do (set ipaddr=%%i)&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM ***ipv6***&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;for&lt;/span&gt; /F &lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt; &lt;span class=&#34;hljs-keyword&#34;&gt;in&lt;/span&gt; (&amp;#x27;&lt;span class=&#34;hljs-variable&#34;&gt;%BIN%&lt;/span&gt; -O- http://checkipv6.dyndns.com ^|grep -m &lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt; -o &lt;span class=&#34;hljs-variable&#34;&gt;%IPV6_REGEX%&lt;/span&gt;&amp;#x27;) &lt;span class=&#34;hljs-keyword&#34;&gt;do&lt;/span&gt; (&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; ipaddr=&lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt;)
+ 
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;&amp;quot; == &amp;quot;null&amp;quot; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 没有IP地址或获得IP地址失败
+timeout &lt;span class=&#34;hljs-number&#34;&gt;5&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; start_ip1
+) &lt;span class=&#34;hljs-keyword&#34;&gt;else&lt;/span&gt; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 获得IP地址:&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;，旧IP地址:&lt;span class=&#34;hljs-variable&#34;&gt;%oldipaddr%&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;hljs-keyword&#34;&gt;NOT&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%oldipaddr%&lt;/span&gt;&amp;quot; == &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;&amp;quot; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ---更新IP---
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; update_web_ip
+) &lt;span class=&#34;hljs-keyword&#34;&gt;else&lt;/span&gt; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; IP没有改变
+timeout &lt;span class=&#34;hljs-number&#34;&gt;300&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;cls&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; start_ip2
+))
+ 
+ 
+:update_web_ip
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ==============================================
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ipaddr=&amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;&amp;quot;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ==============================================
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; var=null
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM ***ipv4***&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;rem for /F &amp;quot;tokens=*&amp;quot; %%i in (&amp;#x27;%BIN% -O- %URL%&amp;#x27;) do (set var=%%i)&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM ***ipv6***&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;for&lt;/span&gt; /F &amp;quot;tokens=*&amp;quot; &lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt; &lt;span class=&#34;hljs-keyword&#34;&gt;in&lt;/span&gt; (&amp;#x27;&lt;span class=&#34;hljs-variable&#34;&gt;%BIN%&lt;/span&gt; -O- &lt;span class=&#34;hljs-variable&#34;&gt;%URLV6%&lt;/span&gt;&amp;#x27;) &lt;span class=&#34;hljs-keyword&#34;&gt;do&lt;/span&gt; (&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; var=&lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt;)
+ 
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 更新信息=&lt;span class=&#34;hljs-variable&#34;&gt;%var%&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%var%&lt;/span&gt;&amp;quot; == &amp;quot;addresses updated&amp;quot; &lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; end
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 更新失败
+timeout &lt;span class=&#34;hljs-number&#34;&gt;120&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; start_ip2
+ 
+:end
+&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; oldipaddr=&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 更新数据成功
+timeout &lt;span class=&#34;hljs-number&#34;&gt;300&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; start_ip2
+&lt;span class=&#34;hljs-comment&#34;&gt;&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM 以上每个TIMEOUT指令都表示等待一定时间（秒），可以按实际情况修改&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM 我这里的300秒应该是够用的，太短了占用过多资源，太长了更新不及时&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;开机自启动&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#开机自启动&#34;&gt;#&lt;/a&gt; 开机自启动&lt;/h2&gt;
+&lt;p&gt;创建一个计划任务即可，详情可百度教程&lt;/p&gt;
+ ]]></description>
+        </item>
         <item>
             <guid isPermalink="true">https://zjxdiu.github.io/blog/another_toss_of_music_recording/</guid>
             <title>又一次折腾手机游戏《灵魂潮汐》音频录制的记录</title>
@@ -82,8 +254,8 @@ b 站，😃&lt;br&gt;
             <guid isPermalink="true">https://zjxdiu.github.io/blog/ipv6_toss/</guid>
             <title>记一次折腾电信ipv6中的各种问题</title>
             <link>https://zjxdiu.github.io/blog/ipv6_toss/</link>
-            <category>游戏</category>
             <category>网络</category>
+            <category>游戏</category>
             <pubDate>Fri, 20 Jan 2023 21:37:00 +0800</pubDate>
             <description><![CDATA[ &lt;p&gt;阅前提示：本文约 5000 字，预计阅读时长 &amp;gt; 5 分钟。&lt;/p&gt;
 &lt;h2 id=&#34;起因&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#起因&#34;&gt;#&lt;/a&gt; 起因&lt;/h2&gt;
