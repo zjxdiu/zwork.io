@@ -13,16 +13,17 @@
         <category>日常</category>
         <category>深度学习</category>
         <category>音频</category>
-        <category>分享</category>
         <category>网络</category>
+        <category>分享</category>
         <category>软件</category>
         <category>游戏</category>
+        <category>开发</category>
+        <category>游戏引擎</category>
         <category>超频</category>
         <category>硬件</category>
         <category>脑洞</category>
-        <category>开发</category>
-        <category>游戏引擎</category>
         <category>生活</category>
+        <category>测试</category>
         <item>
             <guid isPermalink="true">https://zjxdiu.github.io/blog/%E9%9A%8F%E8%AE%B020230501/</guid>
             <title>Hexo批处理脚本更新，通过zerotier实现免费简易内网穿透</title>
@@ -211,6 +212,56 @@ choice /c &lt;span class=&#34;hljs-number&#34;&gt;01&lt;/span&gt;
  ]]></description>
         </item>
         <item>
+            <guid isPermalink="true">https://zjxdiu.github.io/blog/%E5%94%A4%E5%A2%83%E7%BC%96%E7%A8%8B%E7%AC%94%E8%AE%B0/</guid>
+            <title>【计划长期更新】记录自己的编程思路与想法，实现成功后更新</title>
+            <link>https://zjxdiu.github.io/blog/%E5%94%A4%E5%A2%83%E7%BC%96%E7%A8%8B%E7%AC%94%E8%AE%B0/</link>
+            <category>开发</category>
+            <category>游戏引擎</category>
+            <pubDate>Wed, 14 Dec 2022 22:32:00 +0800</pubDate>
+            <description><![CDATA[ &lt;p&gt;前言：&lt;br&gt;
+由于大学事务繁重，很多时候想到了一些功能的实现思路也没有时间及时验证，所以计划开一个帖子存放这些想法。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;1. 音游主体玩法逻辑&lt;br&gt;
+音符数据点存放：xml 文件&lt;br&gt;
+存储内容：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;音符时间：音符应被打击时，距离音乐开始时的毫秒数&lt;/li&gt;
+&lt;li&gt;音符类型（单点、长按）（暂时不考虑）&lt;/li&gt;
+&lt;li&gt;轨道编号&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;实现逻辑：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;场景开始时，生成音符；若数量过多，可以考虑分节生成。音符带实例变量，存储其音符时间。&lt;/li&gt;
+&lt;li&gt;音乐预加载、延迟播放；开始播放同帧启动计时器（高精度计时方法详见&lt;a href=&#34;https://bbs.evkworld.cn/topic/2590/&#34;&gt; https://bbs.evkworld.cn/topic/2590/&lt;/a&gt;）&lt;/li&gt;
+&lt;li&gt;按下按键时（上升沿触发）：
+&lt;ul&gt;
+&lt;li&gt;记录按键时间（可用数组处理）&lt;/li&gt;
+&lt;li&gt;检查该轨道上最近的音符，获取其音符时间，计算差值。
+&lt;ul&gt;
+&lt;li&gt;若差距过大，打击无效；&lt;/li&gt;
+&lt;li&gt;若差距较大，判断为 miss；&lt;/li&gt;
+&lt;li&gt;根据差值判断等级（Perfect、good、OK）&lt;/li&gt;
+&lt;li&gt;一旦判断成功，销毁该音符&lt;/li&gt;
+&lt;li&gt;若差值为负，则打击时间比音符时间晚；
+&lt;ul&gt;
+&lt;li&gt;计算差值、判断等级&lt;/li&gt;
+&lt;li&gt;miss 阈值应低于正差值。&lt;/li&gt;
+&lt;li&gt;（可以避免两个紧挨着的音符总是被判断到后面的那个）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;越线过久未打击：
+&lt;ul&gt;
+&lt;li&gt;采用屏幕外的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+ ]]></description>
+        </item>
+        <item>
             <guid isPermalink="true">https://zjxdiu.github.io/blog/%E8%A1%A5%E6%A1%A31/</guid>
             <title>【补档】唤境游戏如何显示帧率？详解性能相关内容</title>
             <link>https://zjxdiu.github.io/blog/%E8%A1%A5%E6%A1%A31/</link>
@@ -327,6 +378,54 @@ GPU 负责的内容就是渲染画面，例如显示图片、文字等。&lt;br&
 &lt;p&gt;额外优化内容：&lt;br&gt;
 （1）给文本和精灵分别添加 “边界限制” 能力即可；&lt;br&gt;
 （2）在启用测量为假的时候，给精灵添加一条动作：“取消绑定”&lt;/p&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">https://zjxdiu.github.io/blog/%E9%9D%92%E7%BE%BD_blog%E5%BB%BA%E7%AB%8B%E5%AE%8C%E6%88%90%EF%BC%81/</guid>
+            <title>博客成功建立！</title>
+            <link>https://zjxdiu.github.io/blog/%E9%9D%92%E7%BE%BD_blog%E5%BB%BA%E7%AB%8B%E5%AE%8C%E6%88%90%EF%BC%81/</link>
+            <category>日常</category>
+            <category>开发</category>
+            <category>测试</category>
+            <pubDate>Thu, 24 Nov 2022 21:27:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h2 id=&#34;关于青羽&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#关于青羽&#34;&gt;#&lt;/a&gt; 关于青羽&lt;/h2&gt;
+&lt;p&gt;你好，我是 zjxdiu，在这个空间里我也叫青羽 b（￣▽￣）d&lt;br&gt;
+ 其实这个名字应该会和其他人的重吧，但是我一直觉得叫自己 zjxdiu 也太奇怪了（下面会说这个 id 的由来），然后当我试图想一个符合我自设的名字的时候，“青” 和 “羽” 这两个发音就出现在脑海里（就是 “Pop” 一下就冒出来了），所以我觉得叫自己青羽似乎也不错。&lt;br&gt;
+自设内容会慢慢完善，单独放在 “关于” 里。谁不希望把自己塑造成最喜欢的样子呢，现在我有了自己的网络空间，我就是这里的神（？）&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;关于zjxdiu&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#关于zjxdiu&#34;&gt;#&lt;/a&gt; 关于 zjxdiu&lt;/h2&gt;
+&lt;p&gt;这是我的网络常用 id，一些平台里搜索这个 id 找到的大概都是我。&lt;br&gt;
+它的来源其实有点蠢（dumb）&lt;br&gt;
+这个 id 分成两部分，前面是 zjx，也就是我的名字首字母拼一起；后面是 diu，它是源于粤语里的一句脏话，然后初中的时候班上同学天天把 diu 挂在嘴边。&lt;br&gt;
+这还不是全部，当我辗转于各大 mc 服务器时，我意外地发现，diu 这个 id 被占用的概率很低，于是那段时间我的 minecraft 用户名一直叫 diu。&lt;br&gt;
+再长大一点，我觉得只叫 diu 也很容易听出一些低俗感，所以我把两部分拼起来，变成了 zjxdiu。&lt;br&gt;
+虽然还是很难通过英语来阅读这个词，但它确实是伴随着我到大学，一路走过来的 id。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;个人资料&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#个人资料&#34;&gt;#&lt;/a&gt; 个人资料&lt;/h2&gt;
+&lt;p&gt;就读于长沙理工大学，今年大三。&lt;br&gt;
+什么领域都想涉及，软件、硬件、网络工程、音乐制作、音频处理、视频剪辑、游戏开发、平面设计… 但实际上并没有哪个是学得很好的。&lt;br&gt;
+外表是壮汉，内心世界却很单纯。不愿猜测叵测的人心，却总是被迫卷入一次次的纷争。&lt;br&gt;
+这也是我将虚拟名字定为青羽的原因，总是幻想自己如一缕白羽，随青风而去，附于一片枝叶，不为任何人事所困。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;联系方式等&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#联系方式等&#34;&gt;#&lt;/a&gt; 联系方式等&lt;/h2&gt;
+&lt;p&gt;这个博客提供很多好友服务，主要针对（之后会有的）幻想世界，包括但不限于：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;对世界观作出修改和补充&lt;/li&gt;
+&lt;li&gt;提交自己的角色设定&lt;/li&gt;
+&lt;li&gt;获得免费的 AI 角色图集&lt;/li&gt;
+&lt;li&gt;更多内容尽请期待&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;因为我不会后端，也不会前端（），所以这里不提供评论服务。如果想发表吐槽、评论、意见等，可以通过邮箱告知；我会不定期进行更新，加入一些有意思的内容。&lt;br&gt;
+可以通过以下方式联系我：&lt;br&gt;
+常用平台 id：zjxdiu&lt;br&gt;
+QQ：2987631086&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;请在添加好友时说明你是从哪里找到我号码的，否则可能不会同意申请&lt;br&gt;
+ E-mail：zjxdiu@qq.com&lt;/li&gt;
+&lt;li&gt;可以用于提交各种东西，向我提问，等等&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;友情链接功能还没调试好，暂时不开放…&lt;/p&gt;
  ]]></description>
         </item>
     </channel>

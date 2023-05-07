@@ -13,16 +13,17 @@
         <category>日常</category>
         <category>深度学习</category>
         <category>音频</category>
-        <category>分享</category>
         <category>网络</category>
+        <category>分享</category>
         <category>软件</category>
         <category>游戏</category>
+        <category>开发</category>
+        <category>游戏引擎</category>
         <category>超频</category>
         <category>硬件</category>
         <category>脑洞</category>
-        <category>开发</category>
-        <category>游戏引擎</category>
         <category>生活</category>
+        <category>测试</category>
         <item>
             <guid isPermalink="true">https://zjxdiu.github.io/blog/%E6%89%B9%E5%A4%84%E7%90%86%E4%BC%98%E5%8C%96Hexo%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/</guid>
             <title>使用批处理和Joplin执行并优化Hexo博客工作流程</title>
@@ -36,12 +37,12 @@
 &lt;hr&gt;
 &lt;h3 id=&#34;1-git安装配置不确定是否有必要&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#1-git安装配置不确定是否有必要&#34;&gt;#&lt;/a&gt; 1. Git 安装配置（不确定是否有必要）&lt;/h3&gt;
 &lt;p&gt;在安装 Git 的过程中，我们会有一个配置终端的过程，此处其实是建议选择第一项（使用 MinTTY），但我当时选择了第二项即使用系统的 cmd 来作 git bash 的终端。&lt;br&gt;
-&lt;img src=&#34;../_resources/aca6779be5b5f5c9d88dc1215456c295-2.png&#34; alt=&#34;aca6779be5b5f5c9d88dc1215456c295.png&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;../_resources/aca6779be5b5f5c9d88dc1215456c295.png&#34; alt=&#34;aca6779be5b5f5c9d88dc1215456c295.png&#34;&gt;&lt;br&gt;
  如果选择了第一项，可能也是能正常使用批处理来代替执行的，应该不用担心。&lt;/p&gt;
 &lt;hr&gt;
 &lt;h3 id=&#34;2-站点配置&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#2-站点配置&#34;&gt;#&lt;/a&gt; 2. 站点配置&lt;/h3&gt;
 &lt;p&gt;blog 根目录下的_config.yml 文件：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;hljs yaml&#34;&gt;&lt;span class=&#34;hljs-string&#34;&gt;......&lt;/span&gt;
+&lt;pre&gt;&lt;code class=&#34;hljs yml&#34;&gt;&lt;span class=&#34;hljs-string&#34;&gt;......&lt;/span&gt;
 &lt;span class=&#34;hljs-attr&#34;&gt;post_asset_folder:&lt;/span&gt; &lt;span class=&#34;hljs-literal&#34;&gt;false&lt;/span&gt;
 &lt;span class=&#34;hljs-attr&#34;&gt;relative_link:&lt;/span&gt; &lt;span class=&#34;hljs-literal&#34;&gt;false&lt;/span&gt;
 &lt;span class=&#34;hljs-string&#34;&gt;......&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
@@ -50,99 +51,99 @@
 &lt;h3 id=&#34;3-脚本编写&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#3-脚本编写&#34;&gt;#&lt;/a&gt; 3. 脚本编写&lt;/h3&gt;
 &lt;p&gt;在 blog 根目录下新建 “程序名.bat”，开始编写功能。&lt;br&gt;
 先放源码：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;hljs batch&#34;&gt;@echo off
-setlocal EnableDelayedExpansion
-goto start
+&lt;pre&gt;&lt;code class=&#34;hljs bat&#34;&gt;@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; off
+&lt;span class=&#34;hljs-built_in&#34;&gt;setlocal&lt;/span&gt; EnableDelayedExpansion
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; &lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt;
 :ac
-rem 请设置%targetlable%变量，以确保正常跳转至目标位置
-cls
-color 0F
-goto %targetlabel%
-:start
-if &amp;quot;%targetlabel%&amp;quot;==&amp;quot;&amp;quot; (set &amp;quot;targetlabel=start&amp;quot;&amp;amp;&amp;amp;goto ac)
-echo ------------------------------------------------
-echo  1.执行完整的检查和推送blog流程
-echo  2.快速上载blog
-echo  3.本地预览
-echo  4.单独执行指令
-echo ------------------------------------------------
-echo.
-choice /c 1234
-if &amp;quot;%errorlevel%&amp;quot;==&amp;quot;4&amp;quot; goto new
-if &amp;quot;%errorlevel%&amp;quot;==&amp;quot;3&amp;quot; (set &amp;quot;targetlabel=local&amp;quot;&amp;amp;&amp;amp;goto ac)
-if &amp;quot;%errorlevel%&amp;quot;==&amp;quot;2&amp;quot; (set &amp;quot;targetlabel=fast&amp;quot;&amp;amp;&amp;amp;goto ac)
-if &amp;quot;%errorlevel%&amp;quot;==&amp;quot;1&amp;quot; (set &amp;quot;targetlabel=full&amp;quot;&amp;amp;&amp;amp;goto ac)
-pause&amp;amp;exit
+&lt;span class=&#34;hljs-comment&#34;&gt;rem 请设置%targetlable%变量，以确保正常跳转至目标位置&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;cls&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;color&lt;/span&gt; &lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;F
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; &lt;span class=&#34;hljs-variable&#34;&gt;%targetlabel%&lt;/span&gt;
+:&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%targetlabel%&lt;/span&gt;&amp;quot;==&amp;quot;&amp;quot; (&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; &amp;quot;targetlabel=&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt;&amp;quot;&amp;amp;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; ac)
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;  &lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;.执行完整的检查和推送blog流程
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;  &lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;.快速上载blog
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;  &lt;span class=&#34;hljs-number&#34;&gt;3&lt;/span&gt;.本地预览
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;  &lt;span class=&#34;hljs-number&#34;&gt;4&lt;/span&gt;.单独执行指令
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;.
+choice /c &lt;span class=&#34;hljs-number&#34;&gt;1234&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;4&lt;/span&gt;&amp;quot; &lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; new
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;3&lt;/span&gt;&amp;quot; (&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; &amp;quot;targetlabel=local&amp;quot;&amp;amp;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; ac)
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;quot; (&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; &amp;quot;targetlabel=fast&amp;quot;&amp;amp;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; ac)
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;&amp;quot; (&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; &amp;quot;targetlabel=full&amp;quot;&amp;amp;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; ac)
+&lt;span class=&#34;hljs-built_in&#34;&gt;pause&lt;/span&gt;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;exit&lt;/span&gt;
 :new
-echo 正在创建新的cmd实例...
-echo ------------------------------------------------
-echo 命令提示：
-echo hexo clean
-echo hexo g
-echo hexo s
-echo hexo d
-echo ------------------------------------------------
-start cmd
-echo 按任意键返回菜单...
-pause &amp;gt;nul
-set &amp;quot;targetlabel=start&amp;quot;&amp;amp;&amp;amp;goto ac
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 正在创建新的&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt;实例...
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 命令提示：
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; hexo clean
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; hexo g
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; hexo s
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; hexo d
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt; &lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 按任意键返回菜单...
+&lt;span class=&#34;hljs-built_in&#34;&gt;pause&lt;/span&gt; &amp;gt;&lt;span class=&#34;hljs-built_in&#34;&gt;nul&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; &amp;quot;targetlabel=&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt;&amp;quot;&amp;amp;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; ac
 :local
-echo ------------------------------------------------
-echo                  本地预览模式
-echo ------------------------------------------------
-echo 启动预览...
-cmd /c &amp;quot;hexo clean &amp;amp; hexo g &amp;amp; xcopy D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y &amp;amp; echo 2&amp;gt;D:\blog\.deploy_git\.nojekyll &amp;amp; start http://localhost:4000/ &amp;amp; hexo s&amp;quot;
-echo 按任意键返回菜单...
-pause &amp;gt;nul
-set &amp;quot;targetlabel=start&amp;quot;&amp;amp;&amp;amp;goto ac
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;                  本地预览模式
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 启动预览...
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;hexo clean &amp;amp; hexo g &amp;amp; &lt;span class=&#34;hljs-built_in&#34;&gt;xcopy&lt;/span&gt; D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y &amp;amp; &lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;gt;D:\blog\.deploy_git\.nojekyll &amp;amp; &lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt; http://localhost:&lt;span class=&#34;hljs-number&#34;&gt;4000&lt;/span&gt;/ &amp;amp; hexo s&amp;quot;
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 按任意键返回菜单...
+&lt;span class=&#34;hljs-built_in&#34;&gt;pause&lt;/span&gt; &amp;gt;&lt;span class=&#34;hljs-built_in&#34;&gt;nul&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; &amp;quot;targetlabel=&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt;&amp;quot;&amp;amp;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; ac
 :fast
-echo ------------------------------------------------
-echo                  快速上载blog
-echo ------------------------------------------------
-cmd /c &amp;quot;hexo clean &amp;amp; hexo g &amp;amp; xcopy D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y &amp;amp; echo 2&amp;gt;D:\blog\.deploy_git\.nojekyll &amp;amp; hexo d&amp;quot;
-echo ------------------------------------------------
-echo 完成，2秒后退出...
-ping localhost -n 3 &amp;gt;nul
-exit
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;                  快速上载blog
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;hexo clean &amp;amp; hexo g &amp;amp; &lt;span class=&#34;hljs-built_in&#34;&gt;xcopy&lt;/span&gt; D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y &amp;amp; &lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;gt;D:\blog\.deploy_git\.nojekyll &amp;amp; hexo d&amp;quot;
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 完成，&lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;秒后退出...
+&lt;span class=&#34;hljs-built_in&#34;&gt;ping&lt;/span&gt; localhost -n &lt;span class=&#34;hljs-number&#34;&gt;3&lt;/span&gt; &amp;gt;&lt;span class=&#34;hljs-built_in&#34;&gt;nul&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;exit&lt;/span&gt;
 :full
-echo ------------------------------------------------
-echo                  完整流程向导
-echo              按0为确定，按1为跳过
-echo ------------------------------------------------
-goto clean
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;                  完整流程向导
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;              按&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;为确定，按&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;为跳过
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; clean
 :clean
-echo 第一步：清理缓存
-choice /c 01
-if &amp;quot;%errorlevel%&amp;quot;==&amp;quot;2&amp;quot; goto generate
-cmd /c &amp;quot;hexo clean&amp;quot;
-goto generate
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 第一步：清理缓存
+choice /c &lt;span class=&#34;hljs-number&#34;&gt;01&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;quot; &lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; generate
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;hexo clean&amp;quot;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; generate
 :generate
-echo ------------------------------------------------
-echo 第二步：生成页面
-choice /c 01
-if &amp;quot;%errorlevel%&amp;quot;==&amp;quot;2&amp;quot; goto check
-cmd /c &amp;quot;xcopy D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y &amp;amp; echo 2&amp;gt;D:\blog\.deploy_git\.nojekyll &amp;amp; hexo g&amp;quot;
-goto check
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 第二步：生成页面
+choice /c &lt;span class=&#34;hljs-number&#34;&gt;01&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;quot; &lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; check
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;&lt;span class=&#34;hljs-built_in&#34;&gt;xcopy&lt;/span&gt; D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y &amp;amp; &lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;gt;D:\blog\.deploy_git\.nojekyll &amp;amp; hexo g&amp;quot;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; check
 :check
-echo ------------------------------------------------
-echo 第三步：本地预览
-choice /c 01
-if &amp;quot;%errorlevel%&amp;quot;==&amp;quot;2&amp;quot; goto deploy
-start http://localhost:4000/
-cmd /c &amp;quot;hexo s&amp;quot;
-goto deploy
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 第三步：本地预览
+choice /c &lt;span class=&#34;hljs-number&#34;&gt;01&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;quot; &lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; deploy
+&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt; http://localhost:&lt;span class=&#34;hljs-number&#34;&gt;4000&lt;/span&gt;/
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;hexo s&amp;quot;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; deploy
 :deploy
-echo ------------------------------------------------
-echo 第四步：上传到远程服务器
-choice /c 01
-if &amp;quot;%errorlevel%&amp;quot;==&amp;quot;2&amp;quot; goto done
-cmd /c &amp;quot;hexo d&amp;quot;
-goto done
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 第四步：上传到远程服务器
+choice /c &lt;span class=&#34;hljs-number&#34;&gt;01&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;quot; &lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; done
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;hexo d&amp;quot;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; done
 :done
-echo ------------------------------------------------
-echo 流程已完成，按任意键返回菜单...
-pause &amp;gt;nul
-set &amp;quot;targetlabel=start&amp;quot;&amp;amp;&amp;amp;goto ac&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 流程已完成，按任意键返回菜单...
+&lt;span class=&#34;hljs-built_in&#34;&gt;pause&lt;/span&gt; &amp;gt;&lt;span class=&#34;hljs-built_in&#34;&gt;nul&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; &amp;quot;targetlabel=&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt;&amp;quot;&amp;amp;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; ac&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;我自认为自己的批处理写得都算比较清晰的了，虽然注释很少，但结合文字应该能看懂每一步是在干什么。&lt;br&gt;
 如果要使用，请把里面所有的 &lt;code&gt;D:\blog\source\_posts\_resources&lt;/code&gt;  替换为你 Joplin 每次导出时的资源目录，把所有的 &lt;code&gt;D:\blog\public\blog\_resources\&lt;/code&gt;  替换为你的博客站点目录，注意不要动 &lt;code&gt;\public\...&lt;/code&gt;  后面的内容。&lt;/p&gt;
 &lt;p&gt;如果要更换功能模块，也应按照这里的写法，使用  &lt;code&gt;cmd /c 命令内容 &amp;amp; 第二条命令 &amp;amp; 后面的很多命令&lt;/code&gt;  来执行，除了 start 用于启动网页之外尽量不要直接在批处理中使用模块的命令，否则容易直接闪退。&lt;/p&gt;

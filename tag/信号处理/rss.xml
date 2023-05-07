@@ -13,16 +13,17 @@
         <category>日常</category>
         <category>深度学习</category>
         <category>音频</category>
-        <category>分享</category>
         <category>网络</category>
+        <category>分享</category>
         <category>软件</category>
         <category>游戏</category>
+        <category>开发</category>
+        <category>游戏引擎</category>
         <category>超频</category>
         <category>硬件</category>
         <category>脑洞</category>
-        <category>开发</category>
-        <category>游戏引擎</category>
         <category>生活</category>
+        <category>测试</category>
         <item>
             <guid isPermalink="true">https://zjxdiu.github.io/blog/ML_emusic_classify/</guid>
             <title>一种基于神经网络的电子音乐风格分类算法思路</title>
@@ -43,7 +44,7 @@
  3.1 传统人工分类&lt;br&gt;
  3.2 特征提取技术&lt;br&gt;
  3.3 现有机器学习算法&lt;br&gt;
- 3.3.1 实践项目：DeepAutioClassification&lt;br&gt;
+ 3.3.1 实践项目：DeepAudioClassification&lt;br&gt;
  四、SRM-DNN（频谱、节奏、情感分析 - 深度神经网络）思路&lt;br&gt;
  4.1 电子音乐的频谱特征&lt;br&gt;
  4.2 鼓与贝斯节奏分析&lt;br&gt;
@@ -90,13 +91,13 @@
 &lt;h3 id=&#34;33-现有机器学习算法&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#33-现有机器学习算法&#34;&gt;#&lt;/a&gt; 3.3 现有机器学习算法&lt;/h3&gt;
 &lt;p&gt;传统的基于机器学习的音频分类大多基于常规算法，例如支持向量机、决策树、K - 邻近算法、随机森林算法等等。这些算法的优点是部署和训练简单，算法的数学原理完善，但问题是难以准确处理复杂和细微的变化；尤其是在电子音乐风格分类任务中，由于各风格在许多方面非常相似，传统算法无法很好地处理。&lt;br&gt;
 因此，结合使用的技术与特征，提出如下采用神经网络进行识别的识别思路。&lt;/p&gt;
-&lt;h3 id=&#34;331-实践项目deepautioclassification&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#331-实践项目deepautioclassification&#34;&gt;#&lt;/a&gt; 3.3.1 实践项目：DeepAutioClassification&lt;/h3&gt;
+&lt;h3 id=&#34;331-实践项目deepauddioclassification&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#331-实践项目deepauddioclassification&#34;&gt;#&lt;/a&gt; 3.3.1 实践项目：DeepAuddioClassification&lt;/h3&gt;
 &lt;p&gt;在提出自己的算法思路前，笔者首先实践了一个已有的开源项目：&lt;a href=&#34;https://github.com/despoisj/DeepAudioClassification&#34;&gt;Github: despoisj/DeepAudioClassification&lt;/a&gt;；该项目采用 tensorflow 中的 tflearn 模块进行 DNN 训练，并且只对音频频谱进行识别，相当于一个只输入频谱图的图像识别算法。&lt;br&gt;
 通过将音频频谱提取出来并切片，随后基于 DNN 进行图像分类训练，则模型可用于预测一个未知的音乐频谱图。这种方法巧妙地避开了音频数据量过大的问题，因为一般 CD 音质下 44100Hz 意味着 30 秒的音乐就将产生 66 万个长度的向量。但对于原作者的目的而言，分析大类音乐风格的时候可以直接从频谱入手。根据作者发表的文章&lt;a href=&#34;https://medium.com/@juliendespois/finding-the-genre-of-a-song-with-deep-learning-da8f59a61194#.yhemoyql0&#34;&gt; Finding the genre of a song with Deep Learning&lt;/a&gt; 的描述，只需要每秒 50 像素的分辨率即可获得满意的效果；在这里，sox 提供了很好用的命令行工具，允许我们直接生成灰度频谱图，其中每个像素的 x 代表时间、y 代表频率、亮度代表振幅。切片后使用深度卷积神经网络进行图像训练，最后使用投票机制提高准确率。&lt;br&gt;
 但是，这一次实践的结果并不理想。在学习率 0.001、分辨率 50px/s 时，经过 20 个 epoch 后模型仅能达到 55% 的准确率（ACC），可以看出识别效果并不理想。这主要是因为参与训练的原始数据包括 Trance 和 Hardstyle 两种风格，而它们在梅尔（Mel）频谱图上实际上十分相似，无法准确映射到高维数据集中。&lt;/p&gt;
 &lt;h2 id=&#34;四-srm-dnn频谱-节奏-情感分析-深度神经网络思路&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#四-srm-dnn频谱-节奏-情感分析-深度神经网络思路&#34;&gt;#&lt;/a&gt; 四、SRM-DNN（频谱、节奏、情感分析 - 深度神经网络）思路&lt;/h2&gt;
 &lt;h3 id=&#34;41-电子音乐的频谱特征&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#41-电子音乐的频谱特征&#34;&gt;#&lt;/a&gt; 4.1 电子音乐的频谱特征&lt;/h3&gt;
-&lt;p&gt;首先，我们并不希望创建一个需要 A100 才能运行的高度资源密集型网络，而是希望该模型能够在消费级硬件上部署和训练。因此，结合实际电子音乐的主要特征区分，我们可以沿用 DeepAutioClassification 的频谱分析方法。&lt;br&gt;
+&lt;p&gt;首先，我们并不希望创建一个需要 A100 才能运行的高度资源密集型网络，而是希望该模型能够在消费级硬件上部署和训练。因此，结合实际电子音乐的主要特征区分，我们可以沿用 DeepAudioClassification 的频谱分析方法。&lt;br&gt;
 对于电子音乐曲风分类而言，其频谱图提供的信息量是非常大的，因为几乎每种主类别都有自己特征的 DnB 序列。这导致了在频谱图中的显著区分，在低频区域尤为明显（见下图）。&lt;br&gt;
 截取频谱图时采用的配置：&lt;br&gt;
 软件：iZotope RX 7&lt;br&gt;

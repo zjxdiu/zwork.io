@@ -13,16 +13,17 @@
         <category>日常</category>
         <category>深度学习</category>
         <category>音频</category>
-        <category>分享</category>
         <category>网络</category>
+        <category>分享</category>
         <category>软件</category>
         <category>游戏</category>
+        <category>开发</category>
+        <category>游戏引擎</category>
         <category>超频</category>
         <category>硬件</category>
         <category>脑洞</category>
-        <category>开发</category>
-        <category>游戏引擎</category>
         <category>生活</category>
+        <category>测试</category>
         <item>
             <guid isPermalink="true">https://zjxdiu.github.io/blog/dynv6_notes/</guid>
             <title>dynv6使用技巧（如何添加多个地址 子域名 等）</title>

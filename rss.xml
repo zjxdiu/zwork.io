@@ -13,16 +13,17 @@
         <category>日常</category>
         <category>深度学习</category>
         <category>音频</category>
-        <category>分享</category>
         <category>网络</category>
+        <category>分享</category>
         <category>软件</category>
         <category>游戏</category>
+        <category>开发</category>
+        <category>游戏引擎</category>
         <category>超频</category>
         <category>硬件</category>
         <category>脑洞</category>
-        <category>开发</category>
-        <category>游戏引擎</category>
         <category>生活</category>
+        <category>测试</category>
         <item>
             <guid isPermalink="true">https://zjxdiu.github.io/blog/ML_emusic_classify/</guid>
             <title>一种基于神经网络的电子音乐风格分类算法思路</title>
@@ -43,7 +44,7 @@
  3.1 传统人工分类&lt;br&gt;
  3.2 特征提取技术&lt;br&gt;
  3.3 现有机器学习算法&lt;br&gt;
- 3.3.1 实践项目：DeepAutioClassification&lt;br&gt;
+ 3.3.1 实践项目：DeepAudioClassification&lt;br&gt;
  四、SRM-DNN（频谱、节奏、情感分析 - 深度神经网络）思路&lt;br&gt;
  4.1 电子音乐的频谱特征&lt;br&gt;
  4.2 鼓与贝斯节奏分析&lt;br&gt;
@@ -90,13 +91,13 @@
 &lt;h3 id=&#34;33-现有机器学习算法&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#33-现有机器学习算法&#34;&gt;#&lt;/a&gt; 3.3 现有机器学习算法&lt;/h3&gt;
 &lt;p&gt;传统的基于机器学习的音频分类大多基于常规算法，例如支持向量机、决策树、K - 邻近算法、随机森林算法等等。这些算法的优点是部署和训练简单，算法的数学原理完善，但问题是难以准确处理复杂和细微的变化；尤其是在电子音乐风格分类任务中，由于各风格在许多方面非常相似，传统算法无法很好地处理。&lt;br&gt;
 因此，结合使用的技术与特征，提出如下采用神经网络进行识别的识别思路。&lt;/p&gt;
-&lt;h3 id=&#34;331-实践项目deepautioclassification&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#331-实践项目deepautioclassification&#34;&gt;#&lt;/a&gt; 3.3.1 实践项目：DeepAutioClassification&lt;/h3&gt;
+&lt;h3 id=&#34;331-实践项目deepauddioclassification&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#331-实践项目deepauddioclassification&#34;&gt;#&lt;/a&gt; 3.3.1 实践项目：DeepAuddioClassification&lt;/h3&gt;
 &lt;p&gt;在提出自己的算法思路前，笔者首先实践了一个已有的开源项目：&lt;a href=&#34;https://github.com/despoisj/DeepAudioClassification&#34;&gt;Github: despoisj/DeepAudioClassification&lt;/a&gt;；该项目采用 tensorflow 中的 tflearn 模块进行 DNN 训练，并且只对音频频谱进行识别，相当于一个只输入频谱图的图像识别算法。&lt;br&gt;
 通过将音频频谱提取出来并切片，随后基于 DNN 进行图像分类训练，则模型可用于预测一个未知的音乐频谱图。这种方法巧妙地避开了音频数据量过大的问题，因为一般 CD 音质下 44100Hz 意味着 30 秒的音乐就将产生 66 万个长度的向量。但对于原作者的目的而言，分析大类音乐风格的时候可以直接从频谱入手。根据作者发表的文章&lt;a href=&#34;https://medium.com/@juliendespois/finding-the-genre-of-a-song-with-deep-learning-da8f59a61194#.yhemoyql0&#34;&gt; Finding the genre of a song with Deep Learning&lt;/a&gt; 的描述，只需要每秒 50 像素的分辨率即可获得满意的效果；在这里，sox 提供了很好用的命令行工具，允许我们直接生成灰度频谱图，其中每个像素的 x 代表时间、y 代表频率、亮度代表振幅。切片后使用深度卷积神经网络进行图像训练，最后使用投票机制提高准确率。&lt;br&gt;
 但是，这一次实践的结果并不理想。在学习率 0.001、分辨率 50px/s 时，经过 20 个 epoch 后模型仅能达到 55% 的准确率（ACC），可以看出识别效果并不理想。这主要是因为参与训练的原始数据包括 Trance 和 Hardstyle 两种风格，而它们在梅尔（Mel）频谱图上实际上十分相似，无法准确映射到高维数据集中。&lt;/p&gt;
 &lt;h2 id=&#34;四-srm-dnn频谱-节奏-情感分析-深度神经网络思路&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#四-srm-dnn频谱-节奏-情感分析-深度神经网络思路&#34;&gt;#&lt;/a&gt; 四、SRM-DNN（频谱、节奏、情感分析 - 深度神经网络）思路&lt;/h2&gt;
 &lt;h3 id=&#34;41-电子音乐的频谱特征&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#41-电子音乐的频谱特征&#34;&gt;#&lt;/a&gt; 4.1 电子音乐的频谱特征&lt;/h3&gt;
-&lt;p&gt;首先，我们并不希望创建一个需要 A100 才能运行的高度资源密集型网络，而是希望该模型能够在消费级硬件上部署和训练。因此，结合实际电子音乐的主要特征区分，我们可以沿用 DeepAutioClassification 的频谱分析方法。&lt;br&gt;
+&lt;p&gt;首先，我们并不希望创建一个需要 A100 才能运行的高度资源密集型网络，而是希望该模型能够在消费级硬件上部署和训练。因此，结合实际电子音乐的主要特征区分，我们可以沿用 DeepAudioClassification 的频谱分析方法。&lt;br&gt;
 对于电子音乐曲风分类而言，其频谱图提供的信息量是非常大的，因为几乎每种主类别都有自己特征的 DnB 序列。这导致了在频谱图中的显著区分，在低频区域尤为明显（见下图）。&lt;br&gt;
 截取频谱图时采用的配置：&lt;br&gt;
 软件：iZotope RX 7&lt;br&gt;
@@ -827,6 +828,56 @@ when you&amp;#x27;re near
  ]]></description>
         </item>
         <item>
+            <guid isPermalink="true">https://zjxdiu.github.io/blog/%E5%94%A4%E5%A2%83%E7%BC%96%E7%A8%8B%E7%AC%94%E8%AE%B0/</guid>
+            <title>【计划长期更新】记录自己的编程思路与想法，实现成功后更新</title>
+            <link>https://zjxdiu.github.io/blog/%E5%94%A4%E5%A2%83%E7%BC%96%E7%A8%8B%E7%AC%94%E8%AE%B0/</link>
+            <category>开发</category>
+            <category>游戏引擎</category>
+            <pubDate>Wed, 14 Dec 2022 22:32:00 +0800</pubDate>
+            <description><![CDATA[ &lt;p&gt;前言：&lt;br&gt;
+由于大学事务繁重，很多时候想到了一些功能的实现思路也没有时间及时验证，所以计划开一个帖子存放这些想法。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;1. 音游主体玩法逻辑&lt;br&gt;
+音符数据点存放：xml 文件&lt;br&gt;
+存储内容：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;音符时间：音符应被打击时，距离音乐开始时的毫秒数&lt;/li&gt;
+&lt;li&gt;音符类型（单点、长按）（暂时不考虑）&lt;/li&gt;
+&lt;li&gt;轨道编号&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;实现逻辑：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;场景开始时，生成音符；若数量过多，可以考虑分节生成。音符带实例变量，存储其音符时间。&lt;/li&gt;
+&lt;li&gt;音乐预加载、延迟播放；开始播放同帧启动计时器（高精度计时方法详见&lt;a href=&#34;https://bbs.evkworld.cn/topic/2590/&#34;&gt; https://bbs.evkworld.cn/topic/2590/&lt;/a&gt;）&lt;/li&gt;
+&lt;li&gt;按下按键时（上升沿触发）：
+&lt;ul&gt;
+&lt;li&gt;记录按键时间（可用数组处理）&lt;/li&gt;
+&lt;li&gt;检查该轨道上最近的音符，获取其音符时间，计算差值。
+&lt;ul&gt;
+&lt;li&gt;若差距过大，打击无效；&lt;/li&gt;
+&lt;li&gt;若差距较大，判断为 miss；&lt;/li&gt;
+&lt;li&gt;根据差值判断等级（Perfect、good、OK）&lt;/li&gt;
+&lt;li&gt;一旦判断成功，销毁该音符&lt;/li&gt;
+&lt;li&gt;若差值为负，则打击时间比音符时间晚；
+&lt;ul&gt;
+&lt;li&gt;计算差值、判断等级&lt;/li&gt;
+&lt;li&gt;miss 阈值应低于正差值。&lt;/li&gt;
+&lt;li&gt;（可以避免两个紧挨着的音符总是被判断到后面的那个）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;越线过久未打击：
+&lt;ul&gt;
+&lt;li&gt;采用屏幕外的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+ ]]></description>
+        </item>
+        <item>
             <guid isPermalink="true">https://zjxdiu.github.io/blog/%E8%A1%A5%E6%A1%A31/</guid>
             <title>【补档】唤境游戏如何显示帧率？详解性能相关内容</title>
             <link>https://zjxdiu.github.io/blog/%E8%A1%A5%E6%A1%A31/</link>
@@ -1193,12 +1244,12 @@ Je sens &lt;span class=&#34;hljs-keyword&#34;&gt;que&lt;/span&gt; je me perds
 &lt;hr&gt;
 &lt;h3 id=&#34;1-git安装配置不确定是否有必要&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#1-git安装配置不确定是否有必要&#34;&gt;#&lt;/a&gt; 1. Git 安装配置（不确定是否有必要）&lt;/h3&gt;
 &lt;p&gt;在安装 Git 的过程中，我们会有一个配置终端的过程，此处其实是建议选择第一项（使用 MinTTY），但我当时选择了第二项即使用系统的 cmd 来作 git bash 的终端。&lt;br&gt;
-&lt;img src=&#34;../_resources/aca6779be5b5f5c9d88dc1215456c295-2.png&#34; alt=&#34;aca6779be5b5f5c9d88dc1215456c295.png&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;../_resources/aca6779be5b5f5c9d88dc1215456c295.png&#34; alt=&#34;aca6779be5b5f5c9d88dc1215456c295.png&#34;&gt;&lt;br&gt;
  如果选择了第一项，可能也是能正常使用批处理来代替执行的，应该不用担心。&lt;/p&gt;
 &lt;hr&gt;
 &lt;h3 id=&#34;2-站点配置&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#2-站点配置&#34;&gt;#&lt;/a&gt; 2. 站点配置&lt;/h3&gt;
 &lt;p&gt;blog 根目录下的_config.yml 文件：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;hljs yaml&#34;&gt;&lt;span class=&#34;hljs-string&#34;&gt;......&lt;/span&gt;
+&lt;pre&gt;&lt;code class=&#34;hljs yml&#34;&gt;&lt;span class=&#34;hljs-string&#34;&gt;......&lt;/span&gt;
 &lt;span class=&#34;hljs-attr&#34;&gt;post_asset_folder:&lt;/span&gt; &lt;span class=&#34;hljs-literal&#34;&gt;false&lt;/span&gt;
 &lt;span class=&#34;hljs-attr&#34;&gt;relative_link:&lt;/span&gt; &lt;span class=&#34;hljs-literal&#34;&gt;false&lt;/span&gt;
 &lt;span class=&#34;hljs-string&#34;&gt;......&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
@@ -1207,99 +1258,99 @@ Je sens &lt;span class=&#34;hljs-keyword&#34;&gt;que&lt;/span&gt; je me perds
 &lt;h3 id=&#34;3-脚本编写&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#3-脚本编写&#34;&gt;#&lt;/a&gt; 3. 脚本编写&lt;/h3&gt;
 &lt;p&gt;在 blog 根目录下新建 “程序名.bat”，开始编写功能。&lt;br&gt;
 先放源码：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;hljs batch&#34;&gt;@echo off
-setlocal EnableDelayedExpansion
-goto start
+&lt;pre&gt;&lt;code class=&#34;hljs bat&#34;&gt;@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; off
+&lt;span class=&#34;hljs-built_in&#34;&gt;setlocal&lt;/span&gt; EnableDelayedExpansion
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; &lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt;
 :ac
-rem 请设置%targetlable%变量，以确保正常跳转至目标位置
-cls
-color 0F
-goto %targetlabel%
-:start
-if &amp;quot;%targetlabel%&amp;quot;==&amp;quot;&amp;quot; (set &amp;quot;targetlabel=start&amp;quot;&amp;amp;&amp;amp;goto ac)
-echo ------------------------------------------------
-echo  1.执行完整的检查和推送blog流程
-echo  2.快速上载blog
-echo  3.本地预览
-echo  4.单独执行指令
-echo ------------------------------------------------
-echo.
-choice /c 1234
-if &amp;quot;%errorlevel%&amp;quot;==&amp;quot;4&amp;quot; goto new
-if &amp;quot;%errorlevel%&amp;quot;==&amp;quot;3&amp;quot; (set &amp;quot;targetlabel=local&amp;quot;&amp;amp;&amp;amp;goto ac)
-if &amp;quot;%errorlevel%&amp;quot;==&amp;quot;2&amp;quot; (set &amp;quot;targetlabel=fast&amp;quot;&amp;amp;&amp;amp;goto ac)
-if &amp;quot;%errorlevel%&amp;quot;==&amp;quot;1&amp;quot; (set &amp;quot;targetlabel=full&amp;quot;&amp;amp;&amp;amp;goto ac)
-pause&amp;amp;exit
+&lt;span class=&#34;hljs-comment&#34;&gt;rem 请设置%targetlable%变量，以确保正常跳转至目标位置&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;cls&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;color&lt;/span&gt; &lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;F
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; &lt;span class=&#34;hljs-variable&#34;&gt;%targetlabel%&lt;/span&gt;
+:&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%targetlabel%&lt;/span&gt;&amp;quot;==&amp;quot;&amp;quot; (&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; &amp;quot;targetlabel=&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt;&amp;quot;&amp;amp;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; ac)
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;  &lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;.执行完整的检查和推送blog流程
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;  &lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;.快速上载blog
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;  &lt;span class=&#34;hljs-number&#34;&gt;3&lt;/span&gt;.本地预览
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;  &lt;span class=&#34;hljs-number&#34;&gt;4&lt;/span&gt;.单独执行指令
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;.
+choice /c &lt;span class=&#34;hljs-number&#34;&gt;1234&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;4&lt;/span&gt;&amp;quot; &lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; new
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;3&lt;/span&gt;&amp;quot; (&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; &amp;quot;targetlabel=local&amp;quot;&amp;amp;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; ac)
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;quot; (&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; &amp;quot;targetlabel=fast&amp;quot;&amp;amp;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; ac)
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;&amp;quot; (&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; &amp;quot;targetlabel=full&amp;quot;&amp;amp;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; ac)
+&lt;span class=&#34;hljs-built_in&#34;&gt;pause&lt;/span&gt;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;exit&lt;/span&gt;
 :new
-echo 正在创建新的cmd实例...
-echo ------------------------------------------------
-echo 命令提示：
-echo hexo clean
-echo hexo g
-echo hexo s
-echo hexo d
-echo ------------------------------------------------
-start cmd
-echo 按任意键返回菜单...
-pause &amp;gt;nul
-set &amp;quot;targetlabel=start&amp;quot;&amp;amp;&amp;amp;goto ac
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 正在创建新的&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt;实例...
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 命令提示：
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; hexo clean
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; hexo g
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; hexo s
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; hexo d
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt; &lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 按任意键返回菜单...
+&lt;span class=&#34;hljs-built_in&#34;&gt;pause&lt;/span&gt; &amp;gt;&lt;span class=&#34;hljs-built_in&#34;&gt;nul&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; &amp;quot;targetlabel=&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt;&amp;quot;&amp;amp;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; ac
 :local
-echo ------------------------------------------------
-echo                  本地预览模式
-echo ------------------------------------------------
-echo 启动预览...
-cmd /c &amp;quot;hexo clean &amp;amp; hexo g &amp;amp; xcopy D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y &amp;amp; echo 2&amp;gt;D:\blog\.deploy_git\.nojekyll &amp;amp; start http://localhost:4000/ &amp;amp; hexo s&amp;quot;
-echo 按任意键返回菜单...
-pause &amp;gt;nul
-set &amp;quot;targetlabel=start&amp;quot;&amp;amp;&amp;amp;goto ac
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;                  本地预览模式
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 启动预览...
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;hexo clean &amp;amp; hexo g &amp;amp; &lt;span class=&#34;hljs-built_in&#34;&gt;xcopy&lt;/span&gt; D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y &amp;amp; &lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;gt;D:\blog\.deploy_git\.nojekyll &amp;amp; &lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt; http://localhost:&lt;span class=&#34;hljs-number&#34;&gt;4000&lt;/span&gt;/ &amp;amp; hexo s&amp;quot;
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 按任意键返回菜单...
+&lt;span class=&#34;hljs-built_in&#34;&gt;pause&lt;/span&gt; &amp;gt;&lt;span class=&#34;hljs-built_in&#34;&gt;nul&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; &amp;quot;targetlabel=&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt;&amp;quot;&amp;amp;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; ac
 :fast
-echo ------------------------------------------------
-echo                  快速上载blog
-echo ------------------------------------------------
-cmd /c &amp;quot;hexo clean &amp;amp; hexo g &amp;amp; xcopy D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y &amp;amp; echo 2&amp;gt;D:\blog\.deploy_git\.nojekyll &amp;amp; hexo d&amp;quot;
-echo ------------------------------------------------
-echo 完成，2秒后退出...
-ping localhost -n 3 &amp;gt;nul
-exit
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;                  快速上载blog
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;hexo clean &amp;amp; hexo g &amp;amp; &lt;span class=&#34;hljs-built_in&#34;&gt;xcopy&lt;/span&gt; D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y &amp;amp; &lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;gt;D:\blog\.deploy_git\.nojekyll &amp;amp; hexo d&amp;quot;
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 完成，&lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;秒后退出...
+&lt;span class=&#34;hljs-built_in&#34;&gt;ping&lt;/span&gt; localhost -n &lt;span class=&#34;hljs-number&#34;&gt;3&lt;/span&gt; &amp;gt;&lt;span class=&#34;hljs-built_in&#34;&gt;nul&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;exit&lt;/span&gt;
 :full
-echo ------------------------------------------------
-echo                  完整流程向导
-echo              按0为确定，按1为跳过
-echo ------------------------------------------------
-goto clean
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;                  完整流程向导
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;              按&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;为确定，按&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;为跳过
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; clean
 :clean
-echo 第一步：清理缓存
-choice /c 01
-if &amp;quot;%errorlevel%&amp;quot;==&amp;quot;2&amp;quot; goto generate
-cmd /c &amp;quot;hexo clean&amp;quot;
-goto generate
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 第一步：清理缓存
+choice /c &lt;span class=&#34;hljs-number&#34;&gt;01&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;quot; &lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; generate
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;hexo clean&amp;quot;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; generate
 :generate
-echo ------------------------------------------------
-echo 第二步：生成页面
-choice /c 01
-if &amp;quot;%errorlevel%&amp;quot;==&amp;quot;2&amp;quot; goto check
-cmd /c &amp;quot;xcopy D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y &amp;amp; echo 2&amp;gt;D:\blog\.deploy_git\.nojekyll &amp;amp; hexo g&amp;quot;
-goto check
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 第二步：生成页面
+choice /c &lt;span class=&#34;hljs-number&#34;&gt;01&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;quot; &lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; check
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;&lt;span class=&#34;hljs-built_in&#34;&gt;xcopy&lt;/span&gt; D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y &amp;amp; &lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;gt;D:\blog\.deploy_git\.nojekyll &amp;amp; hexo g&amp;quot;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; check
 :check
-echo ------------------------------------------------
-echo 第三步：本地预览
-choice /c 01
-if &amp;quot;%errorlevel%&amp;quot;==&amp;quot;2&amp;quot; goto deploy
-start http://localhost:4000/
-cmd /c &amp;quot;hexo s&amp;quot;
-goto deploy
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 第三步：本地预览
+choice /c &lt;span class=&#34;hljs-number&#34;&gt;01&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;quot; &lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; deploy
+&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt; http://localhost:&lt;span class=&#34;hljs-number&#34;&gt;4000&lt;/span&gt;/
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;hexo s&amp;quot;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; deploy
 :deploy
-echo ------------------------------------------------
-echo 第四步：上传到远程服务器
-choice /c 01
-if &amp;quot;%errorlevel%&amp;quot;==&amp;quot;2&amp;quot; goto done
-cmd /c &amp;quot;hexo d&amp;quot;
-goto done
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 第四步：上传到远程服务器
+choice /c &lt;span class=&#34;hljs-number&#34;&gt;01&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;quot; &lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; done
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;hexo d&amp;quot;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; done
 :done
-echo ------------------------------------------------
-echo 流程已完成，按任意键返回菜单...
-pause &amp;gt;nul
-set &amp;quot;targetlabel=start&amp;quot;&amp;amp;&amp;amp;goto ac&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 流程已完成，按任意键返回菜单...
+&lt;span class=&#34;hljs-built_in&#34;&gt;pause&lt;/span&gt; &amp;gt;&lt;span class=&#34;hljs-built_in&#34;&gt;nul&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; &amp;quot;targetlabel=&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt;&amp;quot;&amp;amp;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; ac&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;我自认为自己的批处理写得都算比较清晰的了，虽然注释很少，但结合文字应该能看懂每一步是在干什么。&lt;br&gt;
 如果要使用，请把里面所有的 &lt;code&gt;D:\blog\source\_posts\_resources&lt;/code&gt;  替换为你 Joplin 每次导出时的资源目录，把所有的 &lt;code&gt;D:\blog\public\blog\_resources\&lt;/code&gt;  替换为你的博客站点目录，注意不要动 &lt;code&gt;\public\...&lt;/code&gt;  后面的内容。&lt;/p&gt;
 &lt;p&gt;如果要更换功能模块，也应按照这里的写法，使用  &lt;code&gt;cmd /c 命令内容 &amp;amp; 第二条命令 &amp;amp; 后面的很多命令&lt;/code&gt;  来执行，除了 start 用于启动网页之外尽量不要直接在批处理中使用模块的命令，否则容易直接闪退。&lt;/p&gt;
@@ -1524,8 +1575,48 @@ FTIR 的运行流程可以概括为：光源发射红外线 – 干涉仪动作�
             <guid isPermalink="true">https://zjxdiu.github.io/blog/%E9%9D%92%E7%BE%BD_blog%E5%BB%BA%E7%AB%8B%E5%AE%8C%E6%88%90%EF%BC%81/</guid>
             <title>博客成功建立！</title>
             <link>https://zjxdiu.github.io/blog/%E9%9D%92%E7%BE%BD_blog%E5%BB%BA%E7%AB%8B%E5%AE%8C%E6%88%90%EF%BC%81/</link>
+            <category>日常</category>
+            <category>开发</category>
+            <category>测试</category>
             <pubDate>Thu, 24 Nov 2022 21:27:00 +0800</pubDate>
-            <description><![CDATA[ &lt;p&gt;本页面内容已移动，请从菜单 - 关于中进入查看！&lt;/p&gt;
+            <description><![CDATA[ &lt;h2 id=&#34;关于青羽&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#关于青羽&#34;&gt;#&lt;/a&gt; 关于青羽&lt;/h2&gt;
+&lt;p&gt;你好，我是 zjxdiu，在这个空间里我也叫青羽 b（￣▽￣）d&lt;br&gt;
+ 其实这个名字应该会和其他人的重吧，但是我一直觉得叫自己 zjxdiu 也太奇怪了（下面会说这个 id 的由来），然后当我试图想一个符合我自设的名字的时候，“青” 和 “羽” 这两个发音就出现在脑海里（就是 “Pop” 一下就冒出来了），所以我觉得叫自己青羽似乎也不错。&lt;br&gt;
+自设内容会慢慢完善，单独放在 “关于” 里。谁不希望把自己塑造成最喜欢的样子呢，现在我有了自己的网络空间，我就是这里的神（？）&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;关于zjxdiu&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#关于zjxdiu&#34;&gt;#&lt;/a&gt; 关于 zjxdiu&lt;/h2&gt;
+&lt;p&gt;这是我的网络常用 id，一些平台里搜索这个 id 找到的大概都是我。&lt;br&gt;
+它的来源其实有点蠢（dumb）&lt;br&gt;
+这个 id 分成两部分，前面是 zjx，也就是我的名字首字母拼一起；后面是 diu，它是源于粤语里的一句脏话，然后初中的时候班上同学天天把 diu 挂在嘴边。&lt;br&gt;
+这还不是全部，当我辗转于各大 mc 服务器时，我意外地发现，diu 这个 id 被占用的概率很低，于是那段时间我的 minecraft 用户名一直叫 diu。&lt;br&gt;
+再长大一点，我觉得只叫 diu 也很容易听出一些低俗感，所以我把两部分拼起来，变成了 zjxdiu。&lt;br&gt;
+虽然还是很难通过英语来阅读这个词，但它确实是伴随着我到大学，一路走过来的 id。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;个人资料&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#个人资料&#34;&gt;#&lt;/a&gt; 个人资料&lt;/h2&gt;
+&lt;p&gt;就读于长沙理工大学，今年大三。&lt;br&gt;
+什么领域都想涉及，软件、硬件、网络工程、音乐制作、音频处理、视频剪辑、游戏开发、平面设计… 但实际上并没有哪个是学得很好的。&lt;br&gt;
+外表是壮汉，内心世界却很单纯。不愿猜测叵测的人心，却总是被迫卷入一次次的纷争。&lt;br&gt;
+这也是我将虚拟名字定为青羽的原因，总是幻想自己如一缕白羽，随青风而去，附于一片枝叶，不为任何人事所困。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;联系方式等&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#联系方式等&#34;&gt;#&lt;/a&gt; 联系方式等&lt;/h2&gt;
+&lt;p&gt;这个博客提供很多好友服务，主要针对（之后会有的）幻想世界，包括但不限于：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;对世界观作出修改和补充&lt;/li&gt;
+&lt;li&gt;提交自己的角色设定&lt;/li&gt;
+&lt;li&gt;获得免费的 AI 角色图集&lt;/li&gt;
+&lt;li&gt;更多内容尽请期待&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;因为我不会后端，也不会前端（），所以这里不提供评论服务。如果想发表吐槽、评论、意见等，可以通过邮箱告知；我会不定期进行更新，加入一些有意思的内容。&lt;br&gt;
+可以通过以下方式联系我：&lt;br&gt;
+常用平台 id：zjxdiu&lt;br&gt;
+QQ：2987631086&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;请在添加好友时说明你是从哪里找到我号码的，否则可能不会同意申请&lt;br&gt;
+ E-mail：zjxdiu@qq.com&lt;/li&gt;
+&lt;li&gt;可以用于提交各种东西，向我提问，等等&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;友情链接功能还没调试好，暂时不开放…&lt;/p&gt;
  ]]></description>
         </item>
     </channel>
