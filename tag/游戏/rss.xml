@@ -5,18 +5,19 @@
         <link>https://zjxdiu.github.io</link>
         <description>Shadow in front implying sun behind</description>
         <language>zh-CN</language>
-        <pubDate>Fri, 12 May 2023 23:51:00 +0800</pubDate>
-        <lastBuildDate>Fri, 12 May 2023 23:51:00 +0800</lastBuildDate>
+        <pubDate>Fri, 03 Mar 2023 17:00:00 +0800</pubDate>
+        <lastBuildDate>Fri, 03 Mar 2023 17:00:00 +0800</lastBuildDate>
         <category>化学</category>
         <category>仪器分析</category>
         <category>信号处理</category>
         <category>日常</category>
         <category>深度学习</category>
         <category>音频</category>
-        <category>网络</category>
         <category>分享</category>
+        <category>网络</category>
         <category>软件</category>
         <category>游戏</category>
+        <category>无标签</category>
         <category>开发</category>
         <category>游戏引擎</category>
         <category>超频</category>
@@ -24,26 +25,6 @@
         <category>脑洞</category>
         <category>生活</category>
         <category>测试</category>
-        <item>
-            <guid isPermalink="true">https://zjxdiu.github.io/blog/test/</guid>
-            <title>unit2</title>
-            <link>https://zjxdiu.github.io/blog/test/</link>
-            <category>游戏</category>
-            <pubDate>Fri, 12 May 2023 23:51:00 +0800</pubDate>
-            <description><![CDATA[ &lt;h2 id=&#34;the-history-of-chivalry&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#the-history-of-chivalry&#34;&gt;#&lt;/a&gt; The History of Chivalry&lt;/h2&gt;
-&lt;p&gt;Chivalry, the knightly class of feudal times. The primary sense of the term in Europe in the Middle Ages is “knights,” or “fully armed and mounted fighting men.” Thence the term came to mean the gallantry and honor expected of knights. Later the word came to be used in its general sense of “courtesy.”&lt;br&gt;
-In the High Middle Ages, chivalric knights who were able to restrain their violent impulses and channel their violence into a good cause did so because certain 12th-century authors elaborated a code of conduct or ethics that medieval nobles were expected to follow. Attempting to curb the violence and warfare that was plaguing Europe, authors created the chivalric ideal often associated with the High Middle Ages, blending older, heroic ideals with new, ecclesiastical interests. By combining elements that appealed to nobles with elements that protected the people from nobles, medieval thinkers created the chivalric ideal. In the 14th and 15th centuries the ideals of chivalry came to be associated increasingly with aristocratic display and public ceremony rather than service in the field.&lt;br&gt;
-There’s a great deal of variety within the different chivalric romances. Certain authors, including Chrétien de Troyes and Marie de France, were able to craft many different kinds of chivalric heroes, each of which had his own peculiar characteristics. The variety among different authors could be even greater. This makes the attempt to define one chivalry perilous. There were almost as many different chivalries as there were chivalric romances.&lt;br&gt;
-Even so, common elements recur again and again in chivalric romances, both in terms of the qualities the knight should possess, and what the knight was supposed to do with these good qualities.&lt;br&gt;
-Qualities chivalric knights were supposed to possess are stock qualities one finds in heroic literature of every period. Knights were expected to be brave, honest, loyal, and generous, and to display prowess. Fighting well was not sufficient; chivalric heroes fought spectacularly well. They didn’t simply lop off one limb with a single blow from a sword. Such heroes would cut a torso in half or cleave a person down the middle.&lt;br&gt;
-The chivalric ideal, the behavior of knights, and how they were to employ these qualities, was somewhat more distinctive. Chivalric knights were expected to be courteous, to speak well, and exhibit good manners, doing things that heroes of the Early Middle Ages, such as Beowulf, did not. The former was expected to use these qualities to protect those who could not protect themselves. Knights were supposed to use their prowess, loyalty, and generosity to defend clerics, peasants, widows, virgins, orphans, or people who were any combination of the above. The more defenseless, the better. Presented with the opportunity to leap to someone’s defense, the chivalric knight seized the opportunity gladly.&lt;br&gt;
-There was one group of people to whom chivalric knights were supposed to devote more attention than any other: young, sometimes single women. Chivalric knights were supposed to engage in a form of behavior that historians call “courtly love.”&lt;/p&gt;
-&lt;h3 id=&#34;love-and-romance&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#love-and-romance&#34;&gt;#&lt;/a&gt; Love and Romance&lt;/h3&gt;
-&lt;p&gt;The chivalric hero was supposed to fall in love and find a lady to whom he would devote all of his attention, to whom he would obey in all things. He would devote his life to winning her esteem. Once he had won her affection and respect, he would find himself ennobled to her in the moral, rather than the legal sense. The knight would find himself becoming a better person from having fallen in love with his lady, and be even more inspired to defend the defenseless.&lt;/p&gt;
-&lt;h3 id=&#34;a-young-knight-and-his-lady&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#a-young-knight-and-his-lady&#34;&gt;#&lt;/a&gt; A young knight and his lady&lt;/h3&gt;
-&lt;p&gt;Chivalric knights were supposed to fall in love. The love that a chivalric knight was supposed to feel, could come in different guises in different romances. Sometimes it was a very chaste and platonic love, a love from a distance. In some instances, the love was neither chaste nor platonic but fully consummate, and in other stories, it was love within a marriage; certain chivalric heroes marry and were expected to marry, their ladies. Sometimes the love they had was unabashedly adulterous. The lady with whom you loved didn’t have to be your wife, but the wife of your lord, for example. Chivalric authors differed among themselves as to which type of love was the best form of courtly love.&lt;/p&gt;
- ]]></description>
-        </item>
         <item>
             <guid isPermalink="true">https://zjxdiu.github.io/blog/dynv6_notes/</guid>
             <title>dynv6使用技巧（如何添加多个地址 子域名 等）</title>
