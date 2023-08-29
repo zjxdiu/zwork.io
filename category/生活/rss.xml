@@ -7,23 +7,23 @@
         <language>zh-CN</language>
         <pubDate>Mon, 01 May 2023 11:01:00 +0800</pubDate>
         <lastBuildDate>Mon, 01 May 2023 11:01:00 +0800</lastBuildDate>
+        <category>游戏</category>
+        <category>生活</category>
+        <category>日常</category>
         <category>化学</category>
         <category>仪器分析</category>
         <category>信号处理</category>
-        <category>日常</category>
-        <category>分享</category>
-        <category>网络</category>
-        <category>游戏</category>
-        <category>软件</category>
         <category>深度学习</category>
         <category>音频</category>
-        <category>无标签</category>
+        <category>网络</category>
+        <category>分享</category>
+        <category>教程</category>
+        <category>软件</category>
         <category>开发</category>
         <category>游戏引擎</category>
-        <category>脑洞</category>
         <category>超频</category>
         <category>硬件</category>
-        <category>生活</category>
+        <category>脑洞</category>
         <category>测试</category>
         <item>
             <guid isPermalink="true">https://zjxdiu.github.io/blog/%E9%9A%8F%E8%AE%B020230501/</guid>
@@ -239,8 +239,8 @@ choice /c &lt;span class=&#34;hljs-number&#34;&gt;01&lt;/span&gt;
             <guid isPermalink="true">https://zjxdiu.github.io/blog/%E9%9A%8F%E8%AE%B020221125/</guid>
             <title>疫情爆炸，如何积极面对</title>
             <link>https://zjxdiu.github.io/blog/%E9%9A%8F%E8%AE%B020221125/</link>
-            <category>日常</category>
             <category>生活</category>
+            <category>日常</category>
             <pubDate>Sun, 27 Nov 2022 11:48:00 +0800</pubDate>
             <description><![CDATA[ &lt;p&gt;&lt;img src=&#34;../_resources/bae16920a3e51780c72e170d6411a8ac.png&#34; alt=&#34;bae16920a3e51780c72e170d6411a8ac.png&#34;&gt;&lt;br&gt;
  人在上课，突闻噩耗。&lt;br&gt;

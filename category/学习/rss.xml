@@ -7,23 +7,23 @@
         <language>zh-CN</language>
         <pubDate>Wed, 03 May 2023 17:18:00 +0800</pubDate>
         <lastBuildDate>Wed, 03 May 2023 17:18:00 +0800</lastBuildDate>
+        <category>游戏</category>
+        <category>生活</category>
+        <category>日常</category>
         <category>化学</category>
         <category>仪器分析</category>
         <category>信号处理</category>
-        <category>日常</category>
-        <category>分享</category>
-        <category>网络</category>
-        <category>游戏</category>
-        <category>软件</category>
         <category>深度学习</category>
         <category>音频</category>
-        <category>无标签</category>
+        <category>网络</category>
+        <category>分享</category>
+        <category>教程</category>
+        <category>软件</category>
         <category>开发</category>
         <category>游戏引擎</category>
-        <category>脑洞</category>
         <category>超频</category>
         <category>硬件</category>
-        <category>生活</category>
+        <category>脑洞</category>
         <category>测试</category>
         <item>
             <guid isPermalink="true">https://zjxdiu.github.io/blog/ML_emusic_classify/</guid>
@@ -161,8 +161,8 @@ FFT 类型（type）：自动可变短时傅里叶变换（Auto-adjustable STFT�
             <guid isPermalink="true">https://zjxdiu.github.io/blog/dynv6_notes/</guid>
             <title>dynv6使用技巧（如何添加多个地址 子域名 等）</title>
             <link>https://zjxdiu.github.io/blog/dynv6_notes/</link>
-            <category>网络</category>
             <category>游戏</category>
+            <category>网络</category>
             <pubDate>Fri, 03 Mar 2023 17:00:00 +0800</pubDate>
             <description><![CDATA[ &lt;h2 id=&#34;前言&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#前言&#34;&gt;#&lt;/a&gt; 前言&lt;/h2&gt;
 &lt;p&gt;因为 ipv6 普及度日益增加，在自己的环境里搭建简易服务器的想法就逐渐发芽；无论是用于博客网站、NAS 或私有云的搭建，还是用来开游戏服务器，都能够简单易行地实现（因为有公网 ipv6）。&lt;br&gt;
@@ -410,8 +410,8 @@ NAT 有助于提高网络安全性，因为路由器上可以部署非常高效�
             <guid isPermalink="true">https://zjxdiu.github.io/blog/ipv6_toss/</guid>
             <title>记一次折腾电信ipv6中的各种问题</title>
             <link>https://zjxdiu.github.io/blog/ipv6_toss/</link>
-            <category>网络</category>
             <category>游戏</category>
+            <category>网络</category>
             <pubDate>Fri, 20 Jan 2023 21:37:00 +0800</pubDate>
             <description><![CDATA[ &lt;p&gt;阅前提示：本文约 5000 字，预计阅读时长 &amp;gt; 5 分钟。&lt;/p&gt;
 &lt;h2 id=&#34;起因&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#起因&#34;&gt;#&lt;/a&gt; 起因&lt;/h2&gt;
