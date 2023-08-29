@@ -10,13 +10,13 @@
         <category>游戏</category>
         <category>生活</category>
         <category>日常</category>
-        <category>化学</category>
-        <category>仪器分析</category>
-        <category>信号处理</category>
         <category>深度学习</category>
         <category>音频</category>
-        <category>网络</category>
+        <category>信号处理</category>
+        <category>化学</category>
+        <category>仪器分析</category>
         <category>分享</category>
+        <category>网络</category>
         <category>教程</category>
         <category>软件</category>
         <category>开发</category>
@@ -29,9 +29,9 @@
             <guid isPermalink="true">https://zjxdiu.github.io/blog/ML_emusic_classify/</guid>
             <title>一种基于神经网络的电子音乐风格分类算法思路</title>
             <link>https://zjxdiu.github.io/blog/ML_emusic_classify/</link>
-            <category>信号处理</category>
             <category>深度学习</category>
             <category>音频</category>
+            <category>信号处理</category>
             <pubDate>Wed, 03 May 2023 17:18:00 +0800</pubDate>
             <description><![CDATA[ &lt;h1 id=&#34;一种基于神经网络的电子音乐风格分类算法思路&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#一种基于神经网络的电子音乐风格分类算法思路&#34;&gt;#&lt;/a&gt; 一种基于神经网络的电子音乐风格分类算法思路&lt;/h1&gt;
 &lt;h2 id=&#34;以zjxdiu常听的电子音乐风格为例&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#以zjxdiu常听的电子音乐风格为例&#34;&gt;#&lt;/a&gt; —— 以 zjxdiu 常听的电子音乐风格为例&lt;/h2&gt;
