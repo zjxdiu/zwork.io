@@ -1,0 +1,394 @@
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://zjxdiu.github.io</id>
+    <title>zjxdiu~blog site • Posts by &#34;网络&#34; tag</title>
+    <link href="https://zjxdiu.github.io" />
+    <updated>2023-03-03T09:00:00.000Z</updated>
+    <category term="游戏" />
+    <category term="生活" />
+    <category term="化学" />
+    <category term="仪器分析" />
+    <category term="信号处理" />
+    <category term="日常" />
+    <category term="深度学习" />
+    <category term="音频" />
+    <category term="分享" />
+    <category term="网络" />
+    <category term="教程" />
+    <category term="软件" />
+    <category term="开发" />
+    <category term="游戏引擎" />
+    <category term="超频" />
+    <category term="硬件" />
+    <category term="脑洞" />
+    <category term="测试" />
+    <entry>
+        <id>https://zjxdiu.github.io/blog/dynv6_notes/</id>
+        <title>dynv6使用技巧（如何添加多个地址 子域名 等）</title>
+        <link rel="alternate" href="https://zjxdiu.github.io/blog/dynv6_notes/"/>
+        <content type="html">&lt;h2 id=&#34;前言&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#前言&#34;&gt;#&lt;/a&gt; 前言&lt;/h2&gt;
+&lt;p&gt;因为 ipv6 普及度日益增加，在自己的环境里搭建简易服务器的想法就逐渐发芽；无论是用于博客网站、NAS 或私有云的搭建，还是用来开游戏服务器，都能够简单易行地实现（因为有公网 ipv6）。&lt;br&gt;
+不过，很多时候家庭环境下 ipv6 地址也会发生变化，尤其是电脑重启、宽带重拨的时候，那么如何在没有固定 ipv6 的情况下让别人能更容易找到我们的地址呢？很简单，当然是用 DDNS 了。&lt;br&gt;
+DDNS，也就是动态 DNS，将一个变化的 IP 绑定到域名上，通过脚本定时检测和更新地址，这样即使地址变化，域名解析出来的地址也会跟着变化，仍然可以使用同一个域名定位到同一个地址。&lt;/p&gt;
+&lt;h2 id=&#34;使用dynv6&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#使用dynv6&#34;&gt;#&lt;/a&gt; 使用 dynv6&lt;/h2&gt;
+&lt;p&gt;官网：&lt;a href=&#34;https://dynv6.com/&#34;&gt;https://dynv6.com/&lt;/a&gt;&lt;br&gt;
+ 首先用邮箱注册一个账号，接着进入 My Zones，点击 Create New Zone，在 Name 里输入你想要的网址名称和后缀类型，下面的地址可以先点击 Set current address，这样网页就会填入你的外网 IP 地址（应注意检查，ipv4 基本不会是跟电脑一致，但 ipv6 需要一致）。&lt;br&gt;
+&lt;img src=&#34;../_resources/8007661dd2ee4a33be77ca500ec41a76.png&#34; alt=&#34;8007661dd2ee4a33be77ca500ec41a76.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;点击创建后，若网址没有冲突，则创建成功；直接点击这个域名，上面有两个选项是可以自己修改的：status 和 records。&lt;/p&gt;
+&lt;h2 id=&#34;创建dns记录&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#创建dns记录&#34;&gt;#&lt;/a&gt; 创建 DNS 记录&lt;/h2&gt;
+&lt;p&gt;在 Status 里，点击 Edit Zone，将 ipv6 地址再次设为你的公网 ipv6 并保存，这样主域名就会直接解析到你的电脑上；&lt;br&gt;
+在 Records 里，可以编辑或删除现有的 AAAA 记录，也可以新增其他 DNS 记录。&lt;/p&gt;
+&lt;h3 id=&#34;创建子域名&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#创建子域名&#34;&gt;#&lt;/a&gt; 创建子域名&lt;/h3&gt;
+&lt;p&gt;点击 Add Record，选择 AAAA 类型（A 是 ipv4，AAAA 是 ipv6，CNAME 是网站别名一般用不到），前面的 name 里填写子域名前缀（&lt;a href=&#34;http://xn--web-th2ek25abiifsffvwu74d.domainname.dynv6.net&#34;&gt;比如我要创建 web.domainname.dynv6.net&lt;/a&gt;，那就在这里写 web），后面的地址里填写目标 ipv6 即可。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;设置ddns自动更新&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#设置ddns自动更新&#34;&gt;#&lt;/a&gt; 设置 DDNS 自动更新&lt;/h2&gt;
+&lt;p&gt;提示：建议将此脚本部署于 Windows 服务器上，而非自己的电脑&lt;/p&gt;
+&lt;h3 id=&#34;下载wget和grep&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#下载wget和grep&#34;&gt;#&lt;/a&gt; 下载 wget 和 grep&lt;/h3&gt;
+&lt;p&gt;网上很多教程，这里列两个：&lt;br&gt;
+&lt;a href=&#34;https://www.cnblogs.com/shenxiaolin/p/16662793.html&#34;&gt;windows 下 grep 的安装与使用&lt;/a&gt;&lt;br&gt;
+&lt;a href=&#34;https://www.jianshu.com/p/a8dfc762ba3b&#34;&gt; win10 安装 wget&lt;/a&gt;&lt;br&gt;
+ 记得检查好环境变量，确定 cmd 下运行这两个命令有输出。&lt;/p&gt;
+&lt;h3 id=&#34;下载instsrvexe和srvanyexe&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#下载instsrvexe和srvanyexe&#34;&gt;#&lt;/a&gt; 下载 instsrv.exe 和 srvany.exe&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.cnblogs.com/zhaiqianfeng/p/4622561.html&#34;&gt;利用 instsrv 和 srvany 来手动安装服务&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;编写脚本&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#编写脚本&#34;&gt;#&lt;/a&gt; 编写脚本&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;在特定路径下创建文件夹，将上述 instsrv.exe、srvany.exe 以及后续脚本均放在此处；&lt;/li&gt;
+&lt;li&gt;创建 install_server.bat 文件：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;hljs bat&#34;&gt;@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; off
+&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; curexe=%~dp0
+&lt;span class=&#34;hljs-built_in&#34;&gt;cd&lt;/span&gt; /d &lt;span class=&#34;hljs-variable&#34;&gt;%curexe%&lt;/span&gt;
+&amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%curexe%&lt;/span&gt;instsrv.exe&amp;quot; ddns_dynv6 &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%curexe%&lt;/span&gt;srvany.exe&amp;quot;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ddns_dynv6 服务添加完成
+
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 修改服务路径
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM 添加注册表语法: reg add 注册表路径 /v 项名称 /t 值类型 /d 数据 /f 表示强行修改不提示&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM 名称 Application 值为你要作为服务运行的程序地址 /d对应的参数有斜杠不是为了转义引号，而是路径还有斜杠，默认将引号转义了，额外添加斜杠是为了保留引号&lt;/span&gt;
+ 
+&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; regpath=HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ddns_dynv6\Parameters\
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM 名称 AppDirectory 值为你要作为服务运行的程序所在文件夹路径&lt;/span&gt;
+reg add &lt;span class=&#34;hljs-variable&#34;&gt;%regpath%&lt;/span&gt; /v AppDirectory /t REG_SZ /d &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%curexe%&lt;/span&gt;\&amp;quot; /f
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM 名称 AppParameters 值为你要作为服务运行的程序启动所需要的参数&lt;/span&gt;
+reg add &lt;span class=&#34;hljs-variable&#34;&gt;%regpath%&lt;/span&gt; /v Application /t REG_SZ /d &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%curexe%&lt;/span&gt;dynv6.bat&amp;quot; /f
+ 
+&lt;span class=&#34;hljs-built_in&#34;&gt;net&lt;/span&gt; &lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt; ddns_dynv6
+ 
+&lt;span class=&#34;hljs-built_in&#34;&gt;pause&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;创建 remove_server.bat 文件：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;hljs bat&#34;&gt;@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; off
+&lt;span class=&#34;hljs-built_in&#34;&gt;net&lt;/span&gt; stop ddns_dynv6
+instsrv ddns_dynv6 remove
+&lt;span class=&#34;hljs-built_in&#34;&gt;pause&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;创建 dynv6.bat 文件：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;hljs bat&#34;&gt;@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; off
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; tempnum=
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; ipaddr=
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; oldipaddr=&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;.&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;.&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;.&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;rem domain=你注册的域名（dynv6.net 提供多种域名后缀可自行修改）&lt;/span&gt;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; domain=【在这里填写你记录的域名，填zone名称】
+&lt;span class=&#34;hljs-comment&#34;&gt;rem token=你注册后的钥匙（dynv6.net 提供）&lt;/span&gt;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; token=【在这里填写你的token，把这段文字和括号删掉然后粘贴】
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; IPV6_REGEX=&amp;quot;\(\([&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;-&lt;span class=&#34;hljs-number&#34;&gt;9&lt;/span&gt;A-Fa-f]\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;4&lt;/span&gt;\&amp;#125;:\)\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,\&amp;#125;\)\(\([&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;-&lt;span class=&#34;hljs-number&#34;&gt;9&lt;/span&gt;A-Fa-f]\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;4&lt;/span&gt;\&amp;#125;\)\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;\&amp;#125;\)\(\(:[&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;-&lt;span class=&#34;hljs-number&#34;&gt;9&lt;/span&gt;A-Fa-f]\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;4&lt;/span&gt;\&amp;#125;\)\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,\&amp;#125;\)&amp;quot;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; IPV4_REGEX=&amp;quot;[&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;-&lt;span class=&#34;hljs-number&#34;&gt;9&lt;/span&gt;]\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;3&lt;/span&gt;\&amp;#125;\.[&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;-&lt;span class=&#34;hljs-number&#34;&gt;9&lt;/span&gt;]\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;3&lt;/span&gt;\&amp;#125;\.[&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;-&lt;span class=&#34;hljs-number&#34;&gt;9&lt;/span&gt;]\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;3&lt;/span&gt;\&amp;#125;\.[&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;-&lt;span class=&#34;hljs-number&#34;&gt;9&lt;/span&gt;]\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;3&lt;/span&gt;\&amp;#125;&amp;quot;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; URL=&amp;quot;https://dynv6.com/api/update?hostname=&lt;span class=&#34;hljs-variable&#34;&gt;%domain%&lt;/span&gt;&amp;amp;token=&lt;span class=&#34;hljs-variable&#34;&gt;%token%&lt;/span&gt;&amp;amp;ipv4=&lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt;paddr&lt;span class=&#34;hljs-variable&#34;&gt;%%&amp;quot;&lt;/span&gt;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; URLV6=&amp;quot;https://dynv6.com/api/update?hostname=&lt;span class=&#34;hljs-variable&#34;&gt;%domain%&lt;/span&gt;&amp;amp;token=&lt;span class=&#34;hljs-variable&#34;&gt;%token%&lt;/span&gt;&amp;amp;ipv6=&lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt;paddr&lt;span class=&#34;hljs-variable&#34;&gt;%%&amp;amp;&lt;/span&gt;ipv6prefix=&lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt;paddr&lt;span class=&#34;hljs-variable&#34;&gt;%%&amp;quot;&lt;/span&gt;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; BIN=wget -t &lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt; --prefer-family=IPv6 --no-dns-cache --no-check-certificate
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;rem ***ipv4***（dynv6也提供ipv4动态域名服务）&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;rem for /F %%i in (&amp;#x27;nslookup %domain% ns1.dynv6.com ^|grep -m2 -o %IPV4_REGEX%&amp;#x27;) do ( set oldipaddr=%%i)&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;rem ***ipv6***&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;for&lt;/span&gt; /F &lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt; &lt;span class=&#34;hljs-keyword&#34;&gt;in&lt;/span&gt; (&amp;#x27;nslookup -qt^=AAAA &lt;span class=&#34;hljs-variable&#34;&gt;%domain%&lt;/span&gt; ns1.dynv6.com ^|grep -m2 -o &lt;span class=&#34;hljs-variable&#34;&gt;%IPV6_REGEX%&lt;/span&gt;&amp;#x27;) &lt;span class=&#34;hljs-keyword&#34;&gt;do&lt;/span&gt; ( &lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; oldipaddr=&lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt;)
+ 
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; Current &lt;span class=&#34;hljs-variable&#34;&gt;%domain%&lt;/span&gt; IP Add:&lt;span class=&#34;hljs-variable&#34;&gt;%oldipaddr%&lt;/span&gt;
+ 
+:start_ip1
+&lt;span class=&#34;hljs-comment&#34;&gt;rem @cls&lt;/span&gt;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ... 
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;.####从ip.sb获得地址####
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; ip6addr=null
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM ***ipv6***&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;for&lt;/span&gt; /F &lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt; &lt;span class=&#34;hljs-keyword&#34;&gt;in&lt;/span&gt; (&amp;#x27;&lt;span class=&#34;hljs-variable&#34;&gt;%BIN%&lt;/span&gt; -O- http://ip.sb  ^|grep -m &lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt; -o &lt;span class=&#34;hljs-variable&#34;&gt;%IPV6_REGEX%&lt;/span&gt;&amp;#x27;) &lt;span class=&#34;hljs-keyword&#34;&gt;do&lt;/span&gt; (&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; ipaddr=&lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt;)
+ 
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;&amp;quot; == &amp;quot;null&amp;quot; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 没有IPV6地址或获得IPV6地址失败
+timeout &lt;span class=&#34;hljs-number&#34;&gt;5&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; start_ip2
+) &lt;span class=&#34;hljs-keyword&#34;&gt;else&lt;/span&gt; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 获得IP地址:&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;，旧IP地址:&lt;span class=&#34;hljs-variable&#34;&gt;%oldipaddr%&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;hljs-keyword&#34;&gt;NOT&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%oldipaddr%&lt;/span&gt;&amp;quot; == &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;&amp;quot; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ---更新IP---
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; update_web_ip
+) &lt;span class=&#34;hljs-keyword&#34;&gt;else&lt;/span&gt; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; IP没有改变
+timeout &lt;span class=&#34;hljs-number&#34;&gt;300&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;cls&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; start_ip2
+))
+ 
+:start_ip2
+@&lt;span class=&#34;hljs-built_in&#34;&gt;ipconfig&lt;/span&gt; /flushdns
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ...
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;.####从checkip.dyndns.com获得地址####
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; ipaddr=null
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM ***ipv4***&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;rem for /F %%i in (&amp;#x27;%BIN% -O- http://checkip.dyndns.com ^|grep -m 1 -o %IPV4_REGEX%&amp;#x27;) do (set ipaddr=%%i)&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM ***ipv6***&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;for&lt;/span&gt; /F &lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt; &lt;span class=&#34;hljs-keyword&#34;&gt;in&lt;/span&gt; (&amp;#x27;&lt;span class=&#34;hljs-variable&#34;&gt;%BIN%&lt;/span&gt; -O- http://checkipv6.dyndns.com ^|grep -m &lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt; -o &lt;span class=&#34;hljs-variable&#34;&gt;%IPV6_REGEX%&lt;/span&gt;&amp;#x27;) &lt;span class=&#34;hljs-keyword&#34;&gt;do&lt;/span&gt; (&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; ipaddr=&lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt;)
+ 
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;&amp;quot; == &amp;quot;null&amp;quot; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 没有IP地址或获得IP地址失败
+timeout &lt;span class=&#34;hljs-number&#34;&gt;5&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; start_ip1
+) &lt;span class=&#34;hljs-keyword&#34;&gt;else&lt;/span&gt; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 获得IP地址:&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;，旧IP地址:&lt;span class=&#34;hljs-variable&#34;&gt;%oldipaddr%&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;hljs-keyword&#34;&gt;NOT&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%oldipaddr%&lt;/span&gt;&amp;quot; == &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;&amp;quot; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ---更新IP---
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; update_web_ip
+) &lt;span class=&#34;hljs-keyword&#34;&gt;else&lt;/span&gt; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; IP没有改变
+timeout &lt;span class=&#34;hljs-number&#34;&gt;300&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;cls&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; start_ip2
+))
+ 
+ 
+:update_web_ip
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ==============================================
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ipaddr=&amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;&amp;quot;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ==============================================
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; var=null
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM ***ipv4***&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;rem for /F &amp;quot;tokens=*&amp;quot; %%i in (&amp;#x27;%BIN% -O- %URL%&amp;#x27;) do (set var=%%i)&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM ***ipv6***&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;for&lt;/span&gt; /F &amp;quot;tokens=*&amp;quot; &lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt; &lt;span class=&#34;hljs-keyword&#34;&gt;in&lt;/span&gt; (&amp;#x27;&lt;span class=&#34;hljs-variable&#34;&gt;%BIN%&lt;/span&gt; -O- &lt;span class=&#34;hljs-variable&#34;&gt;%URLV6%&lt;/span&gt;&amp;#x27;) &lt;span class=&#34;hljs-keyword&#34;&gt;do&lt;/span&gt; (&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; var=&lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt;)
+ 
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 更新信息=&lt;span class=&#34;hljs-variable&#34;&gt;%var%&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%var%&lt;/span&gt;&amp;quot; == &amp;quot;addresses updated&amp;quot; &lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; end
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 更新失败
+timeout &lt;span class=&#34;hljs-number&#34;&gt;120&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; start_ip2
+ 
+:end
+&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; oldipaddr=&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 更新数据成功
+timeout &lt;span class=&#34;hljs-number&#34;&gt;300&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; start_ip2
+&lt;span class=&#34;hljs-comment&#34;&gt;&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM 以上每个TIMEOUT指令都表示等待一定时间（秒），可以按实际情况修改&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM 我这里的300秒应该是够用的，太短了占用过多资源，太长了更新不及时&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;开机自启动&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#开机自启动&#34;&gt;#&lt;/a&gt; 开机自启动&lt;/h2&gt;
+&lt;p&gt;创建一个计划任务即可，详情可百度教程&lt;/p&gt;
+</content>
+        <category term="游戏" />
+        <category term="网络" />
+        <updated>2023-03-03T09:00:00.000Z</updated>
+    </entry>
+    <entry>
+        <id>https://zjxdiu.github.io/blog/Network_progress_CSUST/</id>
+        <title>长沙理工大学无线网络多设备共享解决方案</title>
+        <link rel="alternate" href="https://zjxdiu.github.io/blog/Network_progress_CSUST/"/>
+        <content type="html">&lt;h1 id=&#34;本文未完成&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#本文未完成&#34;&gt;#&lt;/a&gt; 本文未完成&lt;/h1&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;引用&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#引用&#34;&gt;#&lt;/a&gt; 引用&lt;/h2&gt;
+&lt;p&gt;本文大部分内容可参考：&lt;br&gt;
+&lt;a href=&#34;https://www.mr-cn.net/2021/06/15/Share-your-network-in-CSUST/&#34;&gt;长沙理工大学：校园网解除共享限制&lt;/a&gt;&lt;br&gt;
+路由器刷机参考教程（非本次使用）：&lt;br&gt;
+&lt;a href=&#34;https://www.right.com.cn/FORUM/thread-489907-1-1.html&#34;&gt;极路由 Enjoy 1200  HC5861B OpenWRT 固件 Rosy 主题&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;原因与现象&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#原因与现象&#34;&gt;#&lt;/a&gt; 原因与现象&lt;/h2&gt;
+&lt;p&gt;为了维护运营商利益，校园网设置了一些检测与规则，对同时登录校园网的设备数量作出了严格的限制，并且不允许终端用户进行网络共享。&lt;br&gt;
+具体表现为，当用户使用电脑、手机等的热点、无线信号桥等方法时，只要有第二台设备联网，就会在一定条件下被检测发现，随后此账号将无法访问网络，并自动将网页重定向到登录界面（或 1.1.1.3，但这个页面不能加载出来）。&lt;/p&gt;
+&lt;h2 id=&#34;原理&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#原理&#34;&gt;#&lt;/a&gt; 原理&lt;/h2&gt;
+&lt;p&gt;根据引用文章，可以得知共享检测主要通过 80 端口下的 HTTP 报文中浏览器 UA 的区别来实现，可以看到这个限制条件比较多，而且检测周期并不短；因此会出现稳定共享的时间时长时短的现象。&lt;br&gt;
+此外，还可能会通过其他方法检测，包括但不限于 TTL、IPID、侵入式检测等等。&lt;/p&gt;
+&lt;h2 id=&#34;准备工作&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#准备工作&#34;&gt;#&lt;/a&gt; 准备工作&lt;/h2&gt;
+&lt;p&gt;为实现稳定的校园网共享，首先需要选择正确的系统：必须使用 OpenWRT 或 Pavanda 等软路由系统。&lt;br&gt;
+本文基于 Pavanda 操作。&lt;/p&gt;
+&lt;h3 id=&#34;路由选型&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#路由选型&#34;&gt;#&lt;/a&gt; 路由选型&lt;/h3&gt;
+&lt;p&gt;如果你还没有软路由或者合适的路由器，那么选购路由器就是第一步了。我最终的选择是二手极路由 Enjoy 1200，型号 HC5861B。极路由虽然已经倒闭，但它的产品可玩性和性价比确实是相对较好的。&lt;br&gt;
+淘宝入手价格 40 元，由商家代刷 Breed。&lt;br&gt;
+需要注意的是，这一款路由器不支持 USB，电源接口也是 12V DC 而非 5V Micro-USB，如果有这两个功能需求的话可以考虑极路由 3 或其他产品。&lt;/p&gt;
+&lt;h3 id=&#34;检查与刷机&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#检查与刷机&#34;&gt;#&lt;/a&gt; 检查与刷机&lt;/h3&gt;
+&lt;p&gt;收货后先简单清理积灰，检查网口是否有积聚大量灰尘，天线是否正常连接、旋转。&lt;br&gt;
+随后插入电源开机，连接电脑网口到路由器 LAN 1 口，等待 IP 自动配置完成，进入默认网关的地址（本次为 192.168.132.1，极路由原厂固件可能为 192.168.199.1）&lt;br&gt;
+使用默认的管理员账号密码（admin）登录后，发现这台机器已经刷好了老毛子固件（Padavan）了：&lt;br&gt;
+&lt;img src=&#34;../_resources/54de7cdf47ce563bb65d5c42e282e331.png&#34; alt=&#34;54de7cdf47ce563bb65d5c42e282e331.png&#34;&gt;&lt;br&gt;
+ 所以省下了很多时间，虽然我的计划是使用 OpenWrt，但 Padavan 本质上是一样的。&lt;br&gt;
+如果需要刷机教程，请参考引用文章，或直接搜索路由型号 + OpenWrt，即可找到一些刷机教程。&lt;/p&gt;
+&lt;h2 id=&#34;网络拓扑&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#网络拓扑&#34;&gt;#&lt;/a&gt; 网络拓扑&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;../_resources/15828e53952c884a9b9f9f1cc11b7c77.png&#34; alt=&#34;15828e53952c884a9b9f9f1cc11b7c77.png&#34;&gt;&lt;br&gt;
+ 我的目标是达成这样的拓扑，实际上就是一个无线 “路由”，也就是将无线信号作为 WAN，执行 NAT 和防火墙规则后建立子网，设备均接入子网中。&lt;/p&gt;
+&lt;h2 id=&#34;基础配置&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#基础配置&#34;&gt;#&lt;/a&gt; 基础配置&lt;/h2&gt;
+&lt;h3 id=&#34;路由器接入无线网络&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#路由器接入无线网络&#34;&gt;#&lt;/a&gt; 路由器接入无线网络&lt;/h3&gt;
+&lt;p&gt;直接参考这张图即可：&lt;br&gt;
+&lt;img src=&#34;../_resources/d6035076edef8fc78299e3af690eea62.png&#34; alt=&#34;d6035076edef8fc78299e3af690eea62.png&#34;&gt;&lt;br&gt;
+2.4G 和 5G 只能有一个用于 AP-Client，另一个必须禁用桥接。&lt;br&gt;
+需要注意的是，路由器需要用一个频段接入校园网，另一个频段用于发射信号；虽然可以选择 client+AP 来实现单频复用，实际上只用 5GHz 的话效果也不错，但我收到的这台路由器不知道为何 5G 能力极其孱弱（无遮挡 50cm 距离下 client 都不能跑满协商速率），而 2.4G 能力极强（对周围的无线鼠标、蓝牙手柄等造成严重干扰），因此这里不使用这种方法。&lt;br&gt;
+懒得删改的原文：&lt;br&gt;
+&lt;em&gt;这里还涉及到频段的选择，最开始我使用 2.4G 接入校园网、5G 用于共享，但随后我发现无线鼠标的工作会受到较严重的干扰（接收器也工作在 2.4G 频率上），因此后续改为 5G 接入、2.4G 共享。&lt;br&gt;
+此外，网络性能也是一个需要关心的重点，5GHz 总能提供更优秀的表现，但这里我们只能用于一个目的；由于我平时主要使用电脑上网，而电脑是通过网线连接到路由器的，因此选择 5G 接入是更好的。实际上，这种情况下 2.4G 的表现也不差，宿舍面积小、干扰少，多次测试下来延迟在 30ms 以内，速度 8-9MB/s，可以满足 1080P 视频观看和正常游戏。&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id=&#34;修改网络配置&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#修改网络配置&#34;&gt;#&lt;/a&gt; 修改网络配置&lt;/h3&gt;
+&lt;p&gt;如果对内网网段不敏感（例如你只想要正常上网，平时不开发网页、软件、游戏、不做任何测试，那么这一段可以跳过）&lt;br&gt;
+在左侧选择外部网络（WAN），可参考下图配置：&lt;br&gt;
+&lt;img src=&#34;../_resources/e613ab56c89c86b939bf67ab5601fc42.png&#34; alt=&#34;e613ab56c89c86b939bf67ab5601fc42.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;LAN 配置同理，设置想要的网段、DNS、静态路由等。&lt;/p&gt;
+&lt;h2 id=&#34;通过nat连接ipv6&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#通过nat连接ipv6&#34;&gt;#&lt;/a&gt; 通过 NAT 连接 ipv6&lt;/h2&gt;
+&lt;p&gt;由于我希望使用到正常的 ipv6，故单独在此写出方案；对于绝大多数日常网络而言，关闭 ipv6 可能反而有助于提高稳定性。&lt;br&gt;
+参考文章：&lt;a href=&#34;https://post.smzdm.com/p/ad9qkz9k/&#34;&gt;校园网环境下 Openwrt 配置 ipv6 教程 —— 以 nat6 为例&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;NAT 是什么？&lt;br&gt;
+NAT 是出现在 ipv4 中的技术；由于 ipv4 地址空间有限（总约 42 亿个），无法满足爆炸式增长的网络设备入网需求，因此出现了网络地址转换（Network Address Translation）技术；它的作用就是缓解 ipv4 地址消耗，尽量在 ipv6 部署完全之前满足原有上网需求。&lt;br&gt;
+它的工作原理很简单，我们平时使用路由器上网的时候就至少会有一次 NAT 过程，路由器将一个外网（WAN）的地址映射到多个内网地址（通常为 192.168.x.x 或 10.x.x.x），这样一个路由器下的设备就可以共用一个外网 IP，大幅缓解了地址消耗，同时解决了耗尽的影响。&lt;br&gt;
+NAT 有助于提高网络安全性，因为路由器上可以部署非常高效的防火墙，也可以天然阻断所有传入连接，但这样的技术也会带来问题；最大的问题无疑就是点对点连接变得不可能，因此游戏联机、网站建设等都会变得很困难。&lt;br&gt;
+在我的使用场景下，Minecraft 联机是最常见的点对点连接应用，此前的解决方案均为 FRP 内网穿透（见前文章）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;为什么我一定要有 ipv6 连接？&lt;br&gt;
+很简单，ipv6 地址池极大，运营商也并未刻意限制用户的 ipv6 访问（至少我没有遇到过哪个运营商在 ipv6 上用 NAT 的）&lt;strong&gt;（但是教育网除外）&lt;/strong&gt;。&lt;br&gt;
+因此，大多数用户只要开启了 ipv6，就能获取到公网 IP。这对于点对点连接来说无疑是非常有帮助的。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;教育网干了什么？&lt;br&gt;
+一般运营商在家用、商用宽带里分配的 ipv6 都是 / 64 的前缀，这意味着路由器拿到的地址里面还包含了大量的可用地址，用于给后续设备分配 ipv6 地址；&lt;br&gt;
+但教育网的 ipv6 则直接分配了 / 128 的地址，这就意味着它给你的地址只能用于一台设备。也就是说，想要共享 ipv6，必须使用 NAT。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;后续等待完善&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#后续等待完善&#34;&gt;#&lt;/a&gt; 后续等待完善&lt;/h1&gt;
+&lt;p&gt;可参考：&lt;a href=&#34;https://doge.uk/coding/padavan-ipv6-napt66.html&#34;&gt;Padavan 路由下使用 NAPT66 模块访问移动 IPV6 网络&lt;/a&gt;&lt;/p&gt;
+</content>
+        <category term="网络" />
+        <updated>2023-02-24T14:07:00.000Z</updated>
+    </entry>
+    <entry>
+        <id>https://zjxdiu.github.io/blog/ipv6_toss/</id>
+        <title>记一次折腾电信ipv6中的各种问题</title>
+        <link rel="alternate" href="https://zjxdiu.github.io/blog/ipv6_toss/"/>
+        <content type="html">&lt;p&gt;阅前提示：本文约 5000 字，预计阅读时长 &amp;gt; 5 分钟。&lt;/p&gt;
+&lt;h2 id=&#34;起因&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#起因&#34;&gt;#&lt;/a&gt; 起因&lt;/h2&gt;
+&lt;p&gt;由于想跟好友联机 minecraft，而使用 natfrp 做内网穿透时发现有很多问题，包括延迟高且不稳定、速率低、流量限制、高峰时期断连等。刚好想起来家里的网络已经被我启用了 ipv6，因此试图使用 ipv6 来直接对公网开放 minecraft 服务器。&lt;/p&gt;
+&lt;h2 id=&#34;开始第一次尝试&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#开始第一次尝试&#34;&gt;#&lt;/a&gt; 开始第一次尝试&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;当前状态：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;光猫使用路由模式，自主拨号并获取两种 ip 地址（除非特殊说明，否则以下简称 ip）&lt;/li&gt;
+&lt;li&gt;无线路由器（下简称路由器）使用路由模式&lt;/li&gt;
+&lt;li&gt;所有设备连接在路由器上，并能获取到 ip&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;../_resources/a941e7dad288e2bd65c297c76503f111.png&#34; alt=&#34;a941e7dad288e2bd65c297c76503f111.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;当前问题：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;首先尝试外网直接连接服务器 ipv6，失败&lt;/li&gt;
+&lt;li&gt;外网无法 ping 通任何内网主机&lt;/li&gt;
+&lt;li&gt;光猫获取到的 ipv6 地址仍然无法通过外网 ping 通&lt;/li&gt;
+&lt;li&gt;在光猫中设置端口映射或 DMZ 主机，无效&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;实际上，上述内容已经花了我一下午来检查和排查；网上搜索相关内容，有人说&lt;s&gt;获取到的 ipv6 是 240e 开头的，说明是经过了 NAT（类似 ipv4，所以肯定访问不到）&lt;/s&gt;；但是这种说法显然有问题，首先 ipv6 只有在特殊环境下才需要 NAT，其次 2 开头的地址至少不是内网地址。&lt;br&gt;
+另有说法称，运营商（我用的是电信）会用防火墙屏蔽入站流量，防止你开服务器。根据我的实验，这个说法是正确的。&lt;/p&gt;
+&lt;p&gt;随后开始折腾，既然防火墙阻碍了我，那我关掉就好。&lt;br&gt;
+但是现实很惨淡，运营商早就猜到你会搞这一手，所以直接不允许你关闭防火墙。&lt;br&gt;
+这里包括了最后的那个防止 ICMP 包攻击，还有其他的防火墙直接不显示。&lt;br&gt;
+&lt;img src=&#34;../_resources/7d186301818af5165a407c1751fb848c.png&#34; alt=&#34;7d186301818af5165a407c1751fb848c.png&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;换个地方拨号&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#换个地方拨号&#34;&gt;#&lt;/a&gt; 换个地方拨号？&lt;/h3&gt;
+&lt;p&gt;网上提供了一种解决思路，即光猫改桥接、使用路由器进行拨号；这样做有一些好处，例如路由器的性能更强、可以提供更快的网速，以及很高的可玩性、灵活性等等，这里直接把路由器换成软路由就能实现非常多的玩法，因此我就着手开始改桥接。&lt;/p&gt;
+&lt;p&gt;改的过程实际上非常简单，找到宽带的账号密码，进入光猫的超级用户，然后直接改桥接即可。&lt;br&gt;
+&lt;img src=&#34;../_resources/bc81d148f88500f57dbadabcf8080770.png&#34; alt=&#34;bc81d148f88500f57dbadabcf8080770.png&#34;&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;随后，将路由器设置为 PPPoE 拨号连接；这里就不放图了，各家路由器的配置流程都是一回事。&lt;br&gt;
+关闭路由器的防火墙，现在，所有的设备又能重新获取到 ip，且具有公网 ipv6 地址。当然由于 Windows 防火墙的配置，需要关闭 Windows 的防火墙才能从外网 ping 通。&lt;br&gt;
+大获全胜！网速也提升到了 570M（家里办理的 500M 宽带，如果直接从光猫拨号 + 路由，则速度最高 470M）&lt;br&gt;
+&lt;img src=&#34;../_resources/cbdb76297f0af4d4d3837f421060eb67.png&#34; alt=&#34;cbdb76297f0af4d4d3837f421060eb67.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;同时，Minecraft 也能正常从外网通过 ipv6 连接，看起来一切完美。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;核心问题网页无法访问&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#核心问题网页无法访问&#34;&gt;#&lt;/a&gt; 核心问题：网页无法访问&lt;/h2&gt;
+&lt;p&gt;一切完美？当然是不可能的。一定会出问题，而且是大问题。&lt;br&gt;
+配置好 ipv6 之后，一开始所有设备工作正常，网速和解析速度起飞。&lt;br&gt;
+然后，用了半个小时左右，问题开始逐步显现。&lt;br&gt;
+最开始，我在网上搜索一个 Windows 方面的配置问题，并且点进去了一个博客园的链接。然后，网页并没有按照我预想中的那样飞快加载，而是不断转圈。&lt;br&gt;
+最后：&lt;br&gt;
+&lt;img src=&#34;../_resources/84c01f9cc1ebf56595e7d025fc4a0617.png&#34; alt=&#34;84c01f9cc1ebf56595e7d025fc4a0617.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;一开始我以为这是必应的中转链接出现问题了（百度日常），因为点击必应的搜索结果并不是直接访问目标网址，而是先通过一个必应的链接重定向到目标。这个重定向有时候会失败，是正常的。但是，我直接访问目标网址时，居然也不能进去，这就非常奇怪了。&lt;br&gt;
+这时候我还是乐观的心态，认为是博客园的服务器出了问题，也没有去其它设备上尝试。但我仍然重视了这个问题，并立即去搜索解决方法。因为是开了路由器拨号 + ipv6 之后才出现的问题，所以查找方向也很明确了。结果，就在我查找的过程中，发现了更多的问题。&lt;br&gt;
+百度经验、百度知道、百度贴吧、知乎… 这些网站一个接一个地挂掉；有时候网站一开始能正常访问，再开的时候就加载不出 JS 和 CSS（变成了没有渲染的样式，仅限知乎），然后就是一样的不响应。症状跟博客园完全一致，控制台里没有任何有效信息，只有一个响应超时。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;先恢复正常访问&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#先恢复正常访问&#34;&gt;#&lt;/a&gt; 先恢复正常访问&lt;/h3&gt;
+&lt;p&gt;一通摸索之后，我找到了暂时恢复的方法：在网卡选项里禁用 ipv6（Internet 协议版本 6）。&lt;br&gt;
+禁用后，所有网页恢复正常，但这显然不可取，因为我的目的就是使用 ipv6，而禁用它也就丧失了所有 ipv6 能力。&lt;br&gt;
+需要注意的是，现在出问题的网站都不是纯 ipv6 站点，有些是纯 ipv4 站点，但双栈域名居多。这时候访问纯 ipv6 网站是全部成功的，ipv6 测试也是全绿通过，并且无论何种类型的网站都有大量能成功访问的。&lt;/p&gt;
+&lt;h3 id=&#34;退一步试试&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#退一步试试&#34;&gt;#&lt;/a&gt; 退一步试试&lt;/h3&gt;
+&lt;p&gt;退一步，指的就是我找到一种方法，让浏览器只使用或优先使用 ipv4 进行访问。&lt;br&gt;
+因为出问题的只有浏览器，我电脑里其它软件全都正常运行。&lt;br&gt;
+&lt;em&gt;后续补充：今天发现 Windows 版的微信也不能正常使用，二维码加载不出来，禁用 ipv6 后恢复。&lt;/em&gt;。&lt;br&gt;
+但是，网上相关的教程极少甚至没有，偶有几个是针对 Firefox 或 chrome 的，而我使用的是 edge；就算我能参考 chrome，教程也是针对 Linux 而非 Windows。&lt;/p&gt;
+&lt;h3 id=&#34;再退一步&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#再退一步&#34;&gt;#&lt;/a&gt; 再退一步&lt;/h3&gt;
+&lt;p&gt;好的，如果浏览器不行，那我就找个方法让整个操作系统都优先使用 ipv4。&lt;br&gt;
+微软提供了一个文档，通过&lt;a href=&#34;https://learn.microsoft.com/en-US/troubleshoot/windows-server/networking/configure-ipv6-in-windows&#34;&gt;修改注册表的方法&lt;/a&gt;来实现全局优先 ipv4、禁用 ipv6、优先 ipv6 等等。&lt;br&gt;
+一看到这里，我立即兴奋地尝试了。改了注册表，重启，访问：&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;ERR_TIMED_OUT&lt;/code&gt;  .png&lt;/p&gt;
+&lt;p&gt;好，居然没用。微软，不愧是你。&lt;br&gt;
+重启很多次无效，当时已经半夜 2:30，我没有了折腾的心情，只想赶紧睡觉。&lt;/p&gt;
+&lt;h2 id=&#34;第一次折腾失败&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#第一次折腾失败&#34;&gt;#&lt;/a&gt; 第一次折腾失败&lt;/h2&gt;
+&lt;p&gt;网上又找了很多相同症状的用户，解决方案要么是改注册表，要么是说路由器兼容性有问题。&lt;br&gt;
+好吧，反正跟我联机的同学也不是很在意，natfrp 似乎还能继续用用。&lt;br&gt;
+于是，彻底宣告失败，我重新改回了光猫拨号、路由桥接，随后所有网络恢复正常（除了外网还是不能访问这里的所有 ipv6；当然，也包括 ipv4，因为有 NAT）。&lt;/p&gt;
+&lt;p&gt;这就结束了吗？怎么可能，不搞到好用我是不会罢休的。&lt;br&gt;
+于是，第二天，我又开始了新一轮的折腾。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;第二次尝试&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#第二次尝试&#34;&gt;#&lt;/a&gt; 第二次尝试&lt;/h2&gt;
+&lt;p&gt;重新尝试，同样的光猫改桥接，同样的路由器拨号。同样的正常 ipv6 公网访问，但是这一次似乎是运气比较好，网页访问全部正常使用，并且坚持了至少 4 个小时。&lt;br&gt;
+中途离家 4 小时，回来之后，惊喜地发现，这些网页又打不开了 😃&lt;br&gt;
+这时候我就已经明白，无论怎么修改电脑或者路由器配置都无效，于是没有再做尝试，转而对现在的情况进行分析，并希望通过其它方法解决需求。&lt;/p&gt;
+&lt;h3 id=&#34;转机&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#转机&#34;&gt;#&lt;/a&gt; 转机&lt;/h3&gt;
+&lt;p&gt;在我整理思路的时候，我意识到，实际上我只需要服务器一台电脑能够获取正常入站的 ipv6 地址（正常的 ipv6）即可，其余设备甚至根本不需要启用 ipv6。这时候，我首先想到的就是：&lt;/p&gt;
+&lt;h4 id=&#34;一号多拨&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#一号多拨&#34;&gt;#&lt;/a&gt; 一号多拨&lt;/h4&gt;
+&lt;p&gt;一号多拨，指的是我通过同一个光猫，使用同一个宽带账号，分别在两台设备上进行拨号。&lt;br&gt;
+我的最初想法是，服务器电脑直连光猫并自己拨号获取正常的 ipv6 地址，同时路由器也自己拨号，但只启用 ipv4。&lt;br&gt;
+网上搜索发现，这种方法当然是可行的，前提是运营商支持多拨。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;折腾中&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;没有任何侥幸，拨号失败。电脑上尝试第二次拨号时直接返回错误 629。&lt;/p&gt;
+&lt;p&gt;再换一种角度，重新分析我的需求。服务器能使用正常的 ipv6，同时其余设备仅需要 ipv4（最多需要 ipv6 内网而非公网访问）。因此，我做了如下操作，来使得二者兼顾。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;最终如何解决&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#最终如何解决&#34;&gt;#&lt;/a&gt; 最终如何解决&lt;/h2&gt;
+&lt;p&gt;如果你的需求和遇到的问题跟我完全一样，那么也许可以参考我的方法来临时解决。&lt;br&gt;
+&lt;strong&gt;提示：最终的解决方案也并不完美，只不过暂时保证了两边可以都解决主要矛盾&lt;/strong&gt;&lt;br&gt;
+以下是我的解决方案：&lt;/p&gt;
+&lt;h3 id=&#34;1-将路由器的内网ipv6地址分发从无状态改为有状态&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#1-将路由器的内网ipv6地址分发从无状态改为有状态&#34;&gt;#&lt;/a&gt; 1. 将路由器的内网 ipv6 地址分发从无状态改为有状态。&lt;/h3&gt;
+&lt;p&gt;无状态获取指的是机器自己配置地址，然后通过 NDP 等方式确定地址有效性即可；有状态获取类似 DHCP，不过分配的地址是 ipv6。&lt;br&gt;
+这一步解决了手机联网的问题；由于我的网络环境中手机为主要设备，而安卓系统并不支持通过 DHCPv6 进行有状态获取 ipv6 地址；于是所有的手机都只能通过 ipv4 联网，解决了所有上网问题。&lt;/p&gt;
+&lt;h3 id=&#34;2-为电脑配置虚假或者无效的ipv6地址&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#2-为电脑配置虚假或者无效的ipv6地址&#34;&gt;#&lt;/a&gt; 2.  为电脑配置虚假或者无效的 ipv6 地址&lt;/h3&gt;
+&lt;p&gt;这是我在测试的时候忽然想到的主意，既然 ipv4 地址在手动配置错误的情况下无法联网，那么 ipv6 应该也是一样的。&lt;br&gt;
+ipv6 中同样有很多保留地址，例如 &lt;code&gt;fe80&lt;/code&gt;  开头的地址表示本地链路地址，无法进行跨子网路由，因此给我自己的电脑配置一个 &lt;code&gt;fe80::1&lt;/code&gt;  的地址即可。&lt;br&gt;
+配置后，网卡状态中 IPv6 连接变为&lt;strong&gt;无 Internet 访问权限&lt;/strong&gt;，使用 &lt;code&gt;ipconfig /all&lt;/code&gt;  查看 IP 地址，发现手动配置的 ipv6 地址变成了&lt;strong&gt;本地链接 IPv6 地址&lt;/strong&gt;。&lt;br&gt;
+&lt;img src=&#34;../_resources/054913f5d395b1e809f0d7830e64c948.png&#34; alt=&#34;054913f5d395b1e809f0d7830e64c948.png&#34;&gt;&lt;br&gt;
+ 此外，这里网卡仍然获取到了一个 IPv6 地址，但后面提示（&lt;strong&gt;复制&lt;/strong&gt;），检查其地址发现这个地址是我的服务器电脑的公网 ipv6 地址（因此在此处打码作保护）；这可能是一些其它方面的机制，但并不影响服务器和我的电脑的正常工作。同时，由于内网 ipv6 地址被正常配置，我仍然可以通过内网 ipv6 来访问服务器（包括文件服务器、网页服务器、minecraft 和远程桌面）。&lt;br&gt;
+这一步解决了环境中主要的电脑设备：我自己的使用需求。当然没有完全解决，纯 ipv4 模式下访问部分双栈网站时速度还是比较慢，但能够正常使用已经是极其难得了。&lt;/p&gt;
+&lt;h3 id=&#34;3-为windows-11配置&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#3-为windows-11配置&#34;&gt;#&lt;/a&gt; 3. 为 Windows 11 配置&lt;/h3&gt;
+&lt;p&gt;环境中存在另一台常用的电脑，而它搭载的是 Windows 11 家庭版。&lt;br&gt;
+在 win11 下可以执行相同的步骤进行配置，只不过需要多出一个步骤：&lt;strong&gt;你需要在系统设置中手动设置 ipv6 DNS，而不能使用自动获取。&lt;/strong&gt;&lt;br&gt;
+这一步是因为，即便手动配置了 ipv6 地址，win11 似乎也不会立即使用，而是先试图通过 DHCP 等方法获取 ipv6 地址以及 DNS 服务器等；而在自动获取 DNS 的过程中，路由器很可能就为它分配了一个 ipv6 地址，导致我们自己设置的地址完全变成内网地址，而无法实现目的。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;结语&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#结语&#34;&gt;#&lt;/a&gt; 结语&lt;/h2&gt;
+&lt;p&gt;至此，全部流程结束，解决方案全部执行。服务器正常接受公网入站流量，其余设备配置后均能实现正常上网。&lt;/p&gt;
+&lt;p&gt;但是，我并不对现在的解决方案满意。原因很简单，我开 ipv6 不仅是为了服务器使用，更是为了提高日常上网体验，同时接轨最新技术（虽然 ipv6 都是 12 年前的玩意了）；现在虽然解决了问题，但并未达成全部目的，因为除了服务器主机以外没有设备能够正常使用 ipv6 的。这个方法顶多也就临时用用，实际上我也就这一个寒假的需求，假期结束返校前肯定会恢复光猫拨号的，因为服务器主机之后只作为内网打印服务器，不再有公网访问需求。此外，每次新加一台电脑，都需要这样设置一遍无效的 ipv6 地址，以便正常访问网页。&lt;br&gt;
+所以，整体看下来，其实只是在两边的矛盾中取了一个居中妥协的值，为主要矛盾作了让步。我也不是每天都会折腾网络，更多时候还是希望它日常使用能稳定；但我又不希望放弃服务器的公网访问，因此这两者就是核心问题，而最终的方案也就向这两个问题进行妥协。&lt;br&gt;
+Anyway，反正问题算是解决了，但愿 ipv6 的部署进度还能快一点吧（&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;明天就是除夕了，浅放一张 AI 画的胡桃吧，祝大家新年快乐！&lt;br&gt;
+&lt;em&gt;胡桃没画成，人要么太大要么太小，随便搞了个背景算了（）&lt;/em&gt;&lt;br&gt;
+&lt;img src=&#34;../_resources/7c8d8e5459a9f8cd83c33281ca1aa262.png&#34; alt=&#34;7c8d8e5459a9f8cd83c33281ca1aa262.png&#34;&gt;&lt;/p&gt;
+</content>
+        <category term="游戏" />
+        <category term="网络" />
+        <updated>2023-01-20T13:37:00.000Z</updated>
+    </entry>
+</feed>

@@ -1,0 +1,789 @@
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://zjxdiu.github.io</id>
+    <title>zjxdiu~blog site • Posts by &#34;学习&#34; category</title>
+    <link href="https://zjxdiu.github.io" />
+    <updated>2023-05-03T09:18:00.000Z</updated>
+    <category term="游戏" />
+    <category term="生活" />
+    <category term="化学" />
+    <category term="仪器分析" />
+    <category term="信号处理" />
+    <category term="日常" />
+    <category term="深度学习" />
+    <category term="音频" />
+    <category term="分享" />
+    <category term="网络" />
+    <category term="教程" />
+    <category term="软件" />
+    <category term="开发" />
+    <category term="游戏引擎" />
+    <category term="超频" />
+    <category term="硬件" />
+    <category term="脑洞" />
+    <category term="测试" />
+    <entry>
+        <id>https://zjxdiu.github.io/blog/ML_emusic_classify/</id>
+        <title>一种基于神经网络的电子音乐风格分类算法思路</title>
+        <link rel="alternate" href="https://zjxdiu.github.io/blog/ML_emusic_classify/"/>
+        <content type="html">&lt;h1 id=&#34;一种基于神经网络的电子音乐风格分类算法思路&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#一种基于神经网络的电子音乐风格分类算法思路&#34;&gt;#&lt;/a&gt; 一种基于神经网络的电子音乐风格分类算法思路&lt;/h1&gt;
+&lt;h2 id=&#34;以zjxdiu常听的电子音乐风格为例&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#以zjxdiu常听的电子音乐风格为例&#34;&gt;#&lt;/a&gt; —— 以 zjxdiu 常听的电子音乐风格为例&lt;/h2&gt;
+&lt;h1 id=&#34;目录&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#目录&#34;&gt;#&lt;/a&gt; 目录&lt;/h1&gt;
+&lt;p&gt;一、概述与引言&lt;br&gt;
+二、电子音乐风格&lt;br&gt;
+ 2.1 主风格&lt;br&gt;
+ 2.2 子风格&lt;br&gt;
+ 2.3 混合风格与其他元素&lt;br&gt;
+三、现有解决方案&lt;br&gt;
+ 3.1 传统人工分类&lt;br&gt;
+ 3.2 特征提取技术&lt;br&gt;
+ 3.3 现有机器学习算法&lt;br&gt;
+ 3.3.1 实践项目：DeepAudioClassification&lt;br&gt;
+ 四、SRM-DNN（频谱、节奏、情感分析 - 深度神经网络）思路&lt;br&gt;
+ 4.1 电子音乐的频谱特征&lt;br&gt;
+ 4.2 鼓与贝斯节奏分析&lt;br&gt;
+ 4.3 BPM 与时间分析&lt;br&gt;
+ 4.4 情感分析&lt;br&gt;
+ 4.5 能量分析&lt;br&gt;
+ 4.6 实现思路&lt;br&gt;
+ 4.6.1 频谱提取&lt;br&gt;
+ 4.6.2 DnB 分析&lt;br&gt;
+ 4.6.3 BPM 与时间分析&lt;br&gt;
+ 4.6.4 图像识别&lt;br&gt;
+ 4.6.5 人声分离&lt;br&gt;
+ 4.6.6 情感特征&lt;br&gt;
+五、总结&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;一-概述与引言&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#一-概述与引言&#34;&gt;#&lt;/a&gt; 一、概述与引言&lt;/h2&gt;
+&lt;p&gt;随着近年来计算机技术的快速发展，机器学习被应用于越来越多的领域。其中，最广泛的应用之一就是执行分类与识别任务，在音乐风格的识别与分类方面，同样有着应用的空间。为此，结合笔者生活中的实际痛点：难以区分部分电子音乐的风格，且现有方案难以准确识别细分风格，而撰写本文，希望以相对专业的视角提供一种新的解决方案。&lt;/p&gt;
+&lt;h2 id=&#34;二-电子音乐风格&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#二-电子音乐风格&#34;&gt;#&lt;/a&gt; 二、电子音乐风格&lt;/h2&gt;
+&lt;p&gt;电子音乐是音乐中的一个大类型，起源于 20 世纪 60 年代的欧美地区，是音乐文化中重要的一部分。其曲风特色是注重以节奏和旋律创建舞蹈氛围，主要使用各类合成器作为 “乐器”，并具有相对少量的歌词。在约 80 年的发展过程中，电子音乐衍生、拓展出非常多的细分风格，以下对笔者常听的风格进行简述。&lt;/p&gt;
+&lt;h3 id=&#34;21-主风格&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#21-主风格&#34;&gt;#&lt;/a&gt; 2.1 主风格&lt;/h3&gt;
+&lt;p&gt;zjxdiu 常听的电子音乐包括以下几类主要风格：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;House，浩室或浩室舞曲，注重旋律和音色的展现，编曲的格式化比较显著，节奏简单且 “软硬” 适中；&lt;/li&gt;
+&lt;li&gt;Trance，迷幻舞曲，BPM 相对 House 更高一些，鼓点一般位于每个 1/2 beat 上，但较为柔和；snare 和 hat 也在 DnB 序列中以更高频率出现，每节旋律相似但不重复。整体听感与其名字类似，为 “迷幻”。&lt;/li&gt;
+&lt;li&gt;Core，核，主要包括 Hardcore（硬核）和 Frenchcore（法核，也可一并归类为 Hardcore），表现为更为强烈的节奏和鼓点，BPM 也更高，且对人声的处理更极端；部分早期的 Core 十分的 “硬”，以至于很少人能够承受；而近年的新型 core 则相对柔软一些，并且对于旋律和人声的体现也更为注重。&lt;/li&gt;
+&lt;li&gt;Hardstyle，硬派，其显著特征为 bass 和 drum 同时出现，且多使用经失真处理的 bassline，由于其独特的 DnB 听感，时常被开玩笑：“听到 duang duang duang 就是 hardstyle”。其软硬程序介于 Core 与 House 之间。&lt;/li&gt;
+&lt;li&gt;Hands Up，无中文名，是一种处于 Core 与 Hardstyle 之间、更接近 Core 的风格，其特征为较为快速和低沉的鼓点，且旋律表现力强、与 DnB 的融合程度高，编曲方面则接近 House，在许多 Disco 舞厅音乐中较为常见。&lt;/li&gt;
+&lt;li&gt;Chill Out，弛放音乐，它的特征最为显著，即一反常派的柔和与宁静。通常其编曲较为接近 Trance，但使用的音色极为柔软，鼓点和贝斯的响度也很低，BPM 通常也较低，听感上呈现 “飘渺舒缓的节奏，柔和的合成器音效，空灵的女声吟唱，悠远的环境音”。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;22-子风格&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#22-子风格&#34;&gt;#&lt;/a&gt; 2.2 子风格&lt;/h3&gt;
+&lt;p&gt;常见子风格见如下虚表格：&lt;br&gt;
+&lt;img src=&#34;../_resources/7019e2a17be54b2c468752025c2ca3c9.png&#34; alt=&#34;7019e2a17be54b2c468752025c2ca3c9.png&#34;&gt;&lt;br&gt;
+ 需要注意的是，此处列出的仅为一部分，实际上还可区分为数倍于列表项目数的子风格。&lt;/p&gt;
+&lt;h3 id=&#34;23-混合风格与其他元素&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#23-混合风格与其他元素&#34;&gt;#&lt;/a&gt; 2.3 混合风格与其他元素&lt;/h3&gt;
+&lt;p&gt;对于现代电子音乐而言，一首音乐混合多种风格的做法是十分常见的；例如 Hands Up+Hardstyle、Melodic House+Hardstyle、Progressive House+Future House 等等。不过对于大多数音乐而言，其主要曲风只会有一种。&lt;br&gt;
+此外，部分曲风还会有一些其他元素；例如 Midtempo 指 BPM 在约 80~120 之间的，带人声和歌词的 Trance 可称为 Vocal Trance 等。总之，电子音乐的曲风是难以准确、完全判别的，因此可考虑采用标签（label）的方式进行风格判断。&lt;/p&gt;
+&lt;h2 id=&#34;三-现有解决方案&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#三-现有解决方案&#34;&gt;#&lt;/a&gt; 三、现有解决方案&lt;/h2&gt;
+&lt;h3 id=&#34;31-传统人工分类&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#31-传统人工分类&#34;&gt;#&lt;/a&gt; 3.1 传统人工分类&lt;/h3&gt;
+&lt;p&gt;显然，音乐分类可由人工进行；无论是音乐人提供还是听众、鉴赏家提供，都属于人工分类方法。在任何涉及到机器学习与人类学习对比的地方都能得知，人工方法一般有准确率高、复杂任务处理能力强、误报率低、学习速度快且成本低等优点，但其识别速度相比于计算机而言则无法比拟。&lt;/p&gt;
+&lt;h3 id=&#34;32-特征提取技术&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#32-特征提取技术&#34;&gt;#&lt;/a&gt; 3.2 特征提取技术&lt;/h3&gt;
+&lt;p&gt;参考文献：&lt;a href=&#34;https://www.hindawi.com/journals/wcmc/2021/9298654/&#34;&gt;基于音乐特征提取和深度神经网络的音乐风格分类算法&lt;/a&gt;&lt;br&gt;
+对于通常意义上的音乐而言，我们可以通过提取音乐特征进行分析与识别。这些特征包括节奏、旋律、乐器或音色、和弦或和声、人声等内容。通过适当的、已有的算法和模块，可以对这些特征进行单独提取并分析。若加入卷积神经网络，则可获得更为准确的结果。&lt;br&gt;
+参考文献中详细介绍了这二者如何融为一体并实际运用，为接下来的算法思路提供了部分理论基础。&lt;/p&gt;
+&lt;h3 id=&#34;33-现有机器学习算法&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#33-现有机器学习算法&#34;&gt;#&lt;/a&gt; 3.3 现有机器学习算法&lt;/h3&gt;
+&lt;p&gt;传统的基于机器学习的音频分类大多基于常规算法，例如支持向量机、决策树、K - 邻近算法、随机森林算法等等。这些算法的优点是部署和训练简单，算法的数学原理完善，但问题是难以准确处理复杂和细微的变化；尤其是在电子音乐风格分类任务中，由于各风格在许多方面非常相似，传统算法无法很好地处理。&lt;br&gt;
+因此，结合使用的技术与特征，提出如下采用神经网络进行识别的识别思路。&lt;/p&gt;
+&lt;h3 id=&#34;331-实践项目deepauddioclassification&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#331-实践项目deepauddioclassification&#34;&gt;#&lt;/a&gt; 3.3.1 实践项目：DeepAuddioClassification&lt;/h3&gt;
+&lt;p&gt;在提出自己的算法思路前，笔者首先实践了一个已有的开源项目：&lt;a href=&#34;https://github.com/despoisj/DeepAudioClassification&#34;&gt;Github: despoisj/DeepAudioClassification&lt;/a&gt;；该项目采用 tensorflow 中的 tflearn 模块进行 DNN 训练，并且只对音频频谱进行识别，相当于一个只输入频谱图的图像识别算法。&lt;br&gt;
+通过将音频频谱提取出来并切片，随后基于 DNN 进行图像分类训练，则模型可用于预测一个未知的音乐频谱图。这种方法巧妙地避开了音频数据量过大的问题，因为一般 CD 音质下 44100Hz 意味着 30 秒的音乐就将产生 66 万个长度的向量。但对于原作者的目的而言，分析大类音乐风格的时候可以直接从频谱入手。根据作者发表的文章&lt;a href=&#34;https://medium.com/@juliendespois/finding-the-genre-of-a-song-with-deep-learning-da8f59a61194#.yhemoyql0&#34;&gt; Finding the genre of a song with Deep Learning&lt;/a&gt; 的描述，只需要每秒 50 像素的分辨率即可获得满意的效果；在这里，sox 提供了很好用的命令行工具，允许我们直接生成灰度频谱图，其中每个像素的 x 代表时间、y 代表频率、亮度代表振幅。切片后使用深度卷积神经网络进行图像训练，最后使用投票机制提高准确率。&lt;br&gt;
+但是，这一次实践的结果并不理想。在学习率 0.001、分辨率 50px/s 时，经过 20 个 epoch 后模型仅能达到 55% 的准确率（ACC），可以看出识别效果并不理想。这主要是因为参与训练的原始数据包括 Trance 和 Hardstyle 两种风格，而它们在梅尔（Mel）频谱图上实际上十分相似，无法准确映射到高维数据集中。&lt;/p&gt;
+&lt;h2 id=&#34;四-srm-dnn频谱-节奏-情感分析-深度神经网络思路&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#四-srm-dnn频谱-节奏-情感分析-深度神经网络思路&#34;&gt;#&lt;/a&gt; 四、SRM-DNN（频谱、节奏、情感分析 - 深度神经网络）思路&lt;/h2&gt;
+&lt;h3 id=&#34;41-电子音乐的频谱特征&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#41-电子音乐的频谱特征&#34;&gt;#&lt;/a&gt; 4.1 电子音乐的频谱特征&lt;/h3&gt;
+&lt;p&gt;首先，我们并不希望创建一个需要 A100 才能运行的高度资源密集型网络，而是希望该模型能够在消费级硬件上部署和训练。因此，结合实际电子音乐的主要特征区分，我们可以沿用 DeepAudioClassification 的频谱分析方法。&lt;br&gt;
+对于电子音乐曲风分类而言，其频谱图提供的信息量是非常大的，因为几乎每种主类别都有自己特征的 DnB 序列。这导致了在频谱图中的显著区分，在低频区域尤为明显（见下图）。&lt;br&gt;
+截取频谱图时采用的配置：&lt;br&gt;
+软件：iZotope RX 7&lt;br&gt;
+FFT 类型（type）：自动可变短时傅里叶变换（Auto-adjustable STFT）&lt;br&gt;
+启用重分配（reassignment）：否&lt;br&gt;
+窗函数：海宁窗（Hann）&lt;br&gt;
+颜色映射：青色到橙色（Cyan to orange）&lt;br&gt;
+频率缩放（Frequency scale）：对数（Log）&lt;br&gt;
+高品质渲染（High-quality rendering）：启用&lt;br&gt;
+&lt;img src=&#34;../_resources/c3f2fb4bdc6d6f2789d569c084686d46.png&#34; alt=&#34;c3f2fb4bdc6d6f2789d569c084686d46.png&#34;&gt;&lt;br&gt;
+ 图：三种风格的电子音乐频谱图对比&lt;br&gt;
+本图采用的时间窗口：20s&lt;/p&gt;
+&lt;p&gt;从对比图中可以很明显地看出，不同风格的电子音乐在频谱图中呈现出较为显著的区别；尽管也有相近的风格（如 Hands Up 和 Hardcore），但总体来说，其频谱图能提供主要的风格信息。&lt;br&gt;
+既然电子音乐的频谱特征如此明显，为什么 DeepAudioClassification 项目却无法使用呢？&lt;br&gt;
+首先，频谱的选型有误，是最大的问题所在。对于电子音乐而言，由于其风格信息大多位于低频区，因此必须使用低频部分缩放较大的谱图类型。上图中采用的缩放是 Log，相比于常用的 Mel 频谱，它对于低频区有更大的缩放等级，使得低频信息分辨率更高；在实际运用中，该软件还提供了 Extend Log（拓展对数）频谱，其低频区的缩放更为显著。&lt;br&gt;
+其次，切片数量过多。实践中为尽量减轻硬件负担，对较长的音频进行切片处理；但每个音频切片数为 100 份，这个设定相对于电子音乐的结构而言太多了。常见的电子音乐由几个类型的分段组成，例如 intro、lead、build up、verse、drop、outro 等；其风格的定义一般主要从 drop 中得出，所以若切片过多，则容易破坏每个分段的完整性，不利于风格识别。&lt;/p&gt;
+&lt;h3 id=&#34;42-鼓与贝斯分析&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#42-鼓与贝斯分析&#34;&gt;#&lt;/a&gt; 4.2 鼓与贝斯分析&lt;/h3&gt;
+&lt;p&gt;电子音乐的风格可以说有一半都由 DnB（Drum and bass，鼓与贝斯；这个词同时也是一种类型的电子音乐风格，但本文将其用于指代鼓点 + 贝斯）决定；无论是鼓点节拍数、编排方式还是贝斯的特征，亦或是二者的侧链水平等，均包含大量的风格信息。&lt;br&gt;
+有关如何从音频信号中提取节拍信息，目前已有相关研究成果，包括使用动态编程、神经网络等方法进行识别。参考文献：&lt;a href=&#34;https://ieeexplore.ieee.org/document/6734668&#34;&gt;Multi-Feature Beat Tracking&lt;/a&gt;&lt;br&gt;
+ 使用 iZotope RX 7 提供的工具也可以进行 DnB 分析，其中的 Music Rebalance 模块可以准确分离人声、贝斯、鼓点三种信号，为分析提供了有利条件。&lt;br&gt;
+&lt;img src=&#34;../_resources/72bfdc72dfb2f21a37e23d8f647da698.png&#34; alt=&#34;72bfdc72dfb2f21a37e23d8f647da698.png&#34;&gt;&lt;br&gt;
+ 图：RX 7 中提供的 Music Rebalance 组件&lt;/p&gt;
+&lt;h3 id=&#34;43-bpm与时间分析&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#43-bpm与时间分析&#34;&gt;#&lt;/a&gt; 4.3 BPM 与时间分析&lt;/h3&gt;
+&lt;p&gt;BPM，即 Beats per minute，每分钟节拍数。它是音乐的一个重要参数，直接指向音乐的 “速度”。尽管在制作电子音乐时，制作人通常不会严格对齐到小节 / 拍的整数倍，但 BPM 依然能够提供风格信息。&lt;br&gt;
+在主风格分析时，仅通过 BPM 我们即可首先分辨音乐的大致类别；若低于 90 则可能为 Chill Out，90-110 可能为 House，110-130 可能为 Trance、Hands Up，130-160 可能为 Hardstyle 或 Hardcore 等。&lt;br&gt;
+在子风格分析时，BPM 也有助于进行风格确定；例如在 Hardcore 中，若难以分辨 Frenchcore 和 UK Hardcore，则可通过 BPM 辅助判断，若达到了 160 或更高则更可能为 UK Hardcore。&lt;br&gt;
+此外，音频的时间长度同样可以作为网络的输入之一，这是因为 Hands Up、Hardcore、House 和 trance、Chill Out 等分别呈现了两种倾向，前者一般时长为 3 分钟左右，而后者最长可达 10 分钟以上。尽管这种参数的帮助十分有限，但其特征强度还会更高，有助于减少结果的偏离。&lt;/p&gt;
+&lt;h3 id=&#34;44-情感分析&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#44-情感分析&#34;&gt;#&lt;/a&gt; 4.4 情感分析&lt;/h3&gt;
+&lt;p&gt;所谓情感分析，指的是对人声（和音乐，如果可能）进行情绪的识别与分类。尽管不是所有音乐都有歌词和人声，电子音乐中的人声更是少见，但进行情感分析依然有助于进一步判别细微的风格差异。&lt;br&gt;
+不过，这一步的主要目的其实只针对一种风格的音乐，即 trance；许多 Trance 都具有一些人声，即便没有人声，对于音乐本身的情感分析也能够帮助辨别 Progressive trance 和 Uplifting trance。这是因为大部分 Uplifting trance 都具有一些独特的情感特征：Hopeful，Sentimental，Sad 等等；它们具有一个共同的特征，就是 uplifting，即鼓舞人心的。可以说，如果一首 Trance 听着让人想流泪，则多数时候可以确定它一定是 Uplifting trance。&lt;br&gt;
+参考文献：&lt;a href=&#34;https://www.hindawi.com/journals/misy/2022/2715765/&#34;&gt;Music Emotion Classification Method Using Improved Deep Belief Network&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;45-能量分析&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#45-能量分析&#34;&gt;#&lt;/a&gt; 4.5 能量分析&lt;/h3&gt;
+&lt;p&gt;所谓能量分析，是指针对音频每个分片（如每秒）进行电平、响度、频域复杂度等进行分析，从而确定该分片的能量等级。由于电子音乐中每个分段的能量差异较大，intro/outro 最低、lead/build up 中等、drop 最高，因此对整个音频进行能量分析并在二维数组中呈现，将有助于分析音乐结构。&lt;br&gt;
+例如，trance 音乐的结构中，各分段能量差异相对较小，drop 出现的频次更多；House 则一般为 intro、lead、build up、drop、verse、build up、verse、outro 序列。不过该方法适用性不佳，主要是因为电子音乐的结构变化性大，且目前没有已标签的数据集进行训练，需要人工标记才能进行监督学习。&lt;/p&gt;
+&lt;h3 id=&#34;46-实现思路&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#46-实现思路&#34;&gt;#&lt;/a&gt; 4.6 实现思路&lt;/h3&gt;
+&lt;p&gt;有了以上理论基础，我们就可以尝试构建这样一个神经网络了。当然，由于笔者的专业是食品安全，本文并不涉及任何实际代码、构建和部署，而仅为提出思路。&lt;/p&gt;
+&lt;h4 id=&#34;461-频谱提取&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#461-频谱提取&#34;&gt;#&lt;/a&gt; 4.6.1 频谱提取&lt;/h4&gt;
+&lt;p&gt;这个网络仅涉及频域分析而没有时域处理，因此我们可以直接忽略音频原始采样，而是直接生成其频谱图。&lt;br&gt;
+前文实践项目 DeepAudioClassification 中，使用到了一个命令行工具：sox。它可以输出音频的 png 频谱图，并且可以直接定义灰度、分辨率等；但其选项中并不能更改频率缩放类型，而默认情况下的 Mel 频谱图对于电子音乐分类而言效果不佳。因此，我们应该使用其他工具或算法来创建 log 频谱图。在 log 频谱图下，一个 44100Hz 采样率的音频（其最高频率为 22050Hz），频谱图的中间位置约为 2205Hz。&lt;/p&gt;
+&lt;h4 id=&#34;462-dnb分析&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#462-dnb分析&#34;&gt;#&lt;/a&gt; 4.6.2 DnB 分析&lt;/h4&gt;
+&lt;p&gt;网络的第二个输入应该为 DnB 序列；通过前文所述的一些方法，可以获取音乐的节拍序列信息。仅需得知 drum（鼓点）的序列即可提供良好的分类所需的信息，而 bassline 则可通过分析甚低频区的信号得出。&lt;br&gt;
+这两个数据在训练时应始终保持时间一致性，即 drum 和 bass 不能独立分析；也可考虑混合后输入，或直接从频谱图中再单独提取高分辨率的低频区信号频谱图像进行输入。&lt;br&gt;
+可能实现的模块：&lt;a href=&#34;https://github.com/MTG/essentia/&#34;&gt;Github: MTG/essentia&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&#34;463-bpm与时间分析&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#463-bpm与时间分析&#34;&gt;#&lt;/a&gt; 4.6.3 BPM 与时间分析&lt;/h4&gt;
+&lt;p&gt;这一步是相对而言最简单的，音频时间直接获取 duration 即可，BPM 也可以通过许多 python 的音频工具库获得。&lt;br&gt;
+可能实现的模块：&lt;a href=&#34;https://github.com/librosa/librosa&#34;&gt;Github: librosa/Librosa&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&#34;464-图像识别&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#464-图像识别&#34;&gt;#&lt;/a&gt; 4.6.4 图像识别&lt;/h4&gt;
+&lt;p&gt;这一步有许多可选的方向，不过仍然可以参考前文实践项目的做法，使用 tensorflow 提供的 tflearn 进行图像训练。需要注意的是，为了降低负载，仍然可能需要对频谱图进行分片处理。&lt;/p&gt;
+&lt;h4 id=&#34;465-人声分离&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#465-人声分离&#34;&gt;#&lt;/a&gt; 4.6.5 人声分离&lt;/h4&gt;
+&lt;p&gt;借助许多工具，包括 iZotope RX 7 的 Center Extract、Music Rebalance 或 Audition 的中置声道提取功能，都可以对音频的人声进行高质量分离。这一步的目的是为后续进行情感分析提供原始文件，并且也可能为音乐情感分析提供良好的无人声音轨。&lt;/p&gt;
+&lt;h4 id=&#34;466-情感分析&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#466-情感分析&#34;&gt;#&lt;/a&gt; 4.6.6 情感分析&lt;/h4&gt;
+&lt;p&gt;参考文献：&lt;a href=&#34;https://www.hindawi.com/journals/misy/2022/2715765/&#34;&gt;Music Emotion Classification Method Using Improved Deep Belief Network&lt;/a&gt;&lt;br&gt;
+ 基于此文献，可以确定 DBN 网络用于情感分析的可能性。不过目前似乎很少见到相关的模块或库可以直接提供此功能接口的，因此在编程方面可能具有难度。&lt;/p&gt;
+&lt;h2 id=&#34;5总结&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#5总结&#34;&gt;#&lt;/a&gt; 5. 总结&lt;/h2&gt;
+&lt;p&gt;再次说明，由于作者为食品专业，且对机器学习、计算机等了解很少，本文中可能出现大量不专业、错误术语和概念，其中的部分思路也可能无法实现或已有更好的替代方法。但作者编写本文的原因是希望解决实际问题，现有的音乐分类不够准确和细致、无法区分电子音乐下的各类风格。&lt;br&gt;
+如果您有建议、修改提示、想法等，均可直接于评论区留言。人工智能是新兴的热门话题，在时代的风口浪尖上，我们可以共同学习、不断进步，为计算机学习的城墙添砖加瓦。&lt;/p&gt;
+</content>
+        <category term="信号处理" />
+        <category term="深度学习" />
+        <category term="音频" />
+        <updated>2023-05-03T09:18:00.000Z</updated>
+    </entry>
+    <entry>
+        <id>https://zjxdiu.github.io/blog/dynv6_notes/</id>
+        <title>dynv6使用技巧（如何添加多个地址 子域名 等）</title>
+        <link rel="alternate" href="https://zjxdiu.github.io/blog/dynv6_notes/"/>
+        <content type="html">&lt;h2 id=&#34;前言&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#前言&#34;&gt;#&lt;/a&gt; 前言&lt;/h2&gt;
+&lt;p&gt;因为 ipv6 普及度日益增加，在自己的环境里搭建简易服务器的想法就逐渐发芽；无论是用于博客网站、NAS 或私有云的搭建，还是用来开游戏服务器，都能够简单易行地实现（因为有公网 ipv6）。&lt;br&gt;
+不过，很多时候家庭环境下 ipv6 地址也会发生变化，尤其是电脑重启、宽带重拨的时候，那么如何在没有固定 ipv6 的情况下让别人能更容易找到我们的地址呢？很简单，当然是用 DDNS 了。&lt;br&gt;
+DDNS，也就是动态 DNS，将一个变化的 IP 绑定到域名上，通过脚本定时检测和更新地址，这样即使地址变化，域名解析出来的地址也会跟着变化，仍然可以使用同一个域名定位到同一个地址。&lt;/p&gt;
+&lt;h2 id=&#34;使用dynv6&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#使用dynv6&#34;&gt;#&lt;/a&gt; 使用 dynv6&lt;/h2&gt;
+&lt;p&gt;官网：&lt;a href=&#34;https://dynv6.com/&#34;&gt;https://dynv6.com/&lt;/a&gt;&lt;br&gt;
+ 首先用邮箱注册一个账号，接着进入 My Zones，点击 Create New Zone，在 Name 里输入你想要的网址名称和后缀类型，下面的地址可以先点击 Set current address，这样网页就会填入你的外网 IP 地址（应注意检查，ipv4 基本不会是跟电脑一致，但 ipv6 需要一致）。&lt;br&gt;
+&lt;img src=&#34;../_resources/8007661dd2ee4a33be77ca500ec41a76.png&#34; alt=&#34;8007661dd2ee4a33be77ca500ec41a76.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;点击创建后，若网址没有冲突，则创建成功；直接点击这个域名，上面有两个选项是可以自己修改的：status 和 records。&lt;/p&gt;
+&lt;h2 id=&#34;创建dns记录&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#创建dns记录&#34;&gt;#&lt;/a&gt; 创建 DNS 记录&lt;/h2&gt;
+&lt;p&gt;在 Status 里，点击 Edit Zone，将 ipv6 地址再次设为你的公网 ipv6 并保存，这样主域名就会直接解析到你的电脑上；&lt;br&gt;
+在 Records 里，可以编辑或删除现有的 AAAA 记录，也可以新增其他 DNS 记录。&lt;/p&gt;
+&lt;h3 id=&#34;创建子域名&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#创建子域名&#34;&gt;#&lt;/a&gt; 创建子域名&lt;/h3&gt;
+&lt;p&gt;点击 Add Record，选择 AAAA 类型（A 是 ipv4，AAAA 是 ipv6，CNAME 是网站别名一般用不到），前面的 name 里填写子域名前缀（&lt;a href=&#34;http://xn--web-th2ek25abiifsffvwu74d.domainname.dynv6.net&#34;&gt;比如我要创建 web.domainname.dynv6.net&lt;/a&gt;，那就在这里写 web），后面的地址里填写目标 ipv6 即可。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;设置ddns自动更新&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#设置ddns自动更新&#34;&gt;#&lt;/a&gt; 设置 DDNS 自动更新&lt;/h2&gt;
+&lt;p&gt;提示：建议将此脚本部署于 Windows 服务器上，而非自己的电脑&lt;/p&gt;
+&lt;h3 id=&#34;下载wget和grep&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#下载wget和grep&#34;&gt;#&lt;/a&gt; 下载 wget 和 grep&lt;/h3&gt;
+&lt;p&gt;网上很多教程，这里列两个：&lt;br&gt;
+&lt;a href=&#34;https://www.cnblogs.com/shenxiaolin/p/16662793.html&#34;&gt;windows 下 grep 的安装与使用&lt;/a&gt;&lt;br&gt;
+&lt;a href=&#34;https://www.jianshu.com/p/a8dfc762ba3b&#34;&gt; win10 安装 wget&lt;/a&gt;&lt;br&gt;
+ 记得检查好环境变量，确定 cmd 下运行这两个命令有输出。&lt;/p&gt;
+&lt;h3 id=&#34;下载instsrvexe和srvanyexe&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#下载instsrvexe和srvanyexe&#34;&gt;#&lt;/a&gt; 下载 instsrv.exe 和 srvany.exe&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.cnblogs.com/zhaiqianfeng/p/4622561.html&#34;&gt;利用 instsrv 和 srvany 来手动安装服务&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;编写脚本&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#编写脚本&#34;&gt;#&lt;/a&gt; 编写脚本&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;在特定路径下创建文件夹，将上述 instsrv.exe、srvany.exe 以及后续脚本均放在此处；&lt;/li&gt;
+&lt;li&gt;创建 install_server.bat 文件：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;hljs bat&#34;&gt;@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; off
+&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; curexe=%~dp0
+&lt;span class=&#34;hljs-built_in&#34;&gt;cd&lt;/span&gt; /d &lt;span class=&#34;hljs-variable&#34;&gt;%curexe%&lt;/span&gt;
+&amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%curexe%&lt;/span&gt;instsrv.exe&amp;quot; ddns_dynv6 &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%curexe%&lt;/span&gt;srvany.exe&amp;quot;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ddns_dynv6 服务添加完成
+
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 修改服务路径
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM 添加注册表语法: reg add 注册表路径 /v 项名称 /t 值类型 /d 数据 /f 表示强行修改不提示&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM 名称 Application 值为你要作为服务运行的程序地址 /d对应的参数有斜杠不是为了转义引号，而是路径还有斜杠，默认将引号转义了，额外添加斜杠是为了保留引号&lt;/span&gt;
+ 
+&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; regpath=HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ddns_dynv6\Parameters\
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM 名称 AppDirectory 值为你要作为服务运行的程序所在文件夹路径&lt;/span&gt;
+reg add &lt;span class=&#34;hljs-variable&#34;&gt;%regpath%&lt;/span&gt; /v AppDirectory /t REG_SZ /d &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%curexe%&lt;/span&gt;\&amp;quot; /f
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM 名称 AppParameters 值为你要作为服务运行的程序启动所需要的参数&lt;/span&gt;
+reg add &lt;span class=&#34;hljs-variable&#34;&gt;%regpath%&lt;/span&gt; /v Application /t REG_SZ /d &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%curexe%&lt;/span&gt;dynv6.bat&amp;quot; /f
+ 
+&lt;span class=&#34;hljs-built_in&#34;&gt;net&lt;/span&gt; &lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt; ddns_dynv6
+ 
+&lt;span class=&#34;hljs-built_in&#34;&gt;pause&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;创建 remove_server.bat 文件：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;hljs bat&#34;&gt;@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; off
+&lt;span class=&#34;hljs-built_in&#34;&gt;net&lt;/span&gt; stop ddns_dynv6
+instsrv ddns_dynv6 remove
+&lt;span class=&#34;hljs-built_in&#34;&gt;pause&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;创建 dynv6.bat 文件：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;hljs bat&#34;&gt;@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; off
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; tempnum=
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; ipaddr=
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; oldipaddr=&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;.&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;.&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;.&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;rem domain=你注册的域名（dynv6.net 提供多种域名后缀可自行修改）&lt;/span&gt;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; domain=【在这里填写你记录的域名，填zone名称】
+&lt;span class=&#34;hljs-comment&#34;&gt;rem token=你注册后的钥匙（dynv6.net 提供）&lt;/span&gt;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; token=【在这里填写你的token，把这段文字和括号删掉然后粘贴】
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; IPV6_REGEX=&amp;quot;\(\([&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;-&lt;span class=&#34;hljs-number&#34;&gt;9&lt;/span&gt;A-Fa-f]\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;4&lt;/span&gt;\&amp;#125;:\)\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,\&amp;#125;\)\(\([&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;-&lt;span class=&#34;hljs-number&#34;&gt;9&lt;/span&gt;A-Fa-f]\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;4&lt;/span&gt;\&amp;#125;\)\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;\&amp;#125;\)\(\(:[&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;-&lt;span class=&#34;hljs-number&#34;&gt;9&lt;/span&gt;A-Fa-f]\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;4&lt;/span&gt;\&amp;#125;\)\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,\&amp;#125;\)&amp;quot;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; IPV4_REGEX=&amp;quot;[&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;-&lt;span class=&#34;hljs-number&#34;&gt;9&lt;/span&gt;]\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;3&lt;/span&gt;\&amp;#125;\.[&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;-&lt;span class=&#34;hljs-number&#34;&gt;9&lt;/span&gt;]\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;3&lt;/span&gt;\&amp;#125;\.[&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;-&lt;span class=&#34;hljs-number&#34;&gt;9&lt;/span&gt;]\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;3&lt;/span&gt;\&amp;#125;\.[&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;-&lt;span class=&#34;hljs-number&#34;&gt;9&lt;/span&gt;]\&amp;#123;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;,&lt;span class=&#34;hljs-number&#34;&gt;3&lt;/span&gt;\&amp;#125;&amp;quot;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; URL=&amp;quot;https://dynv6.com/api/update?hostname=&lt;span class=&#34;hljs-variable&#34;&gt;%domain%&lt;/span&gt;&amp;amp;token=&lt;span class=&#34;hljs-variable&#34;&gt;%token%&lt;/span&gt;&amp;amp;ipv4=&lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt;paddr&lt;span class=&#34;hljs-variable&#34;&gt;%%&amp;quot;&lt;/span&gt;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; URLV6=&amp;quot;https://dynv6.com/api/update?hostname=&lt;span class=&#34;hljs-variable&#34;&gt;%domain%&lt;/span&gt;&amp;amp;token=&lt;span class=&#34;hljs-variable&#34;&gt;%token%&lt;/span&gt;&amp;amp;ipv6=&lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt;paddr&lt;span class=&#34;hljs-variable&#34;&gt;%%&amp;amp;&lt;/span&gt;ipv6prefix=&lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt;paddr&lt;span class=&#34;hljs-variable&#34;&gt;%%&amp;quot;&lt;/span&gt;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; BIN=wget -t &lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt; --prefer-family=IPv6 --no-dns-cache --no-check-certificate
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;rem ***ipv4***（dynv6也提供ipv4动态域名服务）&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;rem for /F %%i in (&amp;#x27;nslookup %domain% ns1.dynv6.com ^|grep -m2 -o %IPV4_REGEX%&amp;#x27;) do ( set oldipaddr=%%i)&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;rem ***ipv6***&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;for&lt;/span&gt; /F &lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt; &lt;span class=&#34;hljs-keyword&#34;&gt;in&lt;/span&gt; (&amp;#x27;nslookup -qt^=AAAA &lt;span class=&#34;hljs-variable&#34;&gt;%domain%&lt;/span&gt; ns1.dynv6.com ^|grep -m2 -o &lt;span class=&#34;hljs-variable&#34;&gt;%IPV6_REGEX%&lt;/span&gt;&amp;#x27;) &lt;span class=&#34;hljs-keyword&#34;&gt;do&lt;/span&gt; ( &lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; oldipaddr=&lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt;)
+ 
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; Current &lt;span class=&#34;hljs-variable&#34;&gt;%domain%&lt;/span&gt; IP Add:&lt;span class=&#34;hljs-variable&#34;&gt;%oldipaddr%&lt;/span&gt;
+ 
+:start_ip1
+&lt;span class=&#34;hljs-comment&#34;&gt;rem @cls&lt;/span&gt;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ... 
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;.####从ip.sb获得地址####
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; ip6addr=null
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM ***ipv6***&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;for&lt;/span&gt; /F &lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt; &lt;span class=&#34;hljs-keyword&#34;&gt;in&lt;/span&gt; (&amp;#x27;&lt;span class=&#34;hljs-variable&#34;&gt;%BIN%&lt;/span&gt; -O- http://ip.sb  ^|grep -m &lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt; -o &lt;span class=&#34;hljs-variable&#34;&gt;%IPV6_REGEX%&lt;/span&gt;&amp;#x27;) &lt;span class=&#34;hljs-keyword&#34;&gt;do&lt;/span&gt; (&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; ipaddr=&lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt;)
+ 
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;&amp;quot; == &amp;quot;null&amp;quot; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 没有IPV6地址或获得IPV6地址失败
+timeout &lt;span class=&#34;hljs-number&#34;&gt;5&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; start_ip2
+) &lt;span class=&#34;hljs-keyword&#34;&gt;else&lt;/span&gt; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 获得IP地址:&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;，旧IP地址:&lt;span class=&#34;hljs-variable&#34;&gt;%oldipaddr%&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;hljs-keyword&#34;&gt;NOT&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%oldipaddr%&lt;/span&gt;&amp;quot; == &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;&amp;quot; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ---更新IP---
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; update_web_ip
+) &lt;span class=&#34;hljs-keyword&#34;&gt;else&lt;/span&gt; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; IP没有改变
+timeout &lt;span class=&#34;hljs-number&#34;&gt;300&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;cls&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; start_ip2
+))
+ 
+:start_ip2
+@&lt;span class=&#34;hljs-built_in&#34;&gt;ipconfig&lt;/span&gt; /flushdns
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ...
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;.####从checkip.dyndns.com获得地址####
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; ipaddr=null
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM ***ipv4***&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;rem for /F %%i in (&amp;#x27;%BIN% -O- http://checkip.dyndns.com ^|grep -m 1 -o %IPV4_REGEX%&amp;#x27;) do (set ipaddr=%%i)&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM ***ipv6***&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;for&lt;/span&gt; /F &lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt; &lt;span class=&#34;hljs-keyword&#34;&gt;in&lt;/span&gt; (&amp;#x27;&lt;span class=&#34;hljs-variable&#34;&gt;%BIN%&lt;/span&gt; -O- http://checkipv6.dyndns.com ^|grep -m &lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt; -o &lt;span class=&#34;hljs-variable&#34;&gt;%IPV6_REGEX%&lt;/span&gt;&amp;#x27;) &lt;span class=&#34;hljs-keyword&#34;&gt;do&lt;/span&gt; (&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; ipaddr=&lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt;)
+ 
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;&amp;quot; == &amp;quot;null&amp;quot; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 没有IP地址或获得IP地址失败
+timeout &lt;span class=&#34;hljs-number&#34;&gt;5&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; start_ip1
+) &lt;span class=&#34;hljs-keyword&#34;&gt;else&lt;/span&gt; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 获得IP地址:&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;，旧IP地址:&lt;span class=&#34;hljs-variable&#34;&gt;%oldipaddr%&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;hljs-keyword&#34;&gt;NOT&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%oldipaddr%&lt;/span&gt;&amp;quot; == &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;&amp;quot; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ---更新IP---
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; update_web_ip
+) &lt;span class=&#34;hljs-keyword&#34;&gt;else&lt;/span&gt; (
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; IP没有改变
+timeout &lt;span class=&#34;hljs-number&#34;&gt;300&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;cls&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; start_ip2
+))
+ 
+ 
+:update_web_ip
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ==============================================
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ipaddr=&amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;&amp;quot;
+@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ==============================================
+@&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; var=null
+&lt;span class=&#34;hljs-comment&#34;&gt; &lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM ***ipv4***&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;rem for /F &amp;quot;tokens=*&amp;quot; %%i in (&amp;#x27;%BIN% -O- %URL%&amp;#x27;) do (set var=%%i)&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM ***ipv6***&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;for&lt;/span&gt; /F &amp;quot;tokens=*&amp;quot; &lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt; &lt;span class=&#34;hljs-keyword&#34;&gt;in&lt;/span&gt; (&amp;#x27;&lt;span class=&#34;hljs-variable&#34;&gt;%BIN%&lt;/span&gt; -O- &lt;span class=&#34;hljs-variable&#34;&gt;%URLV6%&lt;/span&gt;&amp;#x27;) &lt;span class=&#34;hljs-keyword&#34;&gt;do&lt;/span&gt; (&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; var=&lt;span class=&#34;hljs-variable&#34;&gt;%%i&lt;/span&gt;)
+ 
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 更新信息=&lt;span class=&#34;hljs-variable&#34;&gt;%var%&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%var%&lt;/span&gt;&amp;quot; == &amp;quot;addresses updated&amp;quot; &lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; end
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 更新失败
+timeout &lt;span class=&#34;hljs-number&#34;&gt;120&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; start_ip2
+ 
+:end
+&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; oldipaddr=&lt;span class=&#34;hljs-variable&#34;&gt;%ipaddr%&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 更新数据成功
+timeout &lt;span class=&#34;hljs-number&#34;&gt;300&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; start_ip2
+&lt;span class=&#34;hljs-comment&#34;&gt;&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM 以上每个TIMEOUT指令都表示等待一定时间（秒），可以按实际情况修改&lt;/span&gt;
+&lt;span class=&#34;hljs-comment&#34;&gt;REM 我这里的300秒应该是够用的，太短了占用过多资源，太长了更新不及时&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;开机自启动&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#开机自启动&#34;&gt;#&lt;/a&gt; 开机自启动&lt;/h2&gt;
+&lt;p&gt;创建一个计划任务即可，详情可百度教程&lt;/p&gt;
+</content>
+        <category term="游戏" />
+        <category term="网络" />
+        <updated>2023-03-03T09:00:00.000Z</updated>
+    </entry>
+    <entry>
+        <id>https://zjxdiu.github.io/blog/Network_progress_CSUST/</id>
+        <title>长沙理工大学无线网络多设备共享解决方案</title>
+        <link rel="alternate" href="https://zjxdiu.github.io/blog/Network_progress_CSUST/"/>
+        <content type="html">&lt;h1 id=&#34;本文未完成&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#本文未完成&#34;&gt;#&lt;/a&gt; 本文未完成&lt;/h1&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;引用&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#引用&#34;&gt;#&lt;/a&gt; 引用&lt;/h2&gt;
+&lt;p&gt;本文大部分内容可参考：&lt;br&gt;
+&lt;a href=&#34;https://www.mr-cn.net/2021/06/15/Share-your-network-in-CSUST/&#34;&gt;长沙理工大学：校园网解除共享限制&lt;/a&gt;&lt;br&gt;
+路由器刷机参考教程（非本次使用）：&lt;br&gt;
+&lt;a href=&#34;https://www.right.com.cn/FORUM/thread-489907-1-1.html&#34;&gt;极路由 Enjoy 1200  HC5861B OpenWRT 固件 Rosy 主题&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;原因与现象&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#原因与现象&#34;&gt;#&lt;/a&gt; 原因与现象&lt;/h2&gt;
+&lt;p&gt;为了维护运营商利益，校园网设置了一些检测与规则，对同时登录校园网的设备数量作出了严格的限制，并且不允许终端用户进行网络共享。&lt;br&gt;
+具体表现为，当用户使用电脑、手机等的热点、无线信号桥等方法时，只要有第二台设备联网，就会在一定条件下被检测发现，随后此账号将无法访问网络，并自动将网页重定向到登录界面（或 1.1.1.3，但这个页面不能加载出来）。&lt;/p&gt;
+&lt;h2 id=&#34;原理&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#原理&#34;&gt;#&lt;/a&gt; 原理&lt;/h2&gt;
+&lt;p&gt;根据引用文章，可以得知共享检测主要通过 80 端口下的 HTTP 报文中浏览器 UA 的区别来实现，可以看到这个限制条件比较多，而且检测周期并不短；因此会出现稳定共享的时间时长时短的现象。&lt;br&gt;
+此外，还可能会通过其他方法检测，包括但不限于 TTL、IPID、侵入式检测等等。&lt;/p&gt;
+&lt;h2 id=&#34;准备工作&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#准备工作&#34;&gt;#&lt;/a&gt; 准备工作&lt;/h2&gt;
+&lt;p&gt;为实现稳定的校园网共享，首先需要选择正确的系统：必须使用 OpenWRT 或 Pavanda 等软路由系统。&lt;br&gt;
+本文基于 Pavanda 操作。&lt;/p&gt;
+&lt;h3 id=&#34;路由选型&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#路由选型&#34;&gt;#&lt;/a&gt; 路由选型&lt;/h3&gt;
+&lt;p&gt;如果你还没有软路由或者合适的路由器，那么选购路由器就是第一步了。我最终的选择是二手极路由 Enjoy 1200，型号 HC5861B。极路由虽然已经倒闭，但它的产品可玩性和性价比确实是相对较好的。&lt;br&gt;
+淘宝入手价格 40 元，由商家代刷 Breed。&lt;br&gt;
+需要注意的是，这一款路由器不支持 USB，电源接口也是 12V DC 而非 5V Micro-USB，如果有这两个功能需求的话可以考虑极路由 3 或其他产品。&lt;/p&gt;
+&lt;h3 id=&#34;检查与刷机&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#检查与刷机&#34;&gt;#&lt;/a&gt; 检查与刷机&lt;/h3&gt;
+&lt;p&gt;收货后先简单清理积灰，检查网口是否有积聚大量灰尘，天线是否正常连接、旋转。&lt;br&gt;
+随后插入电源开机，连接电脑网口到路由器 LAN 1 口，等待 IP 自动配置完成，进入默认网关的地址（本次为 192.168.132.1，极路由原厂固件可能为 192.168.199.1）&lt;br&gt;
+使用默认的管理员账号密码（admin）登录后，发现这台机器已经刷好了老毛子固件（Padavan）了：&lt;br&gt;
+&lt;img src=&#34;../_resources/54de7cdf47ce563bb65d5c42e282e331.png&#34; alt=&#34;54de7cdf47ce563bb65d5c42e282e331.png&#34;&gt;&lt;br&gt;
+ 所以省下了很多时间，虽然我的计划是使用 OpenWrt，但 Padavan 本质上是一样的。&lt;br&gt;
+如果需要刷机教程，请参考引用文章，或直接搜索路由型号 + OpenWrt，即可找到一些刷机教程。&lt;/p&gt;
+&lt;h2 id=&#34;网络拓扑&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#网络拓扑&#34;&gt;#&lt;/a&gt; 网络拓扑&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;../_resources/15828e53952c884a9b9f9f1cc11b7c77.png&#34; alt=&#34;15828e53952c884a9b9f9f1cc11b7c77.png&#34;&gt;&lt;br&gt;
+ 我的目标是达成这样的拓扑，实际上就是一个无线 “路由”，也就是将无线信号作为 WAN，执行 NAT 和防火墙规则后建立子网，设备均接入子网中。&lt;/p&gt;
+&lt;h2 id=&#34;基础配置&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#基础配置&#34;&gt;#&lt;/a&gt; 基础配置&lt;/h2&gt;
+&lt;h3 id=&#34;路由器接入无线网络&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#路由器接入无线网络&#34;&gt;#&lt;/a&gt; 路由器接入无线网络&lt;/h3&gt;
+&lt;p&gt;直接参考这张图即可：&lt;br&gt;
+&lt;img src=&#34;../_resources/d6035076edef8fc78299e3af690eea62.png&#34; alt=&#34;d6035076edef8fc78299e3af690eea62.png&#34;&gt;&lt;br&gt;
+2.4G 和 5G 只能有一个用于 AP-Client，另一个必须禁用桥接。&lt;br&gt;
+需要注意的是，路由器需要用一个频段接入校园网，另一个频段用于发射信号；虽然可以选择 client+AP 来实现单频复用，实际上只用 5GHz 的话效果也不错，但我收到的这台路由器不知道为何 5G 能力极其孱弱（无遮挡 50cm 距离下 client 都不能跑满协商速率），而 2.4G 能力极强（对周围的无线鼠标、蓝牙手柄等造成严重干扰），因此这里不使用这种方法。&lt;br&gt;
+懒得删改的原文：&lt;br&gt;
+&lt;em&gt;这里还涉及到频段的选择，最开始我使用 2.4G 接入校园网、5G 用于共享，但随后我发现无线鼠标的工作会受到较严重的干扰（接收器也工作在 2.4G 频率上），因此后续改为 5G 接入、2.4G 共享。&lt;br&gt;
+此外，网络性能也是一个需要关心的重点，5GHz 总能提供更优秀的表现，但这里我们只能用于一个目的；由于我平时主要使用电脑上网，而电脑是通过网线连接到路由器的，因此选择 5G 接入是更好的。实际上，这种情况下 2.4G 的表现也不差，宿舍面积小、干扰少，多次测试下来延迟在 30ms 以内，速度 8-9MB/s，可以满足 1080P 视频观看和正常游戏。&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id=&#34;修改网络配置&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#修改网络配置&#34;&gt;#&lt;/a&gt; 修改网络配置&lt;/h3&gt;
+&lt;p&gt;如果对内网网段不敏感（例如你只想要正常上网，平时不开发网页、软件、游戏、不做任何测试，那么这一段可以跳过）&lt;br&gt;
+在左侧选择外部网络（WAN），可参考下图配置：&lt;br&gt;
+&lt;img src=&#34;../_resources/e613ab56c89c86b939bf67ab5601fc42.png&#34; alt=&#34;e613ab56c89c86b939bf67ab5601fc42.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;LAN 配置同理，设置想要的网段、DNS、静态路由等。&lt;/p&gt;
+&lt;h2 id=&#34;通过nat连接ipv6&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#通过nat连接ipv6&#34;&gt;#&lt;/a&gt; 通过 NAT 连接 ipv6&lt;/h2&gt;
+&lt;p&gt;由于我希望使用到正常的 ipv6，故单独在此写出方案；对于绝大多数日常网络而言，关闭 ipv6 可能反而有助于提高稳定性。&lt;br&gt;
+参考文章：&lt;a href=&#34;https://post.smzdm.com/p/ad9qkz9k/&#34;&gt;校园网环境下 Openwrt 配置 ipv6 教程 —— 以 nat6 为例&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;NAT 是什么？&lt;br&gt;
+NAT 是出现在 ipv4 中的技术；由于 ipv4 地址空间有限（总约 42 亿个），无法满足爆炸式增长的网络设备入网需求，因此出现了网络地址转换（Network Address Translation）技术；它的作用就是缓解 ipv4 地址消耗，尽量在 ipv6 部署完全之前满足原有上网需求。&lt;br&gt;
+它的工作原理很简单，我们平时使用路由器上网的时候就至少会有一次 NAT 过程，路由器将一个外网（WAN）的地址映射到多个内网地址（通常为 192.168.x.x 或 10.x.x.x），这样一个路由器下的设备就可以共用一个外网 IP，大幅缓解了地址消耗，同时解决了耗尽的影响。&lt;br&gt;
+NAT 有助于提高网络安全性，因为路由器上可以部署非常高效的防火墙，也可以天然阻断所有传入连接，但这样的技术也会带来问题；最大的问题无疑就是点对点连接变得不可能，因此游戏联机、网站建设等都会变得很困难。&lt;br&gt;
+在我的使用场景下，Minecraft 联机是最常见的点对点连接应用，此前的解决方案均为 FRP 内网穿透（见前文章）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;为什么我一定要有 ipv6 连接？&lt;br&gt;
+很简单，ipv6 地址池极大，运营商也并未刻意限制用户的 ipv6 访问（至少我没有遇到过哪个运营商在 ipv6 上用 NAT 的）&lt;strong&gt;（但是教育网除外）&lt;/strong&gt;。&lt;br&gt;
+因此，大多数用户只要开启了 ipv6，就能获取到公网 IP。这对于点对点连接来说无疑是非常有帮助的。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;教育网干了什么？&lt;br&gt;
+一般运营商在家用、商用宽带里分配的 ipv6 都是 / 64 的前缀，这意味着路由器拿到的地址里面还包含了大量的可用地址，用于给后续设备分配 ipv6 地址；&lt;br&gt;
+但教育网的 ipv6 则直接分配了 / 128 的地址，这就意味着它给你的地址只能用于一台设备。也就是说，想要共享 ipv6，必须使用 NAT。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;后续等待完善&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#后续等待完善&#34;&gt;#&lt;/a&gt; 后续等待完善&lt;/h1&gt;
+&lt;p&gt;可参考：&lt;a href=&#34;https://doge.uk/coding/padavan-ipv6-napt66.html&#34;&gt;Padavan 路由下使用 NAPT66 模块访问移动 IPV6 网络&lt;/a&gt;&lt;/p&gt;
+</content>
+        <category term="网络" />
+        <updated>2023-02-24T14:07:00.000Z</updated>
+    </entry>
+    <entry>
+        <id>https://zjxdiu.github.io/blog/ipv6_toss/</id>
+        <title>记一次折腾电信ipv6中的各种问题</title>
+        <link rel="alternate" href="https://zjxdiu.github.io/blog/ipv6_toss/"/>
+        <content type="html">&lt;p&gt;阅前提示：本文约 5000 字，预计阅读时长 &amp;gt; 5 分钟。&lt;/p&gt;
+&lt;h2 id=&#34;起因&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#起因&#34;&gt;#&lt;/a&gt; 起因&lt;/h2&gt;
+&lt;p&gt;由于想跟好友联机 minecraft，而使用 natfrp 做内网穿透时发现有很多问题，包括延迟高且不稳定、速率低、流量限制、高峰时期断连等。刚好想起来家里的网络已经被我启用了 ipv6，因此试图使用 ipv6 来直接对公网开放 minecraft 服务器。&lt;/p&gt;
+&lt;h2 id=&#34;开始第一次尝试&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#开始第一次尝试&#34;&gt;#&lt;/a&gt; 开始第一次尝试&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;当前状态：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;光猫使用路由模式，自主拨号并获取两种 ip 地址（除非特殊说明，否则以下简称 ip）&lt;/li&gt;
+&lt;li&gt;无线路由器（下简称路由器）使用路由模式&lt;/li&gt;
+&lt;li&gt;所有设备连接在路由器上，并能获取到 ip&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;../_resources/a941e7dad288e2bd65c297c76503f111.png&#34; alt=&#34;a941e7dad288e2bd65c297c76503f111.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;当前问题：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;首先尝试外网直接连接服务器 ipv6，失败&lt;/li&gt;
+&lt;li&gt;外网无法 ping 通任何内网主机&lt;/li&gt;
+&lt;li&gt;光猫获取到的 ipv6 地址仍然无法通过外网 ping 通&lt;/li&gt;
+&lt;li&gt;在光猫中设置端口映射或 DMZ 主机，无效&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;实际上，上述内容已经花了我一下午来检查和排查；网上搜索相关内容，有人说&lt;s&gt;获取到的 ipv6 是 240e 开头的，说明是经过了 NAT（类似 ipv4，所以肯定访问不到）&lt;/s&gt;；但是这种说法显然有问题，首先 ipv6 只有在特殊环境下才需要 NAT，其次 2 开头的地址至少不是内网地址。&lt;br&gt;
+另有说法称，运营商（我用的是电信）会用防火墙屏蔽入站流量，防止你开服务器。根据我的实验，这个说法是正确的。&lt;/p&gt;
+&lt;p&gt;随后开始折腾，既然防火墙阻碍了我，那我关掉就好。&lt;br&gt;
+但是现实很惨淡，运营商早就猜到你会搞这一手，所以直接不允许你关闭防火墙。&lt;br&gt;
+这里包括了最后的那个防止 ICMP 包攻击，还有其他的防火墙直接不显示。&lt;br&gt;
+&lt;img src=&#34;../_resources/7d186301818af5165a407c1751fb848c.png&#34; alt=&#34;7d186301818af5165a407c1751fb848c.png&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;换个地方拨号&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#换个地方拨号&#34;&gt;#&lt;/a&gt; 换个地方拨号？&lt;/h3&gt;
+&lt;p&gt;网上提供了一种解决思路，即光猫改桥接、使用路由器进行拨号；这样做有一些好处，例如路由器的性能更强、可以提供更快的网速，以及很高的可玩性、灵活性等等，这里直接把路由器换成软路由就能实现非常多的玩法，因此我就着手开始改桥接。&lt;/p&gt;
+&lt;p&gt;改的过程实际上非常简单，找到宽带的账号密码，进入光猫的超级用户，然后直接改桥接即可。&lt;br&gt;
+&lt;img src=&#34;../_resources/bc81d148f88500f57dbadabcf8080770.png&#34; alt=&#34;bc81d148f88500f57dbadabcf8080770.png&#34;&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;随后，将路由器设置为 PPPoE 拨号连接；这里就不放图了，各家路由器的配置流程都是一回事。&lt;br&gt;
+关闭路由器的防火墙，现在，所有的设备又能重新获取到 ip，且具有公网 ipv6 地址。当然由于 Windows 防火墙的配置，需要关闭 Windows 的防火墙才能从外网 ping 通。&lt;br&gt;
+大获全胜！网速也提升到了 570M（家里办理的 500M 宽带，如果直接从光猫拨号 + 路由，则速度最高 470M）&lt;br&gt;
+&lt;img src=&#34;../_resources/cbdb76297f0af4d4d3837f421060eb67.png&#34; alt=&#34;cbdb76297f0af4d4d3837f421060eb67.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;同时，Minecraft 也能正常从外网通过 ipv6 连接，看起来一切完美。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;核心问题网页无法访问&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#核心问题网页无法访问&#34;&gt;#&lt;/a&gt; 核心问题：网页无法访问&lt;/h2&gt;
+&lt;p&gt;一切完美？当然是不可能的。一定会出问题，而且是大问题。&lt;br&gt;
+配置好 ipv6 之后，一开始所有设备工作正常，网速和解析速度起飞。&lt;br&gt;
+然后，用了半个小时左右，问题开始逐步显现。&lt;br&gt;
+最开始，我在网上搜索一个 Windows 方面的配置问题，并且点进去了一个博客园的链接。然后，网页并没有按照我预想中的那样飞快加载，而是不断转圈。&lt;br&gt;
+最后：&lt;br&gt;
+&lt;img src=&#34;../_resources/84c01f9cc1ebf56595e7d025fc4a0617.png&#34; alt=&#34;84c01f9cc1ebf56595e7d025fc4a0617.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;一开始我以为这是必应的中转链接出现问题了（百度日常），因为点击必应的搜索结果并不是直接访问目标网址，而是先通过一个必应的链接重定向到目标。这个重定向有时候会失败，是正常的。但是，我直接访问目标网址时，居然也不能进去，这就非常奇怪了。&lt;br&gt;
+这时候我还是乐观的心态，认为是博客园的服务器出了问题，也没有去其它设备上尝试。但我仍然重视了这个问题，并立即去搜索解决方法。因为是开了路由器拨号 + ipv6 之后才出现的问题，所以查找方向也很明确了。结果，就在我查找的过程中，发现了更多的问题。&lt;br&gt;
+百度经验、百度知道、百度贴吧、知乎… 这些网站一个接一个地挂掉；有时候网站一开始能正常访问，再开的时候就加载不出 JS 和 CSS（变成了没有渲染的样式，仅限知乎），然后就是一样的不响应。症状跟博客园完全一致，控制台里没有任何有效信息，只有一个响应超时。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;先恢复正常访问&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#先恢复正常访问&#34;&gt;#&lt;/a&gt; 先恢复正常访问&lt;/h3&gt;
+&lt;p&gt;一通摸索之后，我找到了暂时恢复的方法：在网卡选项里禁用 ipv6（Internet 协议版本 6）。&lt;br&gt;
+禁用后，所有网页恢复正常，但这显然不可取，因为我的目的就是使用 ipv6，而禁用它也就丧失了所有 ipv6 能力。&lt;br&gt;
+需要注意的是，现在出问题的网站都不是纯 ipv6 站点，有些是纯 ipv4 站点，但双栈域名居多。这时候访问纯 ipv6 网站是全部成功的，ipv6 测试也是全绿通过，并且无论何种类型的网站都有大量能成功访问的。&lt;/p&gt;
+&lt;h3 id=&#34;退一步试试&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#退一步试试&#34;&gt;#&lt;/a&gt; 退一步试试&lt;/h3&gt;
+&lt;p&gt;退一步，指的就是我找到一种方法，让浏览器只使用或优先使用 ipv4 进行访问。&lt;br&gt;
+因为出问题的只有浏览器，我电脑里其它软件全都正常运行。&lt;br&gt;
+&lt;em&gt;后续补充：今天发现 Windows 版的微信也不能正常使用，二维码加载不出来，禁用 ipv6 后恢复。&lt;/em&gt;。&lt;br&gt;
+但是，网上相关的教程极少甚至没有，偶有几个是针对 Firefox 或 chrome 的，而我使用的是 edge；就算我能参考 chrome，教程也是针对 Linux 而非 Windows。&lt;/p&gt;
+&lt;h3 id=&#34;再退一步&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#再退一步&#34;&gt;#&lt;/a&gt; 再退一步&lt;/h3&gt;
+&lt;p&gt;好的，如果浏览器不行，那我就找个方法让整个操作系统都优先使用 ipv4。&lt;br&gt;
+微软提供了一个文档，通过&lt;a href=&#34;https://learn.microsoft.com/en-US/troubleshoot/windows-server/networking/configure-ipv6-in-windows&#34;&gt;修改注册表的方法&lt;/a&gt;来实现全局优先 ipv4、禁用 ipv6、优先 ipv6 等等。&lt;br&gt;
+一看到这里，我立即兴奋地尝试了。改了注册表，重启，访问：&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;ERR_TIMED_OUT&lt;/code&gt;  .png&lt;/p&gt;
+&lt;p&gt;好，居然没用。微软，不愧是你。&lt;br&gt;
+重启很多次无效，当时已经半夜 2:30，我没有了折腾的心情，只想赶紧睡觉。&lt;/p&gt;
+&lt;h2 id=&#34;第一次折腾失败&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#第一次折腾失败&#34;&gt;#&lt;/a&gt; 第一次折腾失败&lt;/h2&gt;
+&lt;p&gt;网上又找了很多相同症状的用户，解决方案要么是改注册表，要么是说路由器兼容性有问题。&lt;br&gt;
+好吧，反正跟我联机的同学也不是很在意，natfrp 似乎还能继续用用。&lt;br&gt;
+于是，彻底宣告失败，我重新改回了光猫拨号、路由桥接，随后所有网络恢复正常（除了外网还是不能访问这里的所有 ipv6；当然，也包括 ipv4，因为有 NAT）。&lt;/p&gt;
+&lt;p&gt;这就结束了吗？怎么可能，不搞到好用我是不会罢休的。&lt;br&gt;
+于是，第二天，我又开始了新一轮的折腾。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;第二次尝试&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#第二次尝试&#34;&gt;#&lt;/a&gt; 第二次尝试&lt;/h2&gt;
+&lt;p&gt;重新尝试，同样的光猫改桥接，同样的路由器拨号。同样的正常 ipv6 公网访问，但是这一次似乎是运气比较好，网页访问全部正常使用，并且坚持了至少 4 个小时。&lt;br&gt;
+中途离家 4 小时，回来之后，惊喜地发现，这些网页又打不开了 😃&lt;br&gt;
+这时候我就已经明白，无论怎么修改电脑或者路由器配置都无效，于是没有再做尝试，转而对现在的情况进行分析，并希望通过其它方法解决需求。&lt;/p&gt;
+&lt;h3 id=&#34;转机&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#转机&#34;&gt;#&lt;/a&gt; 转机&lt;/h3&gt;
+&lt;p&gt;在我整理思路的时候，我意识到，实际上我只需要服务器一台电脑能够获取正常入站的 ipv6 地址（正常的 ipv6）即可，其余设备甚至根本不需要启用 ipv6。这时候，我首先想到的就是：&lt;/p&gt;
+&lt;h4 id=&#34;一号多拨&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#一号多拨&#34;&gt;#&lt;/a&gt; 一号多拨&lt;/h4&gt;
+&lt;p&gt;一号多拨，指的是我通过同一个光猫，使用同一个宽带账号，分别在两台设备上进行拨号。&lt;br&gt;
+我的最初想法是，服务器电脑直连光猫并自己拨号获取正常的 ipv6 地址，同时路由器也自己拨号，但只启用 ipv4。&lt;br&gt;
+网上搜索发现，这种方法当然是可行的，前提是运营商支持多拨。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;折腾中&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;没有任何侥幸，拨号失败。电脑上尝试第二次拨号时直接返回错误 629。&lt;/p&gt;
+&lt;p&gt;再换一种角度，重新分析我的需求。服务器能使用正常的 ipv6，同时其余设备仅需要 ipv4（最多需要 ipv6 内网而非公网访问）。因此，我做了如下操作，来使得二者兼顾。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;最终如何解决&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#最终如何解决&#34;&gt;#&lt;/a&gt; 最终如何解决&lt;/h2&gt;
+&lt;p&gt;如果你的需求和遇到的问题跟我完全一样，那么也许可以参考我的方法来临时解决。&lt;br&gt;
+&lt;strong&gt;提示：最终的解决方案也并不完美，只不过暂时保证了两边可以都解决主要矛盾&lt;/strong&gt;&lt;br&gt;
+以下是我的解决方案：&lt;/p&gt;
+&lt;h3 id=&#34;1-将路由器的内网ipv6地址分发从无状态改为有状态&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#1-将路由器的内网ipv6地址分发从无状态改为有状态&#34;&gt;#&lt;/a&gt; 1. 将路由器的内网 ipv6 地址分发从无状态改为有状态。&lt;/h3&gt;
+&lt;p&gt;无状态获取指的是机器自己配置地址，然后通过 NDP 等方式确定地址有效性即可；有状态获取类似 DHCP，不过分配的地址是 ipv6。&lt;br&gt;
+这一步解决了手机联网的问题；由于我的网络环境中手机为主要设备，而安卓系统并不支持通过 DHCPv6 进行有状态获取 ipv6 地址；于是所有的手机都只能通过 ipv4 联网，解决了所有上网问题。&lt;/p&gt;
+&lt;h3 id=&#34;2-为电脑配置虚假或者无效的ipv6地址&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#2-为电脑配置虚假或者无效的ipv6地址&#34;&gt;#&lt;/a&gt; 2.  为电脑配置虚假或者无效的 ipv6 地址&lt;/h3&gt;
+&lt;p&gt;这是我在测试的时候忽然想到的主意，既然 ipv4 地址在手动配置错误的情况下无法联网，那么 ipv6 应该也是一样的。&lt;br&gt;
+ipv6 中同样有很多保留地址，例如 &lt;code&gt;fe80&lt;/code&gt;  开头的地址表示本地链路地址，无法进行跨子网路由，因此给我自己的电脑配置一个 &lt;code&gt;fe80::1&lt;/code&gt;  的地址即可。&lt;br&gt;
+配置后，网卡状态中 IPv6 连接变为&lt;strong&gt;无 Internet 访问权限&lt;/strong&gt;，使用 &lt;code&gt;ipconfig /all&lt;/code&gt;  查看 IP 地址，发现手动配置的 ipv6 地址变成了&lt;strong&gt;本地链接 IPv6 地址&lt;/strong&gt;。&lt;br&gt;
+&lt;img src=&#34;../_resources/054913f5d395b1e809f0d7830e64c948.png&#34; alt=&#34;054913f5d395b1e809f0d7830e64c948.png&#34;&gt;&lt;br&gt;
+ 此外，这里网卡仍然获取到了一个 IPv6 地址，但后面提示（&lt;strong&gt;复制&lt;/strong&gt;），检查其地址发现这个地址是我的服务器电脑的公网 ipv6 地址（因此在此处打码作保护）；这可能是一些其它方面的机制，但并不影响服务器和我的电脑的正常工作。同时，由于内网 ipv6 地址被正常配置，我仍然可以通过内网 ipv6 来访问服务器（包括文件服务器、网页服务器、minecraft 和远程桌面）。&lt;br&gt;
+这一步解决了环境中主要的电脑设备：我自己的使用需求。当然没有完全解决，纯 ipv4 模式下访问部分双栈网站时速度还是比较慢，但能够正常使用已经是极其难得了。&lt;/p&gt;
+&lt;h3 id=&#34;3-为windows-11配置&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#3-为windows-11配置&#34;&gt;#&lt;/a&gt; 3. 为 Windows 11 配置&lt;/h3&gt;
+&lt;p&gt;环境中存在另一台常用的电脑，而它搭载的是 Windows 11 家庭版。&lt;br&gt;
+在 win11 下可以执行相同的步骤进行配置，只不过需要多出一个步骤：&lt;strong&gt;你需要在系统设置中手动设置 ipv6 DNS，而不能使用自动获取。&lt;/strong&gt;&lt;br&gt;
+这一步是因为，即便手动配置了 ipv6 地址，win11 似乎也不会立即使用，而是先试图通过 DHCP 等方法获取 ipv6 地址以及 DNS 服务器等；而在自动获取 DNS 的过程中，路由器很可能就为它分配了一个 ipv6 地址，导致我们自己设置的地址完全变成内网地址，而无法实现目的。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;结语&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#结语&#34;&gt;#&lt;/a&gt; 结语&lt;/h2&gt;
+&lt;p&gt;至此，全部流程结束，解决方案全部执行。服务器正常接受公网入站流量，其余设备配置后均能实现正常上网。&lt;/p&gt;
+&lt;p&gt;但是，我并不对现在的解决方案满意。原因很简单，我开 ipv6 不仅是为了服务器使用，更是为了提高日常上网体验，同时接轨最新技术（虽然 ipv6 都是 12 年前的玩意了）；现在虽然解决了问题，但并未达成全部目的，因为除了服务器主机以外没有设备能够正常使用 ipv6 的。这个方法顶多也就临时用用，实际上我也就这一个寒假的需求，假期结束返校前肯定会恢复光猫拨号的，因为服务器主机之后只作为内网打印服务器，不再有公网访问需求。此外，每次新加一台电脑，都需要这样设置一遍无效的 ipv6 地址，以便正常访问网页。&lt;br&gt;
+所以，整体看下来，其实只是在两边的矛盾中取了一个居中妥协的值，为主要矛盾作了让步。我也不是每天都会折腾网络，更多时候还是希望它日常使用能稳定；但我又不希望放弃服务器的公网访问，因此这两者就是核心问题，而最终的方案也就向这两个问题进行妥协。&lt;br&gt;
+Anyway，反正问题算是解决了，但愿 ipv6 的部署进度还能快一点吧（&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;明天就是除夕了，浅放一张 AI 画的胡桃吧，祝大家新年快乐！&lt;br&gt;
+&lt;em&gt;胡桃没画成，人要么太大要么太小，随便搞了个背景算了（）&lt;/em&gt;&lt;br&gt;
+&lt;img src=&#34;../_resources/7c8d8e5459a9f8cd83c33281ca1aa262.png&#34; alt=&#34;7c8d8e5459a9f8cd83c33281ca1aa262.png&#34;&gt;&lt;/p&gt;
+</content>
+        <category term="游戏" />
+        <category term="网络" />
+        <updated>2023-01-20T13:37:00.000Z</updated>
+    </entry>
+    <entry>
+        <id>https://zjxdiu.github.io/blog/%E6%98%BE%E7%A4%BA%E5%99%A8%E8%B6%85%E9%A2%91/</id>
+        <title>超频你的显示器，获得更佳的流畅体验</title>
+        <link rel="alternate" href="https://zjxdiu.github.io/blog/%E6%98%BE%E7%A4%BA%E5%99%A8%E8%B6%85%E9%A2%91/"/>
+        <content type="html">&lt;h2 id=&#34;前言&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#前言&#34;&gt;#&lt;/a&gt; 前言&lt;/h2&gt;
+&lt;p&gt;显示器超频？显示器还能超频？&lt;br&gt;
+当然是可以的。从定义上来说，任何以时钟频率进行周期性工作的硬件都有超频的说法，只不过我们平时主要讨论的是 CPU、显卡、内存等核心电脑硬件的超频。&lt;br&gt;
+某种意义上来说，显示器超频实际上是一个很古老的话题。在以前的 “大屁股” 显示器（即 CRT 技术的显示器）时代，超频就已经存在了。由于最开始的显示器都是纯模拟信号，输入的电压经过放大后直接作用于偏转电场，从而实现画面绘制，那时候的显示器超频是真正意义上的物理超频。只要阴极射线管的水平够好、电场板的素质优秀，显示器的各项工作参数完全可以自定义。&lt;br&gt;
+后来用了 LCD 和纯数字信号传输，超频的内容发生了一些变化；不过多数面板仍然会有超频能力，这取决于厂家的配置与面板本身的素质。&lt;br&gt;
+&lt;img src=&#34;../_resources/95a04f46fce4449551b3b11e14510900.png&#34; alt=&#34;95a04f46fce4449551b3b11e14510900.png&#34;&gt;&lt;br&gt;
+&lt;em&gt; 图：LCD 与 CRT 显示器原理对比&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&#34;什么是显示器超频&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#什么是显示器超频&#34;&gt;#&lt;/a&gt; 什么是显示器超频&lt;/h2&gt;
+&lt;p&gt;所谓的显示器超频，实际上是针对其运行参数&lt;strong&gt;垂直刷新率&lt;/strong&gt;而言的。&lt;br&gt;
+在以前的 CRT 显示器上，显示画面需要电子枪从左往右依次发射电子、扫描一行，点亮一行的荧光像素，随后在垂直同步信号的作用下迅速回到左侧，同时跳转到下一行，重新进行下一行的扫描。以此类推，直到整个荧幕被扫描完成后，电场会使电子偏转到左上角，重复这个过程。（此处还有水平同步信号在起作用，不详细说明）&lt;br&gt;
+玩过模拟示波器的朋友肯定能理解垂直信号的作用，实际上就是示波器中的扫描电路，选择合适的扫描信号就能使波形稳定。&lt;br&gt;
+因此，如果能调节垂直（和水平）同步信号，使其可以在更短的时间内完成一次完整的扫描，则显示器的&lt;strong&gt;刷新率&lt;/strong&gt;就能得到提升。&lt;br&gt;
+这就是显示器超频，我们希望提升其垂直刷新率，使其比标称值更高，这样才会有更好的体验。&lt;/p&gt;
+&lt;h2 id=&#34;显示器超频的影响因素&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#显示器超频的影响因素&#34;&gt;#&lt;/a&gt; 显示器超频的影响因素&lt;/h2&gt;
+&lt;p&gt;要完成一次好的显示器超频，我们通常认为有以下几点因素会影响结果。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;面板类型与素质&lt;/li&gt;
+&lt;li&gt;厂商限制&lt;/li&gt;
+&lt;li&gt;接口类型与传输质量&lt;/li&gt;
+&lt;li&gt;合适的配置&lt;/li&gt;
+&lt;li&gt;其它因素&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;以上因素中，面板和厂商在购买后就固定了，无法更改。&lt;br&gt;
+接口类型以 DP、HDMI（高版本）为优。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;请不要将显示器的超频能力纳入选购的考虑范围之中，如果想获得高刷屏的体验，那么建议选购原生的高刷显示器。本文的核心目的是科普，而不是鼓励大家要求厂商提供超频能力。&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;如何超频&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#如何超频&#34;&gt;#&lt;/a&gt; 如何超频&lt;/h2&gt;
+&lt;h3 id=&#34;超频前的准备&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#超频前的准备&#34;&gt;#&lt;/a&gt; 超频前的准备&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;检查接口协议与传输质量&lt;br&gt;
+请使用优质 DP 或 HDMI 线连接电脑与显示器，以获得更佳的超频能力。&lt;br&gt;
+该项主要影响传输带宽，对于特定版本的 DP 或 HDMI 接口而言，其能提供的带宽是有限的。详情可查阅百度。&lt;br&gt;
+只需要记得一点，如果带宽受限，那么降低分辨率有助于获得更高的刷新率。但是对于多数平民显示器而言，即使使用最高分辨率，也不太会出现带宽不足的问题。&lt;/li&gt;
+&lt;li&gt;检查视频信号源&lt;br&gt;
+目前来说，英特尔核心显卡并不支持显示器超频（至少笔记本的不行）。如果您使用台式机，请确保视频信号是独立显卡输出的。如果使用笔记本，请连接到笔记本上的 type-c 接口，一般而言这个接口的显示输出是直接连接独立显卡的。&lt;br&gt;
+如果使用不支持独显直连输出的笔记本（或者没有独显），则大概率不能成功。&lt;br&gt;
+不过，即便如此，您还是可以进行尝试。大多数出厂 60Hz 的显示器都可以直接提升到 75Hz，带来一定程度上的体验提升。不过有一个例外，笔记本自带的屏幕完全不支持超频。&lt;/li&gt;
+&lt;li&gt;环境条件&lt;br&gt;
+尽管现代显示器对工作环境的承受范围极大，环境因素的影响极其小，合适的环境仍然有助于提高超频成功率。&lt;br&gt;
+主要包括合适的工作温度（尤其是不能过低），湿度，电压值与稳定性，甚至摆放方向等。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;开始超频&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#开始超频&#34;&gt;#&lt;/a&gt; 开始超频&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;对于非独立显卡、英特尔核心显卡：&lt;br&gt;
+请进入显卡控制面板（以下以新版英特尔核心显卡为例）&lt;br&gt;
+&lt;img src=&#34;../_resources/ce3133202184eb787a2034f31476db94.png&#34; alt=&#34;ce3133202184eb787a2034f31476db94.png&#34;&gt;&lt;br&gt;
+ 点击&lt;strong&gt;显示器&lt;/strong&gt;，&lt;strong&gt;分辨率旁边的加号&lt;/strong&gt;&lt;br&gt;
+&lt;img src=&#34;../_resources/245a61028b5e9c9e71d6d6abb786ff57.png&#34; alt=&#34;245a61028b5e9c9e71d6d6abb786ff57.png&#34;&gt;&lt;br&gt;
+ 检查是否有刷新率的选项。如果有，可以尝试输入目标刷新率，然后单击确定。&lt;br&gt;
+若不成功或没有输入刷新率的地方，则您的显卡不支持硬超频。&lt;br&gt;
+请尝试点击&lt;strong&gt;刷新率&lt;/strong&gt;旁的下拉框&lt;br&gt;
+&lt;img src=&#34;../_resources/319d41963a5966fc42fe60ac72c0cb2f.png&#34; alt=&#34;319d41963a5966fc42fe60ac72c0cb2f.png&#34;&gt;&lt;br&gt;
+ 若有多个选项，选择最高的。若有 I 和 P 两种，请选择 P。&lt;br&gt;
+至此，显示器超频结束。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;对于英伟达、AMD 独立显卡：&lt;br&gt;
+请进入显卡控制面板（以下以英伟达显卡为例）；应该能在 [开始] 菜单里找到。&lt;br&gt;
+若电脑里找不到该软件，请重装显卡驱动程序。&lt;br&gt;
+&lt;img src=&#34;../_resources/345495b609471f763f8ec8bfc8df62df.png&#34; alt=&#34;345495b609471f763f8ec8bfc8df62df.png&#34;&gt;&lt;br&gt;
+ 在屏幕左侧，单击 [更改分辨率]。&lt;br&gt;
+如果没有此选项，则说明显示器没有连接到独立显卡上。&lt;br&gt;
+&lt;img src=&#34;../_resources/2e632685ea988d1cf03dc6d60b7493ac.png&#34; alt=&#34;2e632685ea988d1cf03dc6d60b7493ac.png&#34;&gt;&lt;br&gt;
+ 点击 [自定义]。&lt;br&gt;
+&lt;img src=&#34;../_resources/ec04c76fa5c31fbee854410f0c96b663.png&#34; alt=&#34;ec04c76fa5c31fbee854410f0c96b663.png&#34;&gt;&lt;br&gt;
+ 勾选 [启用显示器未显示的分辨率]，然后点击 [创建自定义分辨率]。&lt;br&gt;
+&lt;img src=&#34;../_resources/ed628697647b0ae7a7af0b97615d93e1.png&#34; alt=&#34;ed628697647b0ae7a7af0b97615d93e1.png&#34;&gt;&lt;br&gt;
+ 在 [刷新率] 中输入目标刷新率，然后可以点击 [测试] 按钮进行测试。&lt;br&gt;
+在 [计时 - 标准] 选项中选择 [协同视频计时标准（CVT）降低清屏时间]，可能有助于提高成功率。&lt;br&gt;
+&lt;img src=&#34;../_resources/79a358cee11fbd4de054a918720205a4.png&#34; alt=&#34;79a358cee11fbd4de054a918720205a4.png&#34;&gt;&lt;br&gt;
+ 单击 [测试] 按钮，显示器将黑屏进行切换。&lt;br&gt;
+如果成功，则您将很快看到电脑画面。如果半成功，则可能会看到画面上出现抖动、条纹、异常颜色等。&lt;br&gt;
+如果失败，显示器提示不支持或一直黑屏，等待 15s 后会自动退出测试状态。或者，可以按 Esc 键快速返回。&lt;br&gt;
+当测试到稳定的刷新率后，在提示框中点击 [是]，即可保存该分辨率。&lt;br&gt;
+返回上一步的 [更改刷新率]，应该能在列表最顶上看到刚刚创建的分辨率。&lt;br&gt;
+选中后，单击软件右下角的 [应用]，超频结束。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;超频提示&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#超频提示&#34;&gt;#&lt;/a&gt; 超频提示&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;尽管超频一般不会造成伤害，仍可能导致面板发热加剧、液晶老化速率提高等问题。因此，从理论上讲，不建议长时间超频。&lt;/li&gt;
+&lt;li&gt;在超频过程中，可以使用以下方法先确定显示器能承受的最大刷新率：
+&lt;ul&gt;
+&lt;li&gt;先将刷新率定到目标值&lt;/li&gt;
+&lt;li&gt;若成功，则进一步定到下个目标值；否则，应选择当前刷新率与目标值的中间值。&lt;/li&gt;
+&lt;li&gt;重复以上取中值的过程，通过二分法可以快速定位到最大刷新率。&lt;/li&gt;
+&lt;li&gt;确定了最大值后，请适当降低到附近合适的数值使用。例如，若最大刷新率为 96Hz，请保持在 90Hz 即可。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;若超频过程中显示器出现严重事故（如一直黑屏、闪屏等），请断开视频连接线，然后断开显示器电源；等待几分钟或使其完全放电后重新接入电源，检查显示器是否能正常开机，然后再接入电脑。由于现代显示器的保护功能极佳，真正发生无法挽回事故的可能性极低，近乎不存在，但并不为 0。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;超频经验&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#超频经验&#34;&gt;#&lt;/a&gt; 超频经验&lt;/h3&gt;
+&lt;p&gt;对于一般的 1080P、60Hz 显示器而言，75Hz 是日常使用的较佳水平。某些素质较高的显示器可能会一路支持到 80、90 甚至 110Hz，全看厂商良心与运气。&lt;br&gt;
+对于 2K、60Hz 的显示器，一般也可以使用 75Hz。我自己的 2K60 显示器最大支持 98Hz，稳定值是 96Hz，最终保持在 90Hz 使用。&lt;br&gt;
+对于 144Hz 的显示器，一般直接上 165Hz 是没有问题的。较好的面板可以尝试 180Hz。&lt;br&gt;
+更高的不知道，我没钱（&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;总结&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#总结&#34;&gt;#&lt;/a&gt; 总结&lt;/h2&gt;
+&lt;p&gt;没啥可总结的，超个频，获得更好的体验和更高的风险，这是一种交易。权衡结果全由你自己掌控。&lt;br&gt;
+任何问题欢迎留言！&lt;/p&gt;
+</content>
+        <category term="超频" />
+        <category term="硬件" />
+        <updated>2022-12-02T06:33:00.000Z</updated>
+    </entry>
+    <entry>
+        <id>https://zjxdiu.github.io/blog/%E6%89%B9%E5%A4%84%E7%90%86%E4%BC%98%E5%8C%96Hexo%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/</id>
+        <title>使用批处理和Joplin执行并优化Hexo博客工作流程</title>
+        <link rel="alternate" href="https://zjxdiu.github.io/blog/%E6%89%B9%E5%A4%84%E7%90%86%E4%BC%98%E5%8C%96Hexo%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/"/>
+        <content type="html">&lt;p&gt;使用静态部署的方式使用 Hexo，我们经常会遇到一个很烦人的问题，就是部署麻烦。&lt;br&gt;
+每次写一篇文章，就要经历&lt;strong&gt; Hexo clean、Hexo g、Hexo s、Hexo d&lt;/strong&gt; 四连，一开始还好，写多了之后烦不胜烦。&lt;/p&gt;
+&lt;p&gt;同时，由于我个人使用 Joplin 进行文章撰写，这个软件虽然简洁，但并不好用；图片虽然可以直接复制，但不能修改输出目录，图片资源默认保存在与 &lt;code&gt;/blog/&lt;/code&gt;  平行的 &lt;code&gt;/_resources/&lt;/code&gt;  文件夹中。&lt;/p&gt;
+&lt;p&gt;因此，结合我最为擅长的 batch 脚本语言，我就萌生了使用批处理来优化整个流程的想法。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;1-git安装配置不确定是否有必要&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#1-git安装配置不确定是否有必要&#34;&gt;#&lt;/a&gt; 1. Git 安装配置（不确定是否有必要）&lt;/h3&gt;
+&lt;p&gt;在安装 Git 的过程中，我们会有一个配置终端的过程，此处其实是建议选择第一项（使用 MinTTY），但我当时选择了第二项即使用系统的 cmd 来作 git bash 的终端。&lt;br&gt;
+&lt;img src=&#34;../_resources/aca6779be5b5f5c9d88dc1215456c295.png&#34; alt=&#34;aca6779be5b5f5c9d88dc1215456c295.png&#34;&gt;&lt;br&gt;
+ 如果选择了第一项，可能也是能正常使用批处理来代替执行的，应该不用担心。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;2-站点配置&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#2-站点配置&#34;&gt;#&lt;/a&gt; 2. 站点配置&lt;/h3&gt;
+&lt;p&gt;blog 根目录下的_config.yml 文件：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;hljs yml&#34;&gt;&lt;span class=&#34;hljs-string&#34;&gt;......&lt;/span&gt;
+&lt;span class=&#34;hljs-attr&#34;&gt;post_asset_folder:&lt;/span&gt; &lt;span class=&#34;hljs-literal&#34;&gt;false&lt;/span&gt;
+&lt;span class=&#34;hljs-attr&#34;&gt;relative_link:&lt;/span&gt; &lt;span class=&#34;hljs-literal&#34;&gt;false&lt;/span&gt;
+&lt;span class=&#34;hljs-string&#34;&gt;......&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;使用 Joplin 写文章的话应该关闭这两项（至少我测试下来这样是没问题的）&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;3-脚本编写&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#3-脚本编写&#34;&gt;#&lt;/a&gt; 3. 脚本编写&lt;/h3&gt;
+&lt;p&gt;在 blog 根目录下新建 “程序名.bat”，开始编写功能。&lt;br&gt;
+先放源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;hljs bat&#34;&gt;@&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; off
+&lt;span class=&#34;hljs-built_in&#34;&gt;setlocal&lt;/span&gt; EnableDelayedExpansion
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; &lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt;
+:ac
+&lt;span class=&#34;hljs-comment&#34;&gt;rem 请设置%targetlable%变量，以确保正常跳转至目标位置&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;cls&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;color&lt;/span&gt; &lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;F
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; &lt;span class=&#34;hljs-variable&#34;&gt;%targetlabel%&lt;/span&gt;
+:&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%targetlabel%&lt;/span&gt;&amp;quot;==&amp;quot;&amp;quot; (&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; &amp;quot;targetlabel=&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt;&amp;quot;&amp;amp;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; ac)
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;  &lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;.执行完整的检查和推送blog流程
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;  &lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;.快速上载blog
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;  &lt;span class=&#34;hljs-number&#34;&gt;3&lt;/span&gt;.本地预览
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;  &lt;span class=&#34;hljs-number&#34;&gt;4&lt;/span&gt;.单独执行指令
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;.
+choice /c &lt;span class=&#34;hljs-number&#34;&gt;1234&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;4&lt;/span&gt;&amp;quot; &lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; new
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;3&lt;/span&gt;&amp;quot; (&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; &amp;quot;targetlabel=local&amp;quot;&amp;amp;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; ac)
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;quot; (&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; &amp;quot;targetlabel=fast&amp;quot;&amp;amp;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; ac)
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;&amp;quot; (&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; &amp;quot;targetlabel=full&amp;quot;&amp;amp;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; ac)
+&lt;span class=&#34;hljs-built_in&#34;&gt;pause&lt;/span&gt;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;exit&lt;/span&gt;
+:new
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 正在创建新的&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt;实例...
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 命令提示：
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; hexo clean
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; hexo g
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; hexo s
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; hexo d
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt; &lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 按任意键返回菜单...
+&lt;span class=&#34;hljs-built_in&#34;&gt;pause&lt;/span&gt; &amp;gt;&lt;span class=&#34;hljs-built_in&#34;&gt;nul&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; &amp;quot;targetlabel=&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt;&amp;quot;&amp;amp;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; ac
+:local
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;                  本地预览模式
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 启动预览...
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;hexo clean &amp;amp; hexo g &amp;amp; &lt;span class=&#34;hljs-built_in&#34;&gt;xcopy&lt;/span&gt; D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y &amp;amp; &lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;gt;D:\blog\.deploy_git\.nojekyll &amp;amp; &lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt; http://localhost:&lt;span class=&#34;hljs-number&#34;&gt;4000&lt;/span&gt;/ &amp;amp; hexo s&amp;quot;
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 按任意键返回菜单...
+&lt;span class=&#34;hljs-built_in&#34;&gt;pause&lt;/span&gt; &amp;gt;&lt;span class=&#34;hljs-built_in&#34;&gt;nul&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; &amp;quot;targetlabel=&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt;&amp;quot;&amp;amp;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; ac
+:fast
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;                  快速上载blog
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;hexo clean &amp;amp; hexo g &amp;amp; &lt;span class=&#34;hljs-built_in&#34;&gt;xcopy&lt;/span&gt; D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y &amp;amp; &lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;gt;D:\blog\.deploy_git\.nojekyll &amp;amp; hexo d&amp;quot;
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 完成，&lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;秒后退出...
+&lt;span class=&#34;hljs-built_in&#34;&gt;ping&lt;/span&gt; localhost -n &lt;span class=&#34;hljs-number&#34;&gt;3&lt;/span&gt; &amp;gt;&lt;span class=&#34;hljs-built_in&#34;&gt;nul&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;exit&lt;/span&gt;
+:full
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;                  完整流程向导
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt;              按&lt;span class=&#34;hljs-number&#34;&gt;0&lt;/span&gt;为确定，按&lt;span class=&#34;hljs-number&#34;&gt;1&lt;/span&gt;为跳过
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; clean
+:clean
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 第一步：清理缓存
+choice /c &lt;span class=&#34;hljs-number&#34;&gt;01&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;quot; &lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; generate
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;hexo clean&amp;quot;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; generate
+:generate
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 第二步：生成页面
+choice /c &lt;span class=&#34;hljs-number&#34;&gt;01&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;quot; &lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; check
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;&lt;span class=&#34;hljs-built_in&#34;&gt;xcopy&lt;/span&gt; D:\blog\source\_posts\_resources D:\blog\public\blog\_resources\ /e /s /y &amp;amp; &lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;gt;D:\blog\.deploy_git\.nojekyll &amp;amp; hexo g&amp;quot;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; check
+:check
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 第三步：本地预览
+choice /c &lt;span class=&#34;hljs-number&#34;&gt;01&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;quot; &lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; deploy
+&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt; http://localhost:&lt;span class=&#34;hljs-number&#34;&gt;4000&lt;/span&gt;/
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;hexo s&amp;quot;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; deploy
+:deploy
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 第四步：上传到远程服务器
+choice /c &lt;span class=&#34;hljs-number&#34;&gt;01&lt;/span&gt;
+&lt;span class=&#34;hljs-keyword&#34;&gt;if&lt;/span&gt; &amp;quot;&lt;span class=&#34;hljs-variable&#34;&gt;%errorlevel%&lt;/span&gt;&amp;quot;==&amp;quot;&lt;span class=&#34;hljs-number&#34;&gt;2&lt;/span&gt;&amp;quot; &lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; done
+&lt;span class=&#34;hljs-built_in&#34;&gt;cmd&lt;/span&gt; /c &amp;quot;hexo d&amp;quot;
+&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; done
+:done
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; ------------------------------------------------
+&lt;span class=&#34;hljs-built_in&#34;&gt;echo&lt;/span&gt; 流程已完成，按任意键返回菜单...
+&lt;span class=&#34;hljs-built_in&#34;&gt;pause&lt;/span&gt; &amp;gt;&lt;span class=&#34;hljs-built_in&#34;&gt;nul&lt;/span&gt;
+&lt;span class=&#34;hljs-built_in&#34;&gt;set&lt;/span&gt; &amp;quot;targetlabel=&lt;span class=&#34;hljs-built_in&#34;&gt;start&lt;/span&gt;&amp;quot;&amp;amp;&amp;amp;&lt;span class=&#34;hljs-keyword&#34;&gt;goto&lt;/span&gt; ac&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;我自认为自己的批处理写得都算比较清晰的了，虽然注释很少，但结合文字应该能看懂每一步是在干什么。&lt;br&gt;
+如果要使用，请把里面所有的 &lt;code&gt;D:\blog\source\_posts\_resources&lt;/code&gt;  替换为你 Joplin 每次导出时的资源目录，把所有的 &lt;code&gt;D:\blog\public\blog\_resources\&lt;/code&gt;  替换为你的博客站点目录，注意不要动 &lt;code&gt;\public\...&lt;/code&gt;  后面的内容。&lt;/p&gt;
+&lt;p&gt;如果要更换功能模块，也应按照这里的写法，使用  &lt;code&gt;cmd /c 命令内容 &amp;amp; 第二条命令 &amp;amp; 后面的很多命令&lt;/code&gt;  来执行，除了 start 用于启动网页之外尽量不要直接在批处理中使用模块的命令，否则容易直接闪退。&lt;/p&gt;
+&lt;p&gt;创建 &lt;code&gt;.nojekyll&lt;/code&gt;  文件的目的是防止 GitHub 忽略掉下划线开头的文件夹，即 &lt;code&gt;_resources&lt;/code&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;4-工作流程&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#4-工作流程&#34;&gt;#&lt;/a&gt; 4. 工作流程&lt;/h3&gt;
+&lt;p&gt;现在，我们可以愉快地写文章了。&lt;br&gt;
+打开 Joplin，新建笔记（记得都放在同一个笔记本下），笔记的名字是文件名，写上 Front-matter 内容，之后就如同在 word 中一样写稿。&lt;br&gt;
+图片直接粘贴即可，需要的话修改 [ ] 里的内容，这是属于 markdown 语法的一部分，不详细说明。&lt;br&gt;
+写完的文章直接往 &lt;code&gt;blog\source\_posts&lt;/code&gt;  里面一存，然后打开脚本按个 2，等两分钟就部署到 Github Pages 上了。&lt;br&gt;
+&lt;strong&gt;愉快地工作吧！&lt;/strong&gt;&lt;br&gt;
+&lt;img src=&#34;../_resources/cf0fb99a327ef788a844524d6eb74278.png&#34; alt=&#34;cf0fb99a327ef788a844524d6eb74278.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;补充点内容，修改文章稍微有点麻烦，因为 Joplin 非常笨，它不会识别已有的文件，发现重名了直接加后缀，连带着里面的图片也都加后缀、重新复制到 &lt;code&gt;_resources&lt;/code&gt;  里面了；对于我这种硬盘空间够、平时图片不多的人来说倒是无所谓，但部署了之后文章会重复显示好几篇。所以不能直接导出文章，需要手动删除旧的，然后再从 Joplin 中导出即可。&lt;/p&gt;
+</content>
+        <category term="软件" />
+        <updated>2022-11-27T13:53:00.000Z</updated>
+    </entry>
+    <entry>
+        <id>https://zjxdiu.github.io/blog/WPS-word/</id>
+        <title>WPS word如何设置图片背景，如何解决图片变成平铺问题</title>
+        <link rel="alternate" href="https://zjxdiu.github.io/blog/WPS-word/"/>
+        <content type="html">&lt;h2 id=&#34;wps-word如何设置图片背景如何解决图片变成平铺问题&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#wps-word如何设置图片背景如何解决图片变成平铺问题&#34;&gt;#&lt;/a&gt; WPS word 如何设置图片背景，如何解决图片变成平铺问题&lt;/h2&gt;
+&lt;p&gt;问题描述：在 WPS word 中插入背景图片，导出为 PDF、打印后发现图片变成平铺，如图所示&lt;br&gt;
+&lt;img src=&#34;../_resources/1bed71e7e0b967daa78642a737810d17.png&#34; alt=&#34;1bed71e7e0b967daa78642a737810d17.png&#34;&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;1. 打开需要插入背景图片的文档&lt;br&gt;
+ 2. 点击：页面布局、背景、其它背景、纹理&lt;br&gt;
+&lt;img src=&#34;../_resources/88b258680c69021372dab599663945bd.png&#34; alt=&#34;88b258680c69021372dab599663945bd.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;3. 选择 “其它纹理”，选择图片后点击确定&lt;br&gt;
+&lt;img src=&#34;../_resources/a4d5ca84c954b134351ea2d9c8d9881c.png&#34; alt=&#34;a4d5ca84c954b134351ea2d9c8d9881c.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;4. 现在背景图片应该可以正常导出了。&lt;/p&gt;
+&lt;hr&gt;
+</content>
+        <category term="软件" />
+        <updated>2022-11-26T15:18:00.000Z</updated>
+    </entry>
+</feed>

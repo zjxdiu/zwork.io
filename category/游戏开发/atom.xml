@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://zjxdiu.github.io</id>
+    <title>zjxdiu~blog site • Posts by &#34;游戏开发&#34; category</title>
+    <link href="https://zjxdiu.github.io" />
+    <updated>2022-12-14T14:32:00.000Z</updated>
+    <category term="游戏" />
+    <category term="生活" />
+    <category term="化学" />
+    <category term="仪器分析" />
+    <category term="信号处理" />
+    <category term="日常" />
+    <category term="深度学习" />
+    <category term="音频" />
+    <category term="分享" />
+    <category term="网络" />
+    <category term="教程" />
+    <category term="软件" />
+    <category term="开发" />
+    <category term="游戏引擎" />
+    <category term="超频" />
+    <category term="硬件" />
+    <category term="脑洞" />
+    <category term="测试" />
+    <entry>
+        <id>https://zjxdiu.github.io/blog/%E5%94%A4%E5%A2%83%E7%BC%96%E7%A8%8B%E7%AC%94%E8%AE%B0/</id>
+        <title>【计划长期更新】记录自己的编程思路与想法，实现成功后更新</title>
+        <link rel="alternate" href="https://zjxdiu.github.io/blog/%E5%94%A4%E5%A2%83%E7%BC%96%E7%A8%8B%E7%AC%94%E8%AE%B0/"/>
+        <content type="html">&lt;p&gt;前言：&lt;br&gt;
+由于大学事务繁重，很多时候想到了一些功能的实现思路也没有时间及时验证，所以计划开一个帖子存放这些想法。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;1. 音游主体玩法逻辑&lt;br&gt;
+音符数据点存放：xml 文件&lt;br&gt;
+存储内容：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;音符时间：音符应被打击时，距离音乐开始时的毫秒数&lt;/li&gt;
+&lt;li&gt;音符类型（单点、长按）（暂时不考虑）&lt;/li&gt;
+&lt;li&gt;轨道编号&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;实现逻辑：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;场景开始时，生成音符；若数量过多，可以考虑分节生成。音符带实例变量，存储其音符时间。&lt;/li&gt;
+&lt;li&gt;音乐预加载、延迟播放；开始播放同帧启动计时器（高精度计时方法详见&lt;a href=&#34;https://bbs.evkworld.cn/topic/2590/&#34;&gt; https://bbs.evkworld.cn/topic/2590/&lt;/a&gt;）&lt;/li&gt;
+&lt;li&gt;按下按键时（上升沿触发）：
+&lt;ul&gt;
+&lt;li&gt;记录按键时间（可用数组处理）&lt;/li&gt;
+&lt;li&gt;检查该轨道上最近的音符，获取其音符时间，计算差值。
+&lt;ul&gt;
+&lt;li&gt;若差距过大，打击无效；&lt;/li&gt;
+&lt;li&gt;若差距较大，判断为 miss；&lt;/li&gt;
+&lt;li&gt;根据差值判断等级（Perfect、good、OK）&lt;/li&gt;
+&lt;li&gt;一旦判断成功，销毁该音符&lt;/li&gt;
+&lt;li&gt;若差值为负，则打击时间比音符时间晚；
+&lt;ul&gt;
+&lt;li&gt;计算差值、判断等级&lt;/li&gt;
+&lt;li&gt;miss 阈值应低于正差值。&lt;/li&gt;
+&lt;li&gt;（可以避免两个紧挨着的音符总是被判断到后面的那个）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;越线过久未打击：
+&lt;ul&gt;
+&lt;li&gt;采用屏幕外的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+        <category term="开发" />
+        <category term="游戏引擎" />
+        <updated>2022-12-14T14:32:00.000Z</updated>
+    </entry>
+</feed>
