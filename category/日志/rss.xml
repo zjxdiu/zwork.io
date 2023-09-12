@@ -5,53 +5,26 @@
         <link>https://zjxdiu.github.io</link>
         <description>Shadow in front implying sun behind</description>
         <language>zh-CN</language>
-        <pubDate>Wed, 28 Jun 2023 21:05:00 +0800</pubDate>
-        <lastBuildDate>Wed, 28 Jun 2023 21:05:00 +0800</lastBuildDate>
-        <category>游戏</category>
-        <category>生活</category>
-        <category>化学</category>
-        <category>仪器分析</category>
-        <category>信号处理</category>
+        <pubDate>Thu, 26 Jan 2023 23:51:00 +0800</pubDate>
+        <lastBuildDate>Thu, 26 Jan 2023 23:51:00 +0800</lastBuildDate>
         <category>日常</category>
         <category>深度学习</category>
         <category>音频</category>
+        <category>信号处理</category>
+        <category>化学</category>
+        <category>仪器分析</category>
         <category>网络</category>
         <category>分享</category>
-        <category>软件</category>
+        <category>游戏</category>
         <category>教程</category>
+        <category>软件</category>
         <category>开发</category>
         <category>游戏引擎</category>
         <category>超频</category>
         <category>硬件</category>
         <category>脑洞</category>
+        <category>生活</category>
         <category>测试</category>
-        <item>
-            <guid isPermalink="true">https://zjxdiu.github.io/blog/DIY_Gaming_System/</guid>
-            <title>DIY娱乐系统，从Windows玩到PSP和GameCube</title>
-            <link>https://zjxdiu.github.io/blog/DIY_Gaming_System/</link>
-            <category>游戏</category>
-            <category>生活</category>
-            <pubDate>Wed, 28 Jun 2023 21:05:00 +0800</pubDate>
-            <description><![CDATA[ &lt;h1 id=&#34;本文未完成&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#本文未完成&#34;&gt;#&lt;/a&gt; 本文未完成&lt;/h1&gt;
-&lt;h2 id=&#34;前言&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#前言&#34;&gt;#&lt;/a&gt; 前言&lt;/h2&gt;
-&lt;p&gt;没什么好说的，手头有一台 surface 平板电脑，前两天收拾东西的时候发现非常多很多废旧的各类电子垃圾（其实绝大多数都正常），就想着要不可以做一个基于 Windows 的可移动游戏系统，不仅可以完成普通电脑能完成的任务，还可以玩各种老游戏机上的经典游戏。&lt;/p&gt;
-&lt;h2 id=&#34;计划&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#计划&#34;&gt;#&lt;/a&gt; 计划&lt;/h2&gt;
-&lt;p&gt;整个项目最开始其实源于我前不久看过的一个视频，里面是他用一些二手废旧产品做的街机系统，用了一个很老的安卓平板和一个投影仪，再加上手柄和电池，组装进手提箱就可以携带了。&lt;br&gt;
-这个视频给了我很大的启发，加上刚好最近在研究怎么玩一些老的游戏，于是折腾了很久各种模拟器，最终效果其实挺不错的；古老的各类游戏机性能都不强，哪怕模拟器的损失大也能正常玩。&lt;br&gt;
-所以，我就开始制定计划。项目的名称是 Home Gaming System，就是家庭游戏系统；听着很土，当然我懒得取什么花哨的名字，反正把首字母一拼就是 HGS，瞬间就显得高级多了（？）；还可以在后面加个 portable，这样就是 HGSP，听着更高级了（草）。&lt;/p&gt;
-&lt;h3 id=&#34;主机&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#主机&#34;&gt;#&lt;/a&gt; 主机&lt;/h3&gt;
-&lt;p&gt;游戏系统的核心当然是主机了，这里用的是我两年前买的二手 surface 3，当时入手价格 500 左右，除了屏幕边缘有些颗粒和发黄，电池损耗 12% 以外都很完美。实际上这台平板由于用的是 atom 处理器，功耗表现非常不错，用 edge 或者 word 看文档能续航 8 小时以上，高负载的游戏也能跑 2-3 小时。而且直接用 micro USB 进行 5V 充电，连个充电宝就能继续用，体验上来说是很好的。&lt;br&gt;
-这玩意其他的配置也不算过时，4G 内存稍微少了点但是够跑各种模拟器和轻量级的现代游戏了；64G 内置的 EMMC 闪存，我再给自带的 TF 卡槽来了一张 64G 的卡，至少内部存储空间还挺够用了。最难得的是，机身上唯一一个 USB-A 接口是 3.0 的，连个 SSD 上去速度起飞（当然最后我打算用 TF 卡和读卡器来完成；如果还要追求仪式感可以考虑 SD 卡甚至迷你光驱）。&lt;/p&gt;
-&lt;h3 id=&#34;外设&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#外设&#34;&gt;#&lt;/a&gt; 外设&lt;/h3&gt;
-&lt;p&gt;既然是游戏系统，而且主要是玩那些老的家用游戏机上的游戏，自然少不了手柄支持了。&lt;br&gt;
-我确实有一个 Xbox one 的手柄，也是当年买的二手，现在 RB 坏了不响应；不过我后面算了一下，因为用的是比较小的塑料箱，那玩意太厚了放不进去，于是我准备单独买一个华强北特供版 SNES 手柄，只要 10 块钱还是紫色的，巨™香（）&lt;br&gt;
-此外，我们的主机是一台 Windows 10 的平板，因此键盘鼠标自然少不了。这俩我手头都有现成的，键盘有两个迷你尺寸的蓝牙键盘，鼠标也是十块钱随便买的蓝牙 + 2.4G，反正能用就行。再不济 surface 也有触摸屏，至少系统操作是可以正常进行的。&lt;/p&gt;
-&lt;h3 id=&#34;供电&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#供电&#34;&gt;#&lt;/a&gt; 供电&lt;/h3&gt;
-&lt;p&gt;虽然平板的功耗不大，但是整个系统只靠几个设备自己的电池应该也撑不了多久，电脑估计三个小时就没电了。所以，供电设计是项目的一大重点。&lt;br&gt;
-首先，塑料箱里面肯定有空间放充电宝。我刚好收拾出来了一台旧的标准充电宝（1w + 双口 5V），37Wh 的能量至少够 surface 的续航延长一倍以上了。&lt;br&gt;
-其次，我还打算设计多个开关和接口，&lt;/p&gt;
- ]]></description>
-        </item>
         <item>
             <guid isPermalink="true">https://zjxdiu.github.io/blog/another_toss_of_music_recording/</guid>
             <title>又一次折腾手机游戏《灵魂潮汐》音频录制的记录</title>

@@ -7,23 +7,23 @@
         <language>zh-CN</language>
         <pubDate>Sun, 10 Sep 2023 16:31:00 +0800</pubDate>
         <lastBuildDate>Sun, 10 Sep 2023 16:31:00 +0800</lastBuildDate>
-        <category>游戏</category>
-        <category>生活</category>
-        <category>化学</category>
-        <category>仪器分析</category>
-        <category>信号处理</category>
         <category>日常</category>
         <category>深度学习</category>
         <category>音频</category>
+        <category>信号处理</category>
+        <category>化学</category>
+        <category>仪器分析</category>
         <category>网络</category>
         <category>分享</category>
-        <category>软件</category>
+        <category>游戏</category>
         <category>教程</category>
+        <category>软件</category>
         <category>开发</category>
         <category>游戏引擎</category>
         <category>超频</category>
         <category>硬件</category>
         <category>脑洞</category>
+        <category>生活</category>
         <category>测试</category>
         <item>
             <guid isPermalink="true">https://zjxdiu.github.io/blog/openclash_80_proxy/</guid>
@@ -34,7 +34,7 @@
             <description><![CDATA[ &lt;h2 id=&#34;前言&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#前言&#34;&gt;#&lt;/a&gt; 前言&lt;/h2&gt;
 &lt;p&gt;阅读本文前，假设您已经阅读过以下参考文章，并且对路由器、网络工程等方面具有基础的知识储备。&lt;br&gt;
 &lt;strong&gt;参考内容：&lt;/strong&gt;&lt;br&gt;
-自卖自夸（写得挺水的）：&lt;a href=&#34;Network_progress_CSUST.html&#34;&gt;长沙理工大学无线网络多设备共享解决方案&lt;/a&gt;&lt;br&gt;
+自卖自夸（写得挺水的）：&lt;a href=&#34;../Network_progress_CSUST/index.html&#34;&gt;长沙理工大学无线网络多设备共享解决方案&lt;/a&gt;&lt;br&gt;
 校友博客：&lt;a href=&#34;https://www.mr-cn.net/2021/06/15/Share-your-network-in-CSUST/&#34;&gt;长沙理工大学：校园网解除共享限制&lt;/a&gt;&lt;br&gt;
  OpenClash 配置文件说明：&lt;a href=&#34;https://github.com/vernesong/OpenClash/wiki/%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6&#34;&gt;Github Wiki&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;说明：本文内容仍然是独立的，不看前面的文章也没事，不过有空最好看看（&lt;/p&gt;
@@ -54,7 +54,7 @@
 那有人就要想了，我直接在校园网下接一台路由器不就行了，或者干脆用电脑上的无线热点来共享？显然，这种问题当然也会被运营商考虑到，因此就有了如下的各种深入检测方式。&lt;br&gt;
 以下只说我目前根据自己实验的结果认为学校可能用到的方法，其他方法可以网上搜索或者查看参考文章。&lt;/p&gt;
 &lt;h4 id=&#34;macip绑定规则&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#macip绑定规则&#34;&gt;#&lt;/a&gt; MAC（IP）绑定规则&lt;/h4&gt;
-&lt;p&gt;在&lt;a href=&#34;http://bw.csust.edu.cn/&#34;&gt;这个网址&lt;/a&gt;里可以点击 “设备绑定”，查看你的校园网账号目前绑定了哪些 MAC 地址。我目前还不是完全理解这个绑定的含义，但每次认证成功后我的设备 MAC 至少会出现在第一行中。&lt;br&gt;
+&lt;p&gt;在&lt;a href=&#34;http://bw.csust.edu.cn/&#34;&gt;这个网址&lt;/a&gt;（要从 ehall.csust.edu.cn 里登录）里可以点击 “设备绑定”，查看你的校园网账号目前绑定了哪些 MAC 地址。我目前还不是完全理解这个绑定的含义，但每次认证成功后我的设备 MAC 至少会出现在第一行中。&lt;br&gt;
 为什么要提这个事？因为 MAC 地址绑定是第一个坑，它甚至都算不上共享检测的范畴。这里，还需要解释一下我校的 IP 分配与认证规则。&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;在我的路由器初次连接校园网后，首先会分配到一个随机的 IP 地址（在我宿舍里是 10.151.x.x）&lt;/li&gt;
@@ -213,9 +213,9 @@ QQ：检测概率 2~5%，刷 QQ 空间时触发&lt;br&gt;
             <guid isPermalink="true">https://zjxdiu.github.io/blog/ML_emusic_classify/</guid>
             <title>一种基于神经网络的电子音乐风格分类算法思路</title>
             <link>https://zjxdiu.github.io/blog/ML_emusic_classify/</link>
-            <category>信号处理</category>
             <category>深度学习</category>
             <category>音频</category>
+            <category>信号处理</category>
             <pubDate>Wed, 03 May 2023 17:18:00 +0800</pubDate>
             <description><![CDATA[ &lt;h1 id=&#34;一种基于神经网络的电子音乐风格分类算法思路&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#一种基于神经网络的电子音乐风格分类算法思路&#34;&gt;#&lt;/a&gt; 一种基于神经网络的电子音乐风格分类算法思路&lt;/h1&gt;
 &lt;h2 id=&#34;以zjxdiu常听的电子音乐风格为例&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#以zjxdiu常听的电子音乐风格为例&#34;&gt;#&lt;/a&gt; —— 以 zjxdiu 常听的电子音乐风格为例&lt;/h2&gt;
@@ -345,8 +345,8 @@ FFT 类型（type）：自动可变短时傅里叶变换（Auto-adjustable STFT�
             <guid isPermalink="true">https://zjxdiu.github.io/blog/dynv6_notes/</guid>
             <title>dynv6使用技巧（如何添加多个地址 子域名 等）</title>
             <link>https://zjxdiu.github.io/blog/dynv6_notes/</link>
-            <category>游戏</category>
             <category>网络</category>
+            <category>游戏</category>
             <pubDate>Fri, 03 Mar 2023 17:00:00 +0800</pubDate>
             <description><![CDATA[ &lt;h2 id=&#34;前言&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#前言&#34;&gt;#&lt;/a&gt; 前言&lt;/h2&gt;
 &lt;p&gt;因为 ipv6 普及度日益增加，在自己的环境里搭建简易服务器的想法就逐渐发芽；无论是用于博客网站、NAS 或私有云的搭建，还是用来开游戏服务器，都能够简单易行地实现（因为有公网 ipv6）。&lt;br&gt;
@@ -599,8 +599,8 @@ NAT 有助于提高网络安全性，因为路由器上可以部署非常高效�
             <guid isPermalink="true">https://zjxdiu.github.io/blog/ipv6_toss/</guid>
             <title>记一次折腾电信ipv6中的各种问题</title>
             <link>https://zjxdiu.github.io/blog/ipv6_toss/</link>
-            <category>游戏</category>
             <category>网络</category>
+            <category>游戏</category>
             <pubDate>Fri, 20 Jan 2023 21:37:00 +0800</pubDate>
             <description><![CDATA[ &lt;p&gt;阅前提示：本文约 5000 字，预计阅读时长 &amp;gt; 5 分钟。&lt;/p&gt;
 &lt;h2 id=&#34;起因&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#起因&#34;&gt;#&lt;/a&gt; 起因&lt;/h2&gt;
