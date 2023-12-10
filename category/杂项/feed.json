@@ -5,6 +5,16 @@
     "home_page_url": "https://zjxdiu.github.io",
     "items": [
         {
+            "id": "https://zjxdiu.github.io/blog/IMPORTANT_NOTE/",
+            "url": "https://zjxdiu.github.io/blog/IMPORTANT_NOTE/",
+            "title": "网站重要通知 !",
+            "date_published": "2023-12-10T12:02:00.000Z",
+            "content_html": "<h2 id=\"重要通知\"><a class=\"markdownIt-Anchor\" href=\"#重要通知\">#</a> 重要通知</h2>\n<p>目前博客站点存在较多未完成的文章，加上我本身对这个主题也不是很满意，此博客会在 2024 年进行大幅重整，大部分内容将搬运到新博客网站上，这个网站将作为正式内容和工作博客，也可能会下线。</p>\n<p>由于临近毕业，事务繁多，评论可能几个月都看不到，如果期望快速回复可以直接发送邮件，邮箱地址在关于页面。提前预祝各位学生考研、考公、就业顺利！</p>\n",
+            "tags": [
+                "开发"
+            ]
+        },
+        {
             "id": "https://zjxdiu.github.io/blog/%E9%9A%8F%E8%AE%B020230501/",
             "url": "https://zjxdiu.github.io/blog/%E9%9A%8F%E8%AE%B020230501/",
             "title": "Hexo批处理脚本更新，通过zerotier实现免费简易内网穿透",

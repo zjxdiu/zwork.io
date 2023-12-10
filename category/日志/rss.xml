@@ -5,26 +5,37 @@
         <link>https://zjxdiu.github.io</link>
         <description>Shadow in front implying sun behind</description>
         <language>zh-CN</language>
-        <pubDate>Thu, 26 Jan 2023 23:51:00 +0800</pubDate>
-        <lastBuildDate>Thu, 26 Jan 2023 23:51:00 +0800</lastBuildDate>
-        <category>日常</category>
-        <category>深度学习</category>
-        <category>音频</category>
-        <category>信号处理</category>
+        <pubDate>Sun, 10 Dec 2023 20:02:00 +0800</pubDate>
+        <lastBuildDate>Sun, 10 Dec 2023 20:02:00 +0800</lastBuildDate>
         <category>化学</category>
         <category>仪器分析</category>
+        <category>信号处理</category>
+        <category>日常</category>
+        <category>开发</category>
         <category>网络</category>
         <category>分享</category>
+        <category>深度学习</category>
+        <category>音频</category>
         <category>游戏</category>
         <category>教程</category>
         <category>软件</category>
-        <category>开发</category>
         <category>游戏引擎</category>
         <category>超频</category>
         <category>硬件</category>
         <category>脑洞</category>
         <category>生活</category>
         <category>测试</category>
+        <item>
+            <guid isPermalink="true">https://zjxdiu.github.io/blog/IMPORTANT_NOTE/</guid>
+            <title>网站重要通知 !</title>
+            <link>https://zjxdiu.github.io/blog/IMPORTANT_NOTE/</link>
+            <category>开发</category>
+            <pubDate>Sun, 10 Dec 2023 20:02:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h2 id=&#34;重要通知&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#重要通知&#34;&gt;#&lt;/a&gt; 重要通知&lt;/h2&gt;
+&lt;p&gt;目前博客站点存在较多未完成的文章，加上我本身对这个主题也不是很满意，此博客会在 2024 年进行大幅重整，大部分内容将搬运到新博客网站上，这个网站将作为正式内容和工作博客，也可能会下线。&lt;/p&gt;
+&lt;p&gt;由于临近毕业，事务繁多，评论可能几个月都看不到，如果期望快速回复可以直接发送邮件，邮箱地址在关于页面。提前预祝各位学生考研、考公、就业顺利！&lt;/p&gt;
+ ]]></description>
+        </item>
         <item>
             <guid isPermalink="true">https://zjxdiu.github.io/blog/another_toss_of_music_recording/</guid>
             <title>又一次折腾手机游戏《灵魂潮汐》音频录制的记录</title>

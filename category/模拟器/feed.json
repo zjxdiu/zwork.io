@@ -5,6 +5,17 @@
     "home_page_url": "https://zjxdiu.github.io",
     "items": [
         {
+            "id": "https://zjxdiu.github.io/blog/Stardew_valley_ports/",
+            "url": "https://zjxdiu.github.io/blog/Stardew_valley_ports/",
+            "title": "How to play stardew valley ports on JELOS（在JELOS中玩移植版的星露谷）",
+            "date_published": "2023-10-04T04:44:00.000Z",
+            "content_html": "<p><strong>Notification: This article is written in English.</strong></p>\n<h2 id=\"recommend-written-guide\"><a class=\"markdownIt-Anchor\" href=\"#recommend-written-guide\">#</a> Recommend written guide</h2>\n<p>Guide from RetroGameCorps: <a href=\"https://retrogamecorps.com/2021/11/30/stardew-valley-on-retro-handhelds/\">https://retrogamecorps.com/2021/11/30/stardew-valley-on-retro-handhelds/</a><br>\n(At least correct for the time this blog was written.)</p>\n<p>Instructions from PortMaster: <a href=\"https://github.com/christianhaitian/PortMaster/wiki#stardew-valley\">https://github.com/christianhaitian/PortMaster/wiki#stardew-valley</a><br>\n(Spoiler: This not works quite correct!)(on my device)</p>\n<h2 id=\"\"><a class=\"markdownIt-Anchor\" href=\"#\">#</a> </h2>\n",
+            "tags": [
+                "游戏",
+                "教程"
+            ]
+        },
+        {
             "id": "https://zjxdiu.github.io/blog/Vita3k_tutorial/",
             "url": "https://zjxdiu.github.io/blog/Vita3k_tutorial/",
             "title": "PSV模拟器vita3k完全教程",
