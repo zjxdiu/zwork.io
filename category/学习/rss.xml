@@ -2,7 +2,7 @@
 <rss version="2.0">
     <channel>
         <title>zjxdiu~blog site • Posts by &#34;学习&#34; category</title>
-        <link>https://zjxdiu.github.io</link>
+        <link>https://zjxdiu.github.io/zwork.io</link>
         <description></description>
         <language>zh-CN</language>
         <pubDate>Wed, 03 May 2023 17:18:00 +0800</pubDate>
@@ -12,15 +12,15 @@
         <category>信号处理</category>
         <category>深度学习</category>
         <category>音频</category>
-        <category>软件</category>
         <category>开发</category>
         <category>测试</category>
         <category>日常</category>
+        <category>软件</category>
         <category>游戏引擎</category>
         <item>
-            <guid isPermalink="true">https://zjxdiu.github.io/blog/ML_emusic_classify/</guid>
+            <guid isPermalink="true">https://zjxdiu.github.io/zwork.io/blog/ML_emusic_classify/</guid>
             <title>一种基于神经网络的电子音乐风格分类算法思路</title>
-            <link>https://zjxdiu.github.io/blog/ML_emusic_classify/</link>
+            <link>https://zjxdiu.github.io/zwork.io/blog/ML_emusic_classify/</link>
             <category>信号处理</category>
             <category>深度学习</category>
             <category>音频</category>
@@ -150,9 +150,9 @@ FFT 类型（type）：自动可变短时傅里叶变换（Auto-adjustable STFT�
  ]]></description>
         </item>
         <item>
-            <guid isPermalink="true">https://zjxdiu.github.io/blog/%E6%89%B9%E5%A4%84%E7%90%86%E4%BC%98%E5%8C%96Hexo%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/</guid>
+            <guid isPermalink="true">https://zjxdiu.github.io/zwork.io/blog/%E6%89%B9%E5%A4%84%E7%90%86%E4%BC%98%E5%8C%96Hexo%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/</guid>
             <title>使用批处理和Joplin执行并优化Hexo博客工作流程</title>
-            <link>https://zjxdiu.github.io/blog/%E6%89%B9%E5%A4%84%E7%90%86%E4%BC%98%E5%8C%96Hexo%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/</link>
+            <link>https://zjxdiu.github.io/zwork.io/blog/%E6%89%B9%E5%A4%84%E7%90%86%E4%BC%98%E5%8C%96Hexo%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/</link>
             <category>软件</category>
             <pubDate>Sun, 27 Nov 2022 21:53:00 +0800</pubDate>
             <description><![CDATA[ &lt;p&gt;使用静态部署的方式使用 Hexo，我们经常会遇到一个很烦人的问题，就是部署麻烦。&lt;br&gt;
@@ -285,9 +285,9 @@ choice /c &lt;span class=&#34;hljs-number&#34;&gt;01&lt;/span&gt;
  ]]></description>
         </item>
         <item>
-            <guid isPermalink="true">https://zjxdiu.github.io/blog/WPS-word/</guid>
+            <guid isPermalink="true">https://zjxdiu.github.io/zwork.io/blog/WPS-word/</guid>
             <title>WPS word如何设置图片背景，如何解决图片变成平铺问题</title>
-            <link>https://zjxdiu.github.io/blog/WPS-word/</link>
+            <link>https://zjxdiu.github.io/zwork.io/blog/WPS-word/</link>
             <category>软件</category>
             <pubDate>Sat, 26 Nov 2022 23:18:00 +0800</pubDate>
             <description><![CDATA[ &lt;h2 id=&#34;wps-word如何设置图片背景如何解决图片变成平铺问题&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#wps-word如何设置图片背景如何解决图片变成平铺问题&#34;&gt;#&lt;/a&gt; WPS word 如何设置图片背景，如何解决图片变成平铺问题&lt;/h2&gt;

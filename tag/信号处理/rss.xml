@@ -2,7 +2,7 @@
 <rss version="2.0">
     <channel>
         <title>zjxdiu~blog site • Posts by &#34;信号处理&#34; tag</title>
-        <link>https://zjxdiu.github.io</link>
+        <link>https://zjxdiu.github.io/zwork.io</link>
         <description></description>
         <language>zh-CN</language>
         <pubDate>Wed, 03 May 2023 17:18:00 +0800</pubDate>
@@ -12,15 +12,15 @@
         <category>信号处理</category>
         <category>深度学习</category>
         <category>音频</category>
-        <category>软件</category>
         <category>开发</category>
         <category>测试</category>
         <category>日常</category>
+        <category>软件</category>
         <category>游戏引擎</category>
         <item>
-            <guid isPermalink="true">https://zjxdiu.github.io/blog/ML_emusic_classify/</guid>
+            <guid isPermalink="true">https://zjxdiu.github.io/zwork.io/blog/ML_emusic_classify/</guid>
             <title>一种基于神经网络的电子音乐风格分类算法思路</title>
-            <link>https://zjxdiu.github.io/blog/ML_emusic_classify/</link>
+            <link>https://zjxdiu.github.io/zwork.io/blog/ML_emusic_classify/</link>
             <category>信号处理</category>
             <category>深度学习</category>
             <category>音频</category>
@@ -150,9 +150,9 @@ FFT 类型（type）：自动可变短时傅里叶变换（Auto-adjustable STFT�
  ]]></description>
         </item>
         <item>
-            <guid isPermalink="true">https://zjxdiu.github.io/blog/FTIR%E5%8E%9F%E7%90%86%E8%AF%A6%E8%A7%A3/</guid>
+            <guid isPermalink="true">https://zjxdiu.github.io/zwork.io/blog/FTIR%E5%8E%9F%E7%90%86%E8%AF%A6%E8%A7%A3/</guid>
             <title>傅里叶变换红外光谱技术原理详解</title>
-            <link>https://zjxdiu.github.io/blog/FTIR%E5%8E%9F%E7%90%86%E8%AF%A6%E8%A7%A3/</link>
+            <link>https://zjxdiu.github.io/zwork.io/blog/FTIR%E5%8E%9F%E7%90%86%E8%AF%A6%E8%A7%A3/</link>
             <category>化学</category>
             <category>仪器分析</category>
             <category>信号处理</category>

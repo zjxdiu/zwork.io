@@ -2,7 +2,7 @@
 <rss version="2.0">
     <channel>
         <title>zjxdiu~blog site</title>
-        <link>https://zjxdiu.github.io</link>
+        <link>https://zjxdiu.github.io/zwork.io</link>
         <description></description>
         <language>zh-CN</language>
         <pubDate>Wed, 03 May 2023 17:18:00 +0800</pubDate>
@@ -12,15 +12,15 @@
         <category>信号处理</category>
         <category>深度学习</category>
         <category>音频</category>
-        <category>软件</category>
         <category>开发</category>
         <category>测试</category>
         <category>日常</category>
+        <category>软件</category>
         <category>游戏引擎</category>
         <item>
-            <guid isPermalink="true">https://zjxdiu.github.io/blog/ML_emusic_classify/</guid>
+            <guid isPermalink="true">https://zjxdiu.github.io/zwork.io/blog/ML_emusic_classify/</guid>
             <title>一种基于神经网络的电子音乐风格分类算法思路</title>
-            <link>https://zjxdiu.github.io/blog/ML_emusic_classify/</link>
+            <link>https://zjxdiu.github.io/zwork.io/blog/ML_emusic_classify/</link>
             <category>信号处理</category>
             <category>深度学习</category>
             <category>音频</category>
@@ -150,9 +150,9 @@ FFT 类型（type）：自动可变短时傅里叶变换（Auto-adjustable STFT�
  ]]></description>
         </item>
         <item>
-            <guid isPermalink="true">https://zjxdiu.github.io/blog/%E5%9B%BE%E5%BA%8A/</guid>
+            <guid isPermalink="true">https://zjxdiu.github.io/zwork.io/blog/%E5%9B%BE%E5%BA%8A/</guid>
             <title>图床</title>
-            <link>https://zjxdiu.github.io/blog/%E5%9B%BE%E5%BA%8A/</link>
+            <link>https://zjxdiu.github.io/zwork.io/blog/%E5%9B%BE%E5%BA%8A/</link>
             <pubDate>Mon, 02 Jan 2023 00:00:00 +0800</pubDate>
             <description><![CDATA[ &lt;h2 id=&#34;此处用于保存一些图片&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#此处用于保存一些图片&#34;&gt;#&lt;/a&gt; 此处用于保存一些图片&lt;/h2&gt;
 &lt;p&gt;&lt;img src=&#34;../_resources/fc3ae10d48f0ad79151951f2ffa88d3c.png&#34; alt=&#34;fc3ae10d48f0ad79151951f2ffa88d3c.png&#34;&gt;&lt;/p&gt;
@@ -160,9 +160,9 @@ FFT 类型（type）：自动可变短时傅里叶变换（Auto-adjustable STFT�
  ]]></description>
         </item>
         <item>
-            <guid isPermalink="true">https://zjxdiu.github.io/blog/%E8%A1%A5%E6%A1%A31/</guid>
+            <guid isPermalink="true">https://zjxdiu.github.io/zwork.io/blog/%E8%A1%A5%E6%A1%A31/</guid>
             <title>【补档】唤境游戏如何显示帧率？详解性能相关内容</title>
-            <link>https://zjxdiu.github.io/blog/%E8%A1%A5%E6%A1%A31/</link>
+            <link>https://zjxdiu.github.io/zwork.io/blog/%E8%A1%A5%E6%A1%A31/</link>
             <category>开发</category>
             <category>游戏引擎</category>
             <pubDate>Mon, 05 Dec 2022 22:11:00 +0800</pubDate>
@@ -279,9 +279,9 @@ GPU 负责的内容就是渲染画面，例如显示图片、文字等。&lt;br&
  ]]></description>
         </item>
         <item>
-            <guid isPermalink="true">https://zjxdiu.github.io/blog/%E6%89%B9%E5%A4%84%E7%90%86%E4%BC%98%E5%8C%96Hexo%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/</guid>
+            <guid isPermalink="true">https://zjxdiu.github.io/zwork.io/blog/%E6%89%B9%E5%A4%84%E7%90%86%E4%BC%98%E5%8C%96Hexo%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/</guid>
             <title>使用批处理和Joplin执行并优化Hexo博客工作流程</title>
-            <link>https://zjxdiu.github.io/blog/%E6%89%B9%E5%A4%84%E7%90%86%E4%BC%98%E5%8C%96Hexo%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/</link>
+            <link>https://zjxdiu.github.io/zwork.io/blog/%E6%89%B9%E5%A4%84%E7%90%86%E4%BC%98%E5%8C%96Hexo%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/</link>
             <category>软件</category>
             <pubDate>Sun, 27 Nov 2022 21:53:00 +0800</pubDate>
             <description><![CDATA[ &lt;p&gt;使用静态部署的方式使用 Hexo，我们经常会遇到一个很烦人的问题，就是部署麻烦。&lt;br&gt;
@@ -414,9 +414,9 @@ choice /c &lt;span class=&#34;hljs-number&#34;&gt;01&lt;/span&gt;
  ]]></description>
         </item>
         <item>
-            <guid isPermalink="true">https://zjxdiu.github.io/blog/WPS-word/</guid>
+            <guid isPermalink="true">https://zjxdiu.github.io/zwork.io/blog/WPS-word/</guid>
             <title>WPS word如何设置图片背景，如何解决图片变成平铺问题</title>
-            <link>https://zjxdiu.github.io/blog/WPS-word/</link>
+            <link>https://zjxdiu.github.io/zwork.io/blog/WPS-word/</link>
             <category>软件</category>
             <pubDate>Sat, 26 Nov 2022 23:18:00 +0800</pubDate>
             <description><![CDATA[ &lt;h2 id=&#34;wps-word如何设置图片背景如何解决图片变成平铺问题&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#wps-word如何设置图片背景如何解决图片变成平铺问题&#34;&gt;#&lt;/a&gt; WPS word 如何设置图片背景，如何解决图片变成平铺问题&lt;/h2&gt;
@@ -433,9 +433,9 @@ choice /c &lt;span class=&#34;hljs-number&#34;&gt;01&lt;/span&gt;
  ]]></description>
         </item>
         <item>
-            <guid isPermalink="true">https://zjxdiu.github.io/blog/FTIR%E5%8E%9F%E7%90%86%E8%AF%A6%E8%A7%A3/</guid>
+            <guid isPermalink="true">https://zjxdiu.github.io/zwork.io/blog/FTIR%E5%8E%9F%E7%90%86%E8%AF%A6%E8%A7%A3/</guid>
             <title>傅里叶变换红外光谱技术原理详解</title>
-            <link>https://zjxdiu.github.io/blog/FTIR%E5%8E%9F%E7%90%86%E8%AF%A6%E8%A7%A3/</link>
+            <link>https://zjxdiu.github.io/zwork.io/blog/FTIR%E5%8E%9F%E7%90%86%E8%AF%A6%E8%A7%A3/</link>
             <category>化学</category>
             <category>仪器分析</category>
             <category>信号处理</category>
@@ -572,9 +572,9 @@ FTIR 的运行流程可以概括为：光源发射红外线 – 干涉仪动作�
  ]]></description>
         </item>
         <item>
-            <guid isPermalink="true">https://zjxdiu.github.io/blog/blog%E5%BB%BA%E7%AB%8B%E5%AE%8C%E6%88%90%EF%BC%81/</guid>
+            <guid isPermalink="true">https://zjxdiu.github.io/zwork.io/blog/blog%E5%BB%BA%E7%AB%8B%E5%AE%8C%E6%88%90%EF%BC%81/</guid>
             <title>博客成功建立！</title>
-            <link>https://zjxdiu.github.io/blog/blog%E5%BB%BA%E7%AB%8B%E5%AE%8C%E6%88%90%EF%BC%81/</link>
+            <link>https://zjxdiu.github.io/zwork.io/blog/blog%E5%BB%BA%E7%AB%8B%E5%AE%8C%E6%88%90%EF%BC%81/</link>
             <category>开发</category>
             <category>测试</category>
             <category>日常</category>

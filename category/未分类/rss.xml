@@ -2,7 +2,7 @@
 <rss version="2.0">
     <channel>
         <title>zjxdiu~blog site • Posts by &#34;未分类&#34; category</title>
-        <link>https://zjxdiu.github.io</link>
+        <link>https://zjxdiu.github.io/zwork.io</link>
         <description></description>
         <language>zh-CN</language>
         <pubDate>Mon, 02 Jan 2023 00:00:00 +0800</pubDate>
@@ -12,15 +12,15 @@
         <category>信号处理</category>
         <category>深度学习</category>
         <category>音频</category>
-        <category>软件</category>
         <category>开发</category>
         <category>测试</category>
         <category>日常</category>
+        <category>软件</category>
         <category>游戏引擎</category>
         <item>
-            <guid isPermalink="true">https://zjxdiu.github.io/blog/%E5%9B%BE%E5%BA%8A/</guid>
+            <guid isPermalink="true">https://zjxdiu.github.io/zwork.io/blog/%E5%9B%BE%E5%BA%8A/</guid>
             <title>图床</title>
-            <link>https://zjxdiu.github.io/blog/%E5%9B%BE%E5%BA%8A/</link>
+            <link>https://zjxdiu.github.io/zwork.io/blog/%E5%9B%BE%E5%BA%8A/</link>
             <pubDate>Mon, 02 Jan 2023 00:00:00 +0800</pubDate>
             <description><![CDATA[ &lt;h2 id=&#34;此处用于保存一些图片&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#此处用于保存一些图片&#34;&gt;#&lt;/a&gt; 此处用于保存一些图片&lt;/h2&gt;
 &lt;p&gt;&lt;img src=&#34;../_resources/fc3ae10d48f0ad79151951f2ffa88d3c.png&#34; alt=&#34;fc3ae10d48f0ad79151951f2ffa88d3c.png&#34;&gt;&lt;/p&gt;
@@ -28,9 +28,9 @@
  ]]></description>
         </item>
         <item>
-            <guid isPermalink="true">https://zjxdiu.github.io/blog/%E8%A1%A5%E6%A1%A31/</guid>
+            <guid isPermalink="true">https://zjxdiu.github.io/zwork.io/blog/%E8%A1%A5%E6%A1%A31/</guid>
             <title>【补档】唤境游戏如何显示帧率？详解性能相关内容</title>
-            <link>https://zjxdiu.github.io/blog/%E8%A1%A5%E6%A1%A31/</link>
+            <link>https://zjxdiu.github.io/zwork.io/blog/%E8%A1%A5%E6%A1%A31/</link>
             <category>开发</category>
             <category>游戏引擎</category>
             <pubDate>Mon, 05 Dec 2022 22:11:00 +0800</pubDate>
